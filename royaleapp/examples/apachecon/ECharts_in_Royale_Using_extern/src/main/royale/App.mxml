@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:Application 
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:j="library://ns.apache.org/royale/jewel"
+	xmlns:js="library://ns.apache.org/royale/basic"
+	xmlns:crux="library://ns.apache.org/royale/crux"
+	xmlns:views="com.proj.examples.views.*"
+	xmlns:models="com.proj.examples.models.*"
+	xmlns:controller="com.proj.examples.controllers.*"
+	xmlns:services="com.proj.examples.services.*"
+	initialize="setUp()">
+
+	<fx:Style source="../../main/resources/defaults.css"/>
+
+		<fx:Script>
+		<![CDATA[
+            import org.apache.royale.collections.ArrayList;
+            import org.apache.royale.reflection.registerClassAlias;
+            import org.apache.royale.net.URLLoader;
+			import org.apache.royale.events.Event;
+			import org.apache.royale.net.URLRequest;
+
+            /**
+             *  Register ArrayCollection alias to map to ArrayList
+             */
+            public function setUp():void
+			{
+				registerClassAlias("flex.messaging.io.ArrayCollection", ArrayList);
+			}
+
+			override public function start():void{	
+				var xmlLoader:URLLoader = new URLLoader();
+				xmlLoader.addEventListener(Event.COMPLETE, loadXML);
+				xmlLoader.load(new URLRequest("assets/config/config.xml"));
+			}
+
+			private function loadXML(e:Event):void{             
+            	var xmlData:XML = new XML (e.target.data);
+				/* Procesar datos del XML */
+				/*servicesConfig.WPWebService.source = xmlData.child("source").toString();
+				servicesConfig.loginChannel.channelId = xmlData.child("channelId").toString();
+				servicesConfig.loginChannel.serverName = xmlData.child("serverName").toString();
+				servicesConfig.loginChannel.serverPort = xmlData.child("serverPort").toString();
+				servicesConfig.loginChannel.contextRoot = xmlData.child("contextRoot").toString();
+				servicesConfig.loginChannel.endPointName = xmlData.child("endPointName").toString();*/
+				super.start();
+        	} 
+
+			/**
+			 * Define Bean providers.
+			 */
+			public function getBeanProvidersClasses() :Array {
+				return [];
+			}
+
+			/**
+			 * Define custom package events.
+			 */
+			public function getEventPackages() :Array {
+				return ['com.proj.examples.events.*'];
+			}
+
+			/**
+			 * Define view packages to be wired up.
+			 */
+			public function getViewPackages() :Array {
+				return ['com.proj.examples.views.*'];
+			}
+
+
+		]]>	
+	</fx:Script>
+
+	<j:beads>
+    <!-- registrar clases de .net -->
+		<js:ClassAliasBead/>
+
+		<crux:JSStageEvents packageExclusionFilter="_default_"/>
+		<crux:Crux>
+			<crux:beanProviders>
+				<crux:BeanProvider>
+					<!--<models:ChartsModel id="chartsModel"/>
+					<services:ChartsDelegate id="chartsDelegate"/>
+					<controller:ChartsController id="chartsController"/>-->
+				</crux:BeanProvider>
+			</crux:beanProviders>
+
+			<crux:config>
+                <crux:CruxConfig
+                    eventPackages="com.proj.examples.events.*"
+                    viewPackages="com.proj.examples.views.*"/>
+			</crux:config>
+		</crux:Crux>
+	</j:beads>
+
+	<j:initialView>
+		<views:MainContent id="mainContent" />
+	</j:initialView>
+</j:Application>

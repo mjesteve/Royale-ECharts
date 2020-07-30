@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ApplicationResponsiveView xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:j="library://ns.apache.org/royale/jewel"
+        xmlns:js="library://ns.apache.org/royale/basic"
+        xmlns:html="library://ns.apache.org/royale/html"
+	    xmlns:views="com.proj.examples.views.*"
+        initComplete="onInitialize(event)">
+
+    <fx:Script>
+        <![CDATA[
+
+
+            protected function onInitialize(event:Event):void
+            {
+			}
+		        
+
+            ]]>
+    </fx:Script>
+
+    <j:states>
+        <js:State name="noinit" />
+        <js:State name="init" />
+        <js:State name="error" />
+        <js:State name="exit" />
+    </j:states>
+
+    <j:beads>
+		<js:SimpleStatesImpl/>
+		<js:ContainerDataBinding/>
+        <j:CleanValidationErrors/>
+		<js:BrowserResizeListener/>
+	</j:beads>
+
+    <j:TopAppBar localId="topappbar" fixed="true" visible="true" >
+        <j:BarRow localId="barRow">
+            <j:BarSection gap="0">
+                <j:ImageButton src="assets/powered-by-apache-royale.png" width="200" 
+                click="BrowserWindow.open('http://royale.apache.org');"/>
+            </j:BarSection>
+        </j:BarRow>
+    </j:TopAppBar>
+
+    <!--
+    <views:DrawerMain localId="ctMenu" includeIn="loggedIn" onChangeView="onChangeViewHandler(event)" 
+    heightBottomBar="{heightBottomBar}" heightTopBar="{heightTopBar}" percentHeight="100" visible="true"
+    openDrawer="getSize(event)" closeDrawer="getSize(event)"/>
+    -->
+
+    <j:ApplicationMainContent localId="main" hasTopAppBar="true">
+        <views:EChartExample localId="formEChart"/>
+    </j:ApplicationMainContent>
+
+</j:ApplicationResponsiveView>
