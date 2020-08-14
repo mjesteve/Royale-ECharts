@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "royale-echarts-examples"
+		},
+		{
+			"path": "royale-echarts"
+		}
+	],
+	"settings": {
+		"as3mxml.sdk.framework": "D:\\Apache\\apache-royale-0.9.8-iest"
+	}
+}

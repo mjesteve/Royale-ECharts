@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
   Licensed to the Apache Software Foundation (ASF) under one or more
@@ -17,8 +17,14 @@
   limitations under the License.
 
 -->
-<componentPackage>
+<extensions xmlns="http://maven.apache.org/EXTENSIONS/1.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/EXTENSIONS/1.0.0 http://maven.apache.org/xsd/core-extensions-1.0.0.xsd">
 
-    <!-- <component id="echarts" class="echarts"/> -->
+    <extension>
+        <groupId>org.apache.royale.utilities.converter</groupId>
+        <artifactId>flex-sdk-converter-maven-extension</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </extension>
 
-</componentPackage>
+</extensions>
