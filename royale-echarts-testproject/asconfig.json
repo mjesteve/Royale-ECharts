@@ -1,0 +1,38 @@
+{
+    "config": "royale",
+    "compilerOptions": {
+        "debug": true,
+        "targets": ["JSRoyale"],
+        "js-library-path": [
+            "../royale-echarts/target/royale-echarts-1.0-SNAPSHOT-js.swc",
+            "${royalelib}/js/libs/MXRoyaleJS.swc"
+        ],
+        "output": "target/javascript",
+        "define": [
+            {
+                "name": "BUILD::buildNumber",
+                "value": "'buildNumber'"
+            },
+            {
+                "name": "BUILD::buildVersion",
+                "value": "'project.version'"
+            }
+        ],
+        "source-map": true
+    },
+    "additionalOptions": "-remove-circulars -js-output-optimization=skipAsCoercions",
+    // "source-path": [
+    //     "src/main/royale",
+    //     "../royale-echarts/src/main/royale"
+    // ],
+    // "namespace": [
+    //     {
+    //         "uri": "library://ns.apache.org/royale/echarts",
+    //         "manifest": "../royale-echarts/src/main/resources/echarts-manifest.xml"
+    //     }
+    // ],
+    "files":
+    [
+        "src/main/royale/App.mxml"
+    ]
+}
