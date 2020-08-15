@@ -6,19 +6,19 @@
         "html-template": "src/main/resources/royale-echarts-examples-template.html",
         "source-path": [
             "src/main/royale",
-            "../../royale-echarts/src/main/royale/"
+            "../royale-echarts/src/main/royale/"
         ],
         "namespace": [
             {
                 "uri": "library://ns.apache.org/royale/echarts",
-                "manifest": "../../royale-echarts/src/main/resources/echarts-manifest.xml"
+                "manifest": "../royale-echarts/src/main/resources/echarts-manifest.xml"
             }
         ],
         "library-path": [
-            "${royalelib}/js/libs/MXRoyaleJS.swc"
+            "${royalelib}/js/libs/MXRoyale-0.9.8-SNAPSHOT-js.swc"
         ],
         "js-library-path": [
-            "${royalelib}/js/libs/MXRoyaleJS.swc"
+            "${royalelib}/js/libs/MXRoyale-0.9.8-SNAPSHOT-js.swc"
         ],
         "define": [
             {

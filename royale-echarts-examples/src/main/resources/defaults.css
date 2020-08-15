@@ -1,9 +1,13 @@
 
 @namespace j "library://ns.apache.org/royale/jewel";
 @namespace "http://www.w3.org/1999/xhtml";
-  
-.jewel.application{
-    font-family: 'Lato';
+
+  .Application {
+    font-family: 'Open Sans', serif, sans-serif;
+    color: #434343;
+  }
+  .jewel.application{
+    font-family: 'Open Sans', serif, sans-serif;
     color: #333333;
   }
 

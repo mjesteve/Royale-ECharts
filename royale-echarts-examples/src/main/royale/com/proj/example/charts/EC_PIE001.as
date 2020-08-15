@@ -1,4 +1,4 @@
-package com.proj.example.echarts
+package com.proj.example.charts
 {
 
     public class EC_PIE001 implements IEchartDefinition
