@@ -26,66 +26,420 @@
   <artifactId>royale-echarts-examples</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>swf</packaging>
+ 
+  <name>Royale Application</name>
 
   <properties>
-    <compiler.debug>true</compiler.debug>
+    <compiler.debug>true</compiler.debug>    
+    <buildTimestamp>DEV</buildTimestamp>
+    <royale.debug>true</royale.debug>
+    <royale.framework.version>0.9.8-SNAPSHOT</royale.framework.version>
+    <compiler.output-dir-debug>${basedir}/target/javascript/bin/js-debug</compiler.output-dir-debug>
+    <compiler.output-dir-release>${basedir}/target/javascript/bin/js-release</compiler.output-dir-release>
   </properties>
 
   <build>
     <sourceDirectory>src/main/royale</sourceDirectory>
+    
+    <pluginManagement>
+      <plugins>
+        <!-- Copy the resources to the compiler output directory -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>copy-resources-debug</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${compiler.output-dir-debug}</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>copy-resources-release-assets</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <!-- Copy the assets to the assets output directory -->
+                <outputDirectory>${compiler.output-dir-release}/assets</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources/assets</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>copy-resources-release-js</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <!-- Copy the assets to the assets output directory -->
+                <outputDirectory>${compiler.output-dir-release}/js</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources/js</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>copy-resources-release</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <!-- Copy the assets to the assets output directory -->
+                <outputDirectory>${compiler.output-dir-release}/assets</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources/assets</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+
+          <execution>
+            <id>copy-resources</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.proj.example</groupId>
+                  <artifactId>royale-echarts</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <type>swc</type>
+                  <classifier>js</classifier>
+                  <outputDirectory>${project.build.directory}/javascript/bin/js-release</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+              <includes>js/*</includes>
+            </configuration>
+          </execution>
+          
+          <execution>
+            <id>copy-resources-debug</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.proj.example</groupId>
+                  <artifactId>royale-echarts</artifactId>
+                  <version>1.0-SNAPSHOT</version>
+                  <type>swc</type>
+                  <classifier>js</classifier>
+                  <outputDirectory>${project.build.directory}/javascript/bin/js-debug</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+              <includes>js/*</includes>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.royale.compiler</groupId>
         <artifactId>royale-maven-plugin</artifactId>
-        <version>0.9.8-SNAPSHOT</version>
         <extensions>true</extensions>
+
         <configuration>
           <mainClass>App.mxml</mainClass>
-          <targets>SWF,JSRoyale</targets>
+          <targets>JSRoyale</targets>
+          <debug>${royale.debug}</debug>
+          <htmlTemplate>${basedir}/src/main/resources/royale-echarts-examples-template.html</htmlTemplate>
+          <additionalCompilerOptions>
+              -js-default-initializers=true;
+              -source-map=true;
+              -compiler.exclude-defaults-css-files=MXRoyale-${royale.framework.version}-js.swc:defaults.css;
+              -keep-as3-metadata+=Inject,Dispatcher,EventHandler,PostConstruct,PreDestroy,ViewAdded,ViewRemoved,Bindable,Transient;
+              -keep-code-with-metadata=Inject;
+              -show-binding-warnings=false;
+              -js-dynamic-access-unknown-members=true; <!-- to access JSON object graph subobjects --> 
+          </additionalCompilerOptions>
+          <defines>
+              <property>
+                  <name>BUILD::buildNumber</name>
+                  <value>'"${buildTimestamp}"'</value>
+              </property>
+              <property>
+                  <name>BUILD::buildVersion</name>
+                  <value>'"${project.version}"'</value>
+              </property>
+          </defines>
+          
         </configuration>
         <dependencies>
           <dependency>
             <groupId>org.apache.royale.compiler</groupId>
             <artifactId>compiler-jx</artifactId>
-            <version>0.9.8-SNAPSHOT</version>
+            <version>${royale.framework.version}</version>
           </dependency>
         </dependencies>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+      </plugin>
+
     </plugins>
   </build>
 
   <dependencies>
-    <dependency>
+    <!--<dependency>
       <groupId>org.apache.royale.framework</groupId>
       <artifactId>Core</artifactId>
       <version>0.9.8-SNAPSHOT</version>
       <type>swc</type>
-    </dependency>
-
-    <!-- Needed for Flash compilation -->
+    </dependency>-->
     <dependency>
-      <groupId>com.adobe.flash.framework</groupId>
-      <artifactId>playerglobal</artifactId>
-      <version>20.0</version>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Core</artifactId>
+      <version>${royale.framework.version}</version>
       <type>swc</type>
-      <scope>provided</scope>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Network</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Basic</artifactId>
+      <version>0.9.8-SNAPSHOT</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>    
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>BasicTheme</artifactId>
+      <version>0.9.8-SNAPSHOT</version>
+      <type>swc</type>
+      <scope>theme</scope>
+      <classifier>js</classifier>
     </dependency>
 
     <!-- Needed for JavaScript compilation -->
-    <dependency>
+    <!-- <dependency>
       <groupId>org.apache.royale.framework</groupId>
       <artifactId>HTML</artifactId>
       <version>0.9.8-SNAPSHOT</version>
       <type>swc</type>
-    </dependency>
+    </dependency>-->
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>HTML</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>    
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
       <artifactId>Language</artifactId>
-      <version>0.9.8-SNAPSHOT</version>
+      <version>${royale.framework.version}</version>
       <type>swc</type>
       <classifier>js</classifier>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Binding</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Collections</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>	
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Formatters</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+	  <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Reflection</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+	  <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Graphics</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Jewel</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Icons</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Crux</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>com.proj.example</groupId>
+      <artifactId>royale-echarts</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>JewelTheme</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>theme</scope>
+      <classifier>js</classifier>
+    </dependency>
+<!--    
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Jewel-Light-Flat-Primary-Blue-Theme</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>theme</scope>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Jewel-Light-Flat-Secondary-Orange-Theme</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>theme</scope>
+      <classifier>js</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Jewel-Light-Flat-Emphasized-Green-Theme</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
+-->
   </dependencies>
+
+  <repositories>
+    <repository>
+      <id>apache-release</id>
+      <url>https://repository.apache.org/content/repositories/releases</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>apache-snapshots</id>
+      <url>https://repository.apache.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jspresso</id>
+      <url>http://repository.jspresso.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories> 
+  
+   <pluginRepositories>
+    <pluginRepository>
+      <id>apache-plugins-release</id>
+      <url>https://repository.apache.org/content/repositories/releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>apache-plugins-snapshots</id>
+      <url>https://repository.apache.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
   <profiles>
     <profile>
@@ -94,6 +448,15 @@
         <compiler.debug>false</compiler.debug>
       </properties>
     </profile>
+    
+    <profile>
+      <id>option-with-swf</id>
+      <properties>
+        <!-- no point building the swf target  -->
+        <royale.targets>JSRoyale</royale.targets>
+      </properties>
+    </profile>
+
   </profiles>
 
 </project>
