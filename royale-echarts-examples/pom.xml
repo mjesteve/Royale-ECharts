@@ -32,6 +32,7 @@
   <properties>
     <compiler.debug>true</compiler.debug>    
     <buildTimestamp>DEV</buildTimestamp>
+    <royale.debug>true</royale.debug>
     <royale.framework.version>0.9.8-SNAPSHOT</royale.framework.version>
     <compiler.output-dir-debug>${basedir}/target/javascript/bin/js-debug</compiler.output-dir-debug>
     <compiler.output-dir-release>${basedir}/target/javascript/bin/js-release</compiler.output-dir-release>
@@ -39,6 +40,86 @@
 
   <build>
     <sourceDirectory>src/main/royale</sourceDirectory>
+    
+    <pluginManagement>
+      <plugins>
+        <!-- Copy the resources to the compiler output directory -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>copy-resources-debug</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${compiler.output-dir-debug}</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>copy-resources-release-assets</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <!-- Copy the assets to the assets output directory -->
+                <outputDirectory>${compiler.output-dir-release}/assets</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources/assets</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>copy-resources-release-js</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <!-- Copy the assets to the assets output directory -->
+                <outputDirectory>${compiler.output-dir-release}/js</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources/js</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+            <execution>
+              <id>copy-resources-release</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <!-- Copy the assets to the assets output directory -->
+                <outputDirectory>${compiler.output-dir-release}/assets</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>src/main/resources/assets</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    
     <plugins>
       <plugin>
         <groupId>org.apache.royale.compiler</groupId>
@@ -70,7 +151,6 @@
           </defines>
           
         </configuration>
-
         <dependencies>
           <dependency>
             <groupId>org.apache.royale.compiler</groupId>
@@ -79,6 +159,18 @@
           </dependency>
         </dependencies>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+      </plugin>
+
     </plugins>
   </build>
 
