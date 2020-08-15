@@ -19,7 +19,6 @@
             "args": [
                 "clean",
                 "install",
-                "-P option-with-swf",
                 "-DskipTests"
             ],
             "group": "build",

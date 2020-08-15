@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Royal ECharts (Debug version)",
+            "type": "chrome",
+            "request": "launch",
+            "sourceMaps": true,
+            "url": "file:///${workspaceRoot}/target/javascript/bin/js-debug/index.html",
+            "webRoot": "${workspaceRoot}/target/javascript/bin/js-debug"
+        }
+    }
+    ]
+}

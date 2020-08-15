@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ApplicationResponsiveView xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+    initComplete="onInitComplete()" className="mainPrin"
+    >
+
+     <fx:Script>
+        <![CDATA[
+        import org.apache.royale.collections.ArrayList;
+        import org.apache.royale.jewel.Alert;
+        import com.proj.example.echarts.IEchartDefinition;
+        import com.proj.example.echarts.EC_BAR001;
+        import com.proj.example.echarts.EC_LINE001;
+        import com.proj.example.echarts.EC_BAR002;
+        import com.proj.example.echarts.EC_BAR003;
+        import com.proj.example.echarts.EC_PIE001;
+        import com.proj.example.echarts.EC_PIE002;
+
+
+        private var mychart:Object;
+        private var dpCharts:ArrayList;
+
+        private function onInitComplete():void{            
+			window.addEventListener('resize', autoResizeHandler, false);
+            var ar:Array = [
+                {idChart:1, desChart:'Bar Chart Person', typeChart:'bar'},
+                {idChart:2, desChart:'Bar Chart Example', typeChart:'bar'},
+                {idChart:3, desChart:'Bar Chart Example - Overlapping Series', typeChart:'bar'},
+                {idChart:4, desChart:'Pie Chart Example 1', typeChart:'pie'},
+                {idChart:5, desChart:'Pie-Doughnut Chart Person', typeChart:'pie'},
+                {idChart:6, desChart:'Line Chart - Temperature changes in the next week', typeChart:'line'}
+            ];
+            cbCharts.dataProvider = new ArrayList(ar);
+        }
+
+		public function autoResizeHandler(event:Event = null):void
+        {
+            if(mychart)
+                mychart.resize({width: 'auto', height: 'auto'});
+        }
+
+        private function selectChart():void
+        {
+            if(cbCharts.selectedIndex == -1)
+            {
+                if(mychart)
+                    mychart.clear();                
+            }
+            else{
+                //var mychart:Object = echarts.init(charLimitsPerGen.element);'light', 'dark'
+                var h:Number = cardContent.positioner.clientHeight;
+                var w:Number = cardContent.positioner.clientWidth;
+
+                var notMerge:Boolean = true;
+                var option:Object;
+                var idChart:int = cbCharts.selectedItem.idChart;                
+
+                if(!mychart)
+                {
+                    mychart = echarts.init(charLimitsPerGen.element);
+                }
+                
+                var defchart:IEchartDefinition;
+                switch(idChart)
+                {
+                    case 1:
+                        defchart = new EC_BAR001() as IEchartDefinition;
+                        break;
+                    case 2:
+                        defchart = new EC_BAR002() as IEchartDefinition;
+                        break;
+                    case 3:
+                        defchart = new EC_BAR003() as IEchartDefinition;               
+                        break;
+                    case 4:
+                        defchart = new EC_PIE001() as IEchartDefinition;            
+                        break;
+                    case 5:
+                        defchart = new EC_PIE002() as IEchartDefinition;                 
+                        break;
+                    case 6:
+                        defchart = new EC_LINE001() as IEchartDefinition;
+                        break;
+                
+                    default:
+                        option = mychart.getOption();
+                        break;
+                }
+                if(defchart)
+                    option = defchart.optionsInit();
+                if(notMerge)
+                    mychart.clear();
+
+                mychart.setOption(option, notMerge);
+                mychart.resize({width: 'auto', height: 'auto'});
+            }
+        }
+
+
+        ]]>
+    </fx:Script>
+	
+	<fx:Style>
+        @namespace js "library://ns.apache.org/royale/basic";
+        @namespace j "library://ns.apache.org/royale/jewel";
+		.mainPrin {
+            background-color: #384E6B;
+        }
+
+        .wrapper {
+            outline: 1px dashed navy;
+        }
+
+        /* styles for '...' */ 
+        .block-with-text {
+            /* hide text if it more than N lines  */
+            overflow: hidden;
+            /* for set '...' in absolute position */
+            position: relative; 
+            /* use this value to count block height */
+            line-height: 1.2em;
+            /* max-height = line-height (1.2) * lines max number (3) */
+            max-height: 3.6em; 
+            /* fix problem when last visible word doesn't adjoin right side  */
+            text-align: justify;  
+            /* place for '...' */
+            margin-right: -1em;
+            padding-right: 1em;
+        }
+        /* create the ... */
+        .block-with-text:before {
+            /* points in the end */
+            content: '...';
+            /* absolute position */
+            position: absolute;
+            /* set position to right bottom corner of block */
+            right: 0;
+            bottom: 0;
+        }
+        /* hide ... if we have text, which is less than or equal to max lines */
+        .block-with-text:after {
+            /* points in the end */
+            content: '';
+            /* absolute position */
+            position: absolute;
+            /* set position to right bottom corner of text */
+            right: 0;
+            /* set width and height */
+            width: 1em;
+            height: 1em;
+            margin-top: 0.2em;
+            /* bg color = bg color under block */
+            background: white;
+        }
+	</fx:Style>
+
+    <j:beads>
+		<js:ContainerDataBinding/>
+	</j:beads>
+
+    <j:ApplicationMainContent localId="main">
+        
+        <j:ScrollableSectionContent>
+
+            <j:Grid gap="true" width="100%" height="100%">
+                <j:beads>
+                    <j:Paddings padding="20"/>
+                </j:beads>  
+                <j:GridCell desktopNumerator="1" desktopDenominator="1" tabletNumerator="1" tabletDenominator="1" phoneNumerator="1" phoneDenominator="1">
+
+                    <j:Card itemsExpand="false" width="100%" height="100%" className="cardWPStyle">
+                        <j:CardHeader>
+                                <j:BarSection gap="3" width="80%">
+                                    <html:H3 text="Integrating Apache ECharts (Incumbating) into Apache Royale" 
+                                        className="block-with-text primary-dark"/>
+                                </j:BarSection>
+                                <j:BarSection width="20%" itemsHorizontalAlign="itemsRight">
+                                    <j:ComboBox width="100%" localId="cbCharts" labelField="desChart" change="selectChart()"/>
+                                    <!--<j:Button text="*" click="onOpenPopup()"/>-->
+                                </j:BarSection>       
+                        </j:CardHeader>
+
+                        <j:CardPrimaryContent style="border-top: 1px solid #d2dadf;" itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" >
+                            <j:VGroup localId="cardContent" gap="3" height="85%" width="85%" className="wrapper">
+                                    <j:HGroup localId="charLimitsPerGen" height="100%" width="100%"/>
+                            </j:VGroup>   
+                        </j:CardPrimaryContent>
+                    </j:Card> 
+
+                </j:GridCell>
+            </j:Grid>
+
+        </j:ScrollableSectionContent>
+    </j:ApplicationMainContent>
+
+</j:ApplicationResponsiveView>
