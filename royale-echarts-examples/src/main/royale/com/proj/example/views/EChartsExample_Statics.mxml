@@ -112,6 +112,8 @@
                         option = mychart.getOption();
                         break;
                 }
+                if(idChart != 7)
+                    mychart.off('updateAxisPointer');
                 if(defchart)
                     option = defchart.optionsInit();
                 if(notMerge)
