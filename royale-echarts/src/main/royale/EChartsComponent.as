@@ -2,7 +2,6 @@ package
 {
 	import org.apache.royale.html.Container;
 	//import org.apache.royale.core.UIBase;
-	
 
 	[DefaultProperty("currentInstance")]
 
@@ -26,9 +25,9 @@ package
 			domInstance = this.element;
 		}
         
-        public var currentInstance:Object;
+        protected var currentInstance:Object;
 
-        private var _options:Object;
+        protected var _options:Object;
         [Bindable("optionsChange")]
         public function get options():Object{ 
             return _options; 
@@ -66,9 +65,9 @@ package
         {
             if(currentInstance){
                 currentInstance.setOption(options,{notMerge: true, lazyUpdate: lazyUpdate, silent: silent});
-                this.options = getOption();
+                _options = getOption();
             }else{
-                this.options = options;
+                _options = options;
             }
         }
 		
@@ -78,19 +77,20 @@ package
                 return;
 
             currentInstance.setOption(options,{notMerge: false, lazyUpdate: lazyUpdate, silent: silent});
-            this.options = getOption();
+            _options = getOption();
         }
 		/**
-		 * Gets option object maintained in current instance, which contains configuration item and data merged from previous setOption operations by users, along with user interaction states.
+		 * Gets option object maintained in current instance, which contains configuration item and data merged 
+         * from previous setOption operations by users, along with user interaction states.
 		 * @return Object
 		 */
         public function getOption():Object{
             if(currentInstance){
-                options = currentInstance.getOption();
+                _options = currentInstance.getOption();
             }else{
-                options = null;
+                _options = null;
             }
-            return options;
+            return _options;
         }
 		/**
 		 * Clears current instance; removes all components and series in current instance.

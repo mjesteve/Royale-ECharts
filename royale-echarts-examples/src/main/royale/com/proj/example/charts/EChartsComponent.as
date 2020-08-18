@@ -25,19 +25,29 @@ package com.proj.example.charts
 			domInstance = this.element;
 		}
         
-        public var currentInstance:Object;
+        private var _currentInstance:Object;
+        public function get currentInstance():Object{ return _currentInstance; }
+        public function set currentInstance(value:Object):void{ 
+            _currentInstance = value;
+            isInit = (_currentInstance);
+        }
+        [Bindable]
+        public var isInit:Boolean;
 
-        private var _options:Object;
+        protected var _options:Object;
         [Bindable("optionsChange")]
         public function get options():Object{ 
             return _options; 
         }
         public function set options(value:Object):void{ 
-            _options = value; 
+            _options = value;
         }
+        [Bindable]
+        public var isConfigure:Boolean;
+
 		public var themeInstance:Object = null;
 		public var optsInstance:Object = null;
-
+    
 		/**
 		 * Creates an ECharts instance, and returns an echartsInstance.
 		 * @param theme Object|string
@@ -61,35 +71,40 @@ package com.proj.example.charts
 		 * @param lazyUpdate Optional; states whether not to update chart immediately; false by default, stating update immediately.
 		 * @param silent Optional; states whether not to prevent triggering events when calling setOption; false by default, stating trigger events.
 		 */
-        public function setOption(options:Object, lazyUpdate:Boolean=false, silent:Boolean=false):void
+        public function setOption(option:Object, lazyUpdate:Boolean=false, silent:Boolean=false):void
         {
+            options = option;
             if(currentInstance){
-                currentInstance.setOption(options,{notMerge: true, lazyUpdate: lazyUpdate, silent: silent});
-                this.options = getOption();
-            }else{
-                this.options = options;
+                currentInstance.setOption(option,{notMerge: true, lazyUpdate: lazyUpdate, silent: silent});
+                isConfigure = _options?true:false;
             }
         }
-		
-        public function updateOption(options:Object, lazyUpdate:Boolean=false, silent:Boolean=false):void
+		/**
+         * Api Royale. Update de Option Object not Merge
+         * @param option 
+         * @param lazyUpdate 
+         * @param silent 
+         */
+        public function updateOption(option:Object, lazyUpdate:Boolean=false, silent:Boolean=false):void
         {
+            options = option;
             if(!currentInstance)
                 return;
 
-            currentInstance.setOption(options,{notMerge: false, lazyUpdate: lazyUpdate, silent: silent});
-            this.options = getOption();
+            currentInstance.setOption(option,{notMerge: false, lazyUpdate: lazyUpdate, silent: silent});
+            isConfigure = _options?true:false;
         }
 		/**
-		 * Gets option object maintained in current instance, which contains configuration item and data merged from previous setOption operations by users, along with user interaction states.
+		 * Gets option object maintained in current instance, which contains configuration item and data merged 
+         * from previous setOption operations by users, along with user interaction states.
 		 * @return Object
 		 */
         public function getOption():Object{
             if(currentInstance){
-                options = currentInstance.getOption();
+                return currentInstance.getOption();
             }else{
-                options = null;
+                return null;
             }
-            return options;
         }
 		/**
 		 * Clears current instance; removes all components and series in current instance.
@@ -97,6 +112,8 @@ package com.proj.example.charts
         public function clear():void{
             if(currentInstance){
                 currentInstance.clear();
+                options = null;
+                isConfigure = false;
             }
         }
 		/**
@@ -130,7 +147,7 @@ package com.proj.example.charts
             if(currentInstance){
                 return currentInstance.getWidth();
             }else{
-                return null;
+                return 0;
             }
         }
 		/**
@@ -141,7 +158,7 @@ package com.proj.example.charts
             if(currentInstance){
                 return currentInstance.getHeight();
             }else{
-                return null;
+                return 0;
             }
         }
 		/**

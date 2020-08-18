@@ -10,9 +10,10 @@
      <fx:Script>
         <![CDATA[
         import org.apache.royale.collections.ArrayList;
-        import com.proj.example.charts.IEchartDefinition;
         import com.proj.example.charts.ECC_PIE002;
         import com.proj.example.vos.ChartCompDefExampleVO;
+        import com.proj.example.charts.EChartsComponent;
+        import com.proj.example.charts.ECC_PIE002;
 
 
         private var mychart:Object;
@@ -27,51 +28,33 @@
         }
 
 		public function autoResizeHandler(event:Event = null):void
-        {/*
-            if(mychart)
-                mychart.resize({width: 'auto', height: 'auto'});*/
-                cbCharts.selectedIndex = -1;
+        {
+            if(cardContent.numElements>0){
+                var mychart:EChartsComponent = cardContent.getElementAt(0) as EChartsComponent;
+                mychart.resize({width: 'auto', height: 'auto'});
+            }
         }
 
         private function selectChart():void
         {
-                /*
-                //var mychart:Object = echarts.init(charLimitsPerGen.element);'light', 'dark'
-                var h:Number = cardContent.positioner.clientHeight;
-                var w:Number = cardContent.positioner.clientWidth;
-                var notMerge:Boolean = true;                
-                var option:Object;
-                */
-                var itChart:Object = cbCharts.selectedItem;// as ChartCompDefExampleVO;
+            var itChart:Object = cbCharts.selectedItem;// as ChartCompDefExampleVO;
 
-                if(!itChart.chartInstance)
-                {
-                    var clsChart:Class = Class(itChart.component);
-                    itChart.chartInstance = new clsChart();
-                    cardContent.addElement(itChart.chartInstance);
-                    itChart.chartInstance.init();
-                }
-                
-                /*
-                if(!mychart)
-                {
-                    mychart = echarts.init(charLimitsPerGen.element);
-                }
-               
-                if(idChart != 7)
-                    mychart.off('updateAxisPointer');
-                if(defchart)
-                    option = defchart.optionsInit();
-                if(notMerge)
-                    mychart.clear();
-
-                mychart.setOption(option, notMerge);
-                mychart.resize({width: 'auto', height: 'auto'}); */
+            if(!itChart.chartInstance)
+            {
+                var clsChart:Class = Class(itChart.component);
+                itChart.chartInstance = new clsChart();
+                cardContent.addElement(itChart.chartInstance);
+                itChart.chartInstance.init();
+            }
             
         }
         private function onRefreshActiveChart():void
         {
-
+            charComp.reInit();
+        }
+        private function onUpdateActiveChart():void
+        {
+            charComp.updateOption( { title: {text:'Pie-Doughnut Chart Person - Update 1'} } );
         }
 
         ]]>
@@ -153,13 +136,15 @@
                                 </j:BarSection>
                                 <j:BarSection width="20%" itemsHorizontalAlign="itemsRight">
                                     <j:ComboBox width="100%" localId="cbCharts" labelField="desChart" change="selectChart()"/>
-                                    <j:Button text="refresh" visible="{cbCharts.selectedItem?true:false}" click="onRefreshActiveChart()"/>
                                 </j:BarSection>       
                         </j:CardHeader>
 
                         <j:CardPrimaryContent style="border-top: 1px solid #d2dadf;" itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" >
                             <j:VGroup localId="cardContent" gap="3" height="85%" width="85%" className="wrapper">
-                                    <!--<localchart:EChartsComponent localId="charComp" height="100%" width="100%"/>-->
+                                    <localchart:EChartsContainer localId="charComp" height="100%" width="100%"
+                                    optionsInit="{ECC_PIE002.optionsInit}" />
+                                    <j:Button text="reInit" visible="{charComp.isInit}" click="onRefreshActiveChart()"/>
+                                    <j:Button text="Refresh" visible="{charComp.isConfigure}" click="onUpdateActiveChart()"/>
                             </j:VGroup>   
                         </j:CardPrimaryContent>
                     </j:Card> 

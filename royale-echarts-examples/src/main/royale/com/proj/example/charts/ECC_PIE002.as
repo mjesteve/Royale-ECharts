@@ -11,15 +11,16 @@ package com.proj.example.charts
 		override public function addedToParent():void
 		{
 			super.addedToParent();
-            setOption(optionsInit());
-		}
+            setOption(optionsInit);
+		}        
 		override public function init(theme:Object=null, opts:Object=null):void
 		{ 			
-			super.init(themeInstance,optsInstance);
+			super.init(theme,opts);
             resize({width: 'auto', height: 'auto'});
 		}
-        
-        private function optionsInit():Object
+
+        [Bindable]
+        public static function get optionsInit():Object
         {
             var dataprovider:Array = [
                         { name: 'Acummulated', value: 70, caption: '70:00'},
