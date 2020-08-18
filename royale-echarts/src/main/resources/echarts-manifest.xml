@@ -19,6 +19,6 @@
 -->
 <componentPackage>
 
-    <!-- <component id="echarts" class="com.proj.example.echarts"/> -->
-
+  <!--<component id="EChartsComponent" class="EChartsComponent"/>-->
+  
 </componentPackage>

@@ -5,11 +5,29 @@ package
 	 */
 	COMPILE::JS
 	public class echarts{
-//echarts.min.formatted.js | echarts.min_5.0.js | echarts_4.8.js
+
 		/**
 		 * <inject_script>
 		 * var script = document.createElement("script");
-		 * script.setAttribute("src", "js/echarts.min_5.0.js");
+		 * //echarts.min.formatted.js | echarts.min_5.0.js | echarts_4.8.js
+		 * //script.setAttribute("src", "js/echarts.min_5.0.js");
+		 * 
+		 * //script.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.0-alpha.1/echarts.js");
+		 * //script.setAttribute("integrity","sha512-n2gjFomIFcQSkwMN5uuPlxcvbf5Ip2ZnEBO4myHTzn6dZyMT8G6peNUL7iZcKZfESBGpdE63rN1OeVAlrFQ8VA==");
+		 * //script.setAttribute("crossorigin","anonymous");
+		 * 
+		 * script.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.0-alpha.1/echarts.min.js");
+		 * script.setAttribute("integrity","sha512-wVpBaJluJNXD8CXm5jrr/GATUJiyfxwWKkcilnn0w1D9CbLqkVGNkTVr4w7vGsFEE0riSPLP5oi4hAxG3l8SVA==");
+		 * script.setAttribute("crossorigin","anonymous");
+		 * 
+		 * //script.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/echarts/4.9.0-rc.1/echarts-en.min.js");
+		 * //script.setAttribute("integrity","sha512-yT7ns3Drvl+Fi4DxGXYOGF7CtPX94lhBcgjDRTeZWaaD4MUMQ1eFI4lH2eQx1CYMuxwyN+vPvUeukycLcBkT8Q==");
+		 * //script.setAttribute("crossorigin","anonymous");
+		 * 
+		 * //src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.9.0-rc.1/echarts.min.js" integrity="sha512-q0nIjE1LHEOioBDYuyhml+xxTm+ftiPuzdWgEgwq5g3YAZ5CWDmjDUs4t7pFeWnvFQe7eLQg/+PepPbacIDtkA==" crossorigin="anonymous">
+		 * //src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.8.0/echarts.min.js" integrity="sha512-OvWfXEXFlgwaMYESoKZRrPGq9Ndjcf7pMgp+NjbUNeqEA1OOOUbLgquJGOzvh7H78qinNObGwRiFIj22es61Eg==" crossorigin="anonymous">
+		 * //src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.8.0/echarts-en.min.js" integrity="sha512-bHJjukAEXqiJdnUlb1I2Oios4izlP1da7mpUIeogj26NjAmT/EEbcDn0AlnAE+eOaJyQAsPy5FIzw4dhfe8o4A==" crossorigin="anonymous">
+		 * 
 		 * document.head.appendChild(script);
 		 * </inject_script>
 		*/
@@ -21,7 +39,7 @@ package
 		 * @param opts { devicePixelRatio?: number,  renderer?: string, width?: number|string, height?: number|string }
 		 * @return echartsInstance
 		 */
-		public static function init(dom:Element=null,theme:String=null, opts:Object=null):Object { return null; }
+		public static function init(dom:Element=null,theme:Object=null, opts:Object=null):Object { return null; }
 		/**
 		 * Connects interaction of multiple chart series.
 		 * @param group string|Array

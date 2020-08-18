@@ -1,15 +1,17 @@
 package com.proj.example.vos
 {
     import com.proj.example.charts.IEchartDefinition;
+    import com.proj.example.charts.EChartsComponent;
 
-    public class ChartDefExampleVO
+    public class ChartCompDefExampleVO
     {
         public var idChart:int;
         public var desChart:String;
         public var typeChart:String;
         public var component:IEchartDefinition;
+        public var chartInstance:EChartsComponent;
 
-        public function ChartDefExampleVO(idChart:int, desChart:String, typeChart:String, component:IEchartDefinition)
+        public function ChartCompDefExampleVO(idChart:int, desChart:String, typeChart:String, component:IEchartDefinition)
         {
             this.idChart = idChart;
             this.desChart = desChart;
