@@ -3,22 +3,16 @@
     xmlns:j="library://ns.apache.org/royale/jewel"
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
+    xmlns:localchart="com.proj.example.charts.*"
     initComplete="onInitComplete()" className="mainPrin"
     >
 
      <fx:Script>
         <![CDATA[
         import org.apache.royale.collections.ArrayList;
-        import org.apache.royale.jewel.Alert;
         import com.proj.example.charts.IEchartDefinition;
-        import com.proj.example.charts.EC_BAR001;
-        import com.proj.example.charts.EC_LINE001;
-        import com.proj.example.charts.EC_BAR002;
-        import com.proj.example.charts.EC_BAR003;
-        import com.proj.example.charts.EC_PIE001;
-        import com.proj.example.charts.EC_PIE002;
-        import com.proj.example.charts.EC_LINE002;
-        import com.proj.example.vos.ChartDefExampleVO;
+        import com.proj.example.charts.ECC_PIE002;
+        import com.proj.example.vos.ChartCompDefExampleVO;
 
 
         private var mychart:Object;
@@ -27,91 +21,43 @@
         private function onInitComplete():void{            
 			window.addEventListener('resize', autoResizeHandler, false);
             var ar:Array = [
-                {idChart:1, desChart:'Bar Chart Person', typeChart:'bar', component: EC_BAR001},
-                {idChart:2, desChart:'Bar Chart Example', typeChart:'bar', component: EC_BAR002},
-                {idChart:3, desChart:'Bar Chart Example - Overlapping Series', typeChart:'bar', component: EC_BAR003},
-                {idChart:4, desChart:'Pie Chart Example 1', typeChart:'pie', component: EC_PIE001},
-                {idChart:5, desChart:'Pie-Doughnut Chart Person', typeChart:'pie', component: EC_PIE002},
-                {idChart:6, desChart:'Line Chart - Temperature changes in the next week', typeChart:'line', component: EC_LINE001},
-                {idChart:7, desChart:'Line Chart & Pie Chart dataset-link', typeChart:'line', component: EC_LINE002}
+                {idChart:5, desChart:'Pie-Doughnut Chart Person', typeChart:'pie', component: ECC_PIE002, echartInstance: null}
             ];
             cbCharts.dataProvider = new ArrayList(ar);
         }
 
 		public function autoResizeHandler(event:Event = null):void
-        {
+        {/*
             if(mychart)
-                mychart.resize({width: 'auto', height: 'auto'});
+                mychart.resize({width: 'auto', height: 'auto'});*/
+                cbCharts.selectedIndex = -1;
         }
 
         private function selectChart():void
         {
-            if(cbCharts.selectedIndex == -1)
-            {
-                if(mychart)
-                    mychart.clear();                
-            }
-            else{
+                /*
                 //var mychart:Object = echarts.init(charLimitsPerGen.element);'light', 'dark'
                 var h:Number = cardContent.positioner.clientHeight;
                 var w:Number = cardContent.positioner.clientWidth;
-
-                var notMerge:Boolean = true;
+                var notMerge:Boolean = true;                
                 var option:Object;
-                var idChart:int = cbCharts.selectedItem.idChart;                
+                */
+                var itChart:Object = cbCharts.selectedItem;// as ChartCompDefExampleVO;
 
+                if(!itChart.chartInstance)
+                {
+                    var clsChart:Class = Class(itChart.component);
+                    itChart.chartInstance = new clsChart();
+                    cardContent.addElement(itChart.chartInstance);
+                    itChart.chartInstance.init();
+                }
+                
+                /*
                 if(!mychart)
                 {
                     mychart = echarts.init(charLimitsPerGen.element);
                 }
-                
-                var defchart:IEchartDefinition;
-                switch(idChart)
-                {
-                    case 1:
-                        defchart = new EC_BAR001() as IEchartDefinition;
-                        break;
-                    case 2:
-                        defchart = new EC_BAR002() as IEchartDefinition;
-                        break;
-                    case 3:
-                        defchart = new EC_BAR003() as IEchartDefinition;               
-                        break;
-                    case 4:
-                        defchart = new EC_PIE001() as IEchartDefinition;            
-                        break;
-                    case 5:
-                        defchart = new EC_PIE002() as IEchartDefinition;                 
-                        break;
-                    case 6:
-                        defchart = new EC_LINE001() as IEchartDefinition;
-                        break;
-                    case 7:
-                        defchart = new EC_LINE002() as IEchartDefinition;
-                        mychart.on('updateAxisPointer', function (event) {
-                            var xAxisInfo = event.axesInfo[0];
-                            if (xAxisInfo) {
-                                var dimension = xAxisInfo.value + 1;
-                                mychart.setOption({
-                                    series: {
-                                        id: 'pie',
-                                        label: {
-                                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
-                                        },
-                                        encode: {
-                                            value: dimension,
-                                            tooltip: dimension
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                        break;
-                
-                    default:
-                        option = mychart.getOption();
-                        break;
-                }
+               
                 if(idChart != 7)
                     mychart.off('updateAxisPointer');
                 if(defchart)
@@ -120,10 +66,13 @@
                     mychart.clear();
 
                 mychart.setOption(option, notMerge);
-                mychart.resize({width: 'auto', height: 'auto'});
-            }
+                mychart.resize({width: 'auto', height: 'auto'}); */
+            
         }
+        private function onRefreshActiveChart():void
+        {
 
+        }
 
         ]]>
     </fx:Script>
@@ -204,13 +153,13 @@
                                 </j:BarSection>
                                 <j:BarSection width="20%" itemsHorizontalAlign="itemsRight">
                                     <j:ComboBox width="100%" localId="cbCharts" labelField="desChart" change="selectChart()"/>
-                                    <!--<j:Button text="*" click="onOpenPopup()"/>-->
+                                    <j:Button text="refresh" visible="{cbCharts.selectedItem?true:false}" click="onRefreshActiveChart()"/>
                                 </j:BarSection>       
                         </j:CardHeader>
 
                         <j:CardPrimaryContent style="border-top: 1px solid #d2dadf;" itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" >
                             <j:VGroup localId="cardContent" gap="3" height="85%" width="85%" className="wrapper">
-                                    <j:Group localId="charLimitsPerGen" height="100%" width="100%"/>
+                                    <!--<localchart:EChartsComponent localId="charComp" height="100%" width="100%"/>-->
                             </j:VGroup>   
                         </j:CardPrimaryContent>
                     </j:Card> 

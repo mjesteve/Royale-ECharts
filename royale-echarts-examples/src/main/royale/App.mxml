@@ -29,6 +29,6 @@
 	</j:beads>
 
 	<j:initialView>
-		<views:EChartsExample_Statics id="mainContent" />
+		<views:EChartsExample_component id="mainContent" />
 	</j:initialView>
 </j:Application>

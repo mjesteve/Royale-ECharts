@@ -1,4 +1,5 @@
-package {
+package 
+{
 
 	/**
 	 *  @private
@@ -11,6 +12,7 @@ package {
 		COMPILE::JS
 		{
 		import echarts; echarts;
+		//import EChartsComponent; EChartsComponent;
 		}
 	}
 }
