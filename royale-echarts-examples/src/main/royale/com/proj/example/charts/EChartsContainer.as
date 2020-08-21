@@ -10,13 +10,15 @@ package com.proj.example.charts
         }
 
         private var _optionsInit:Object;
+
+        [Bindable("__NoChangeEvent__")]
         public function get optionsInit():Object{ 
             return _optionsInit; 
         }
         public function set optionsInit(value:Object):void
         { 
             _optionsInit = value;
-           reInit();            
+            reInit();            
         }
 
         [Bindable("optionsChange")]

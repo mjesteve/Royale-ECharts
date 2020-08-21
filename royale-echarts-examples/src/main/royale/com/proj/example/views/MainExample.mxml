@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ApplicationResponsiveView xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+    xmlns:vos="com.proj.example.vos.*"
+    xmlns:localchart="com.proj.example.charts.*"
+    initComplete="onInitComplete()"
+    >
+
+     <fx:Script>
+        <![CDATA[
+        import org.apache.royale.collections.ArrayList;
+        import com.proj.example.charts.ECC_PIE002;
+
+
+        private var mychart:Object;
+        private var dpCharts:ArrayList;
+
+        private function onInitComplete():void{            
+			window.addEventListener('resize', autoResizeHandler, false);
+            var ar:Array = [
+                {idChart:5, desChart:'Pie-Doughnut Chart Person', typeChart:'pie', component: ECC_PIE002, echartInstance: null}
+            ];
+        }
+
+		public function autoResizeHandler(event:Event = null):void
+        {
+            
+        }
+
+        ]]>
+    </fx:Script>
+
+    <j:beads>
+		<js:ContainerDataBinding/>
+		<js:BrowserResizeListener/>
+	</j:beads>
+
+    <j:TopAppBar localId="topappbar" fixed="true" visible="true" >
+        <j:BarRow localId="barRowHeader">
+            <j:BarSection gap="0" percentWidth="100">
+                <j:BarTitle text="Integrating Apache ECharts (Incumbating) into Apache Royale"/>
+            </j:BarSection>
+        </j:BarRow>
+        <j:BarRow localId="barRowContent" style ="height:auto;">
+            <j:HGroup gap="0" percentWidth="100" itemsVerticalAlign="itemsCenter">
+                <j:TabBar id="tabbarApp" width="100%" selectedIndex="0" sameWidths="true"
+                    itemRenderer="com.proj.example.itemRenderers.TabBarThumbnailItemRenderer">                    
+                    <js:ArrayList>
+                        <fx:Array>
+                            <vos:TabBarChartVO label="Char1" hash="ecp1" thumbnail="assets/charts/xCFIVk5Ebk.png" description="Pie Chart. 1"/>
+                            <vos:TabBarChartVO label="Char2" hash="ecp2" thumbnail="assets/charts/xlZeV3FwQM.png" description="Pie Chart. 2"/>
+                        </fx:Array>
+                    </js:ArrayList>
+                </j:TabBar>
+            </j:HGroup>
+        </j:BarRow>
+
+    </j:TopAppBar>
+
+
+    <j:ApplicationMainContent  localId="main" hasTopAppBar="true" >
+        
+    </j:ApplicationMainContent>
+
+</j:ApplicationResponsiveView>

@@ -1,6 +1,7 @@
 
-@namespace j "library://ns.apache.org/royale/jewel";
 @namespace "http://www.w3.org/1999/xhtml";
+@namespace js "library://ns.apache.org/royale/basic";
+@namespace j "library://ns.apache.org/royale/jewel";
 
   .Application {
     font-family: 'Open Sans', serif, sans-serif;
@@ -27,10 +28,39 @@
     text-align: center;
   }
 
-  .colorSymbol{
-    color: rgb(60, 173, 241);
-  }
+#cardThumbnail{
+  background: white;
+  padding: 10px;
+  margin: 10px;
+  text-transform: none; 
+  /*box-shadow: 0 1px 2px rgba(0,0,0,0.15);*/
+}
+/*
+#cardThumbnail::after {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+#cardThumbnail:hover::after {
+  opacity: 1;
+}
+#cardThumbnail .card-header{
+  padding-left: 0px;
+  font-weight: bold;
+}*/ 
 
+#cardThumbnail:hover {
+  /*Si no se especifica color coge el del "color" 0px 0px 5px 3px; white;  border-color: #d2dadf !important;*/
+  -webkit-box-shadow: 0px 0px 5px 3px burlywood;
+  -moz-box-shadow:    0px 0px 5px 3px burlywood;
+  box-shadow:         0px 0px 5px 3px burlywood;
+}
+#tabbarApp .indicator>.indicatorContent{
+  background-color: white;
+}
+
+    
+/*
   .jewel.card .card-header{
       border-bottom: 1px solid #d2dadf;
       min-height: 58px;
@@ -39,4 +69,4 @@
   .jewel.card .card-actions{
       border-top: 1px solid #d2dadf;
   }
-
+*/

@@ -1,12 +1,12 @@
 package 
 {
-	import org.apache.royale.html.Container;
 	//import org.apache.royale.core.UIBase;
-
+    import org.apache.royale.html.Container;
+	
 	[DefaultProperty("currentInstance")]
 
 	COMPILE::JS
-	public class EChartsComponent extends Container
+	public class EChartsComponent extends org.apache.royale.html.Container
     {
 	
         public function EChartsComponent()
