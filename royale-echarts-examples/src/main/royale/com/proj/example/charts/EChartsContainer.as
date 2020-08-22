@@ -9,6 +9,8 @@ package com.proj.example.charts
             super();
         }
 
+        public var autoLoad:Boolean = true;
+
         private var _optionsInit:Object;
 
         [Bindable("__NoChangeEvent__")]
@@ -18,18 +20,8 @@ package com.proj.example.charts
         public function set optionsInit(value:Object):void
         { 
             _optionsInit = value;
-            reInit();            
-        }
-
-        [Bindable("optionsChange")]
-        override public function get options():Object{ 
-            return super.options; 
-        }
-        override public function set options(value:Object):void{
-            if(!_optionsInit)
-                optionsInit = value;
-            
-            super.options = value;
+            if (autoLoad)
+                reInit();
         }
 
         public function reInit():void

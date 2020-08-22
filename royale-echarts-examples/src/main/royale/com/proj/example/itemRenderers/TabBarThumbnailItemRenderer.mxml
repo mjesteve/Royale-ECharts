@@ -42,15 +42,17 @@ limitations under the License.
     </j:beads>
 
     <j:Card id="cardThumbnail">
+        <j:beads>
+            <j:ToolTip localId="tt" toolTip="{tabButton.description}"/>
+        </j:beads>
         <j:CardHeader>
             <j:Label text="{tabButton.label}" className="primary" style="font-size: 0.75em;"/>            
         </j:CardHeader>
         <j:CardExpandedContent itemsHorizontalAlign="itemsCenter" itemsVerticalAlign="itemsCenter">
-            <j:Image localId="img" src="{tabButton.thumbnail}" height="100">
+            <j:Image localId="img" src="{tabButton.thumbnail}" width="100">
                 <j:beads>
-                    <j:ResponsiveSize phoneHeight="25" tabletHeight="50"/>
+                    <j:ResponsiveSize phoneWidth="75"/>
                     <js:ErrorImage emptyIsError="true"/>
-                    <j:ToolTip localId="tt" toolTip="{tabButton.description}"/>
                 </j:beads>
             </j:Image>
             

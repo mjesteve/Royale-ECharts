@@ -1,6 +1,5 @@
 package com.proj.example.vos
 {
-    import com.proj.example.charts.IEchartDefinition;
 
     [Bindable]
     public class TabBarChartVO
@@ -10,7 +9,7 @@ package com.proj.example.vos
         public var label:String;
         public var description:String;
         public var thumbnail:String;
-        public var component:IEchartDefinition;
+        public var descChart:ChartDefExampleVO;
 
         public function TabBarChartVO()
         {

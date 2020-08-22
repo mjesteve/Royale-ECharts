@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    initComplete="initCompleteHandler(event)"
+    style="padding: 300px">
+
+    <fx:Script>
+        <![CDATA[
+            import org.apache.royale.events.Event;
+            import org.apache.royale.utils.BrowserInfo;
+            import org.apache.royale.utils.OSUtils;
+
+            /**
+             * BUILD NUMBER
+             */
+            private static var _buildNumber :String = BUILD::buildNumber;
+
+            /**
+             * Project Version
+             */
+            private static var _projectVersion :String = BUILD::buildVersion;
+
+            private function initCompleteHandler(event:Event):void
+            {
+                buildVersionLabel.html = _projectVersion + '.' + _buildNumber;
+                COMPILE::JS
+                {
+                    os.html = BrowserInfo.current().formFactor + " (" + OSUtils.getOS() + " " + OSUtils.getOSVersion() + ")";
+                    browser.html = BrowserInfo.current().browser + " " + BrowserInfo.current().version + " (" + BrowserInfo.current().engine + ")";
+                }
+            }
+        ]]>
+    </fx:Script>
+    
+    <j:beads>
+        <js:ContainerDataBinding/>
+    </j:beads>
+    
+    <j:VGroup gap="3" itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">    
+
+        <j:Label text="Login Correcto">
+            <j:beads>
+                <j:TextAlign align="center"/>
+            </j:beads>
+        </j:Label>
+        
+        <j:Label localId="os" html="*os*">
+            <j:beads>
+                <j:TextAlign align="center"/>
+            </j:beads>
+        </j:Label>
+
+        <j:Label localId="browser" html="*browser*">
+            <j:beads>
+                <j:TextAlign align="center"/>
+            </j:beads>
+        </j:Label>
+
+        <j:Label localId="buildVersionLabel" html="*version*">
+            <j:beads>
+                <j:TextAlign align="center"/>
+            </j:beads>
+        </j:Label>
+    </j:VGroup>
+
+</j:ScrollableSectionContent>
