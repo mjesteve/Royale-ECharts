@@ -9,7 +9,7 @@ package com.proj.example.vos
         public var label:String;
         public var description:String;
         public var thumbnail:String;
-        public var descChart:ChartDefExampleVO;
+        //public var descChart:ChartDefExampleVO;
 
         public function TabBarChartVO()
         {

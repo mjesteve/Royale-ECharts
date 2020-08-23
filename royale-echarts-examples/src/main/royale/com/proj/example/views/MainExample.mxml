@@ -4,18 +4,14 @@
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:vos="com.proj.example.vos.*"
-	xmlns:models="models.*" 
+	xmlns:models="com.proj.example.models.*" 
     xmlns:localchart="com.proj.example.charts.*" xmlns:views="com.proj.example.views.*"
     initComplete="onInitComplete()"
     >
 
      <fx:Script>
         <![CDATA[
-        import org.apache.royale.collections.ArrayList;
-        import com.proj.example.charts.*;
         import com.proj.example.vos.TabBarChartVO;
-        import com.proj.example.charts.ECC_PIE002;
-        import com.proj.example.charts.ECC_PIE001;
         import org.apache.royale.jewel.supportClasses.ISelectableContent;
         import com.proj.example.charts.IEchartDefinitionTemplate;
 
@@ -23,6 +19,16 @@
 			//window.addEventListener('resize', autoResizeHandler, false);
             this.addEventListener("sizeChanged", autoResizeHandler);
             trace(topappbar.height.toString());
+
+            
+				var dp:Array = [];
+				for (var i:int = 0; i < 30; i++)
+				{
+					var color:uint = uint(Math.random() * 0xFFFFFF);
+					dp.push(color);
+				}
+				arrayColorSelectionModel.dataProvider = dp;
+                
         }
 
         [Bindable]
@@ -45,12 +51,12 @@
 				for (var i:int = 0; i < main.numElements; i++)
 				{
 					var content:ISelectableContent = main.getElementAt(i) as ISelectableContent;
-					if(content.isSelected){
+					if(content.isSelected){                        
                         if(content is IEchartDefinitionTemplate){
-                            if(!(content as IEchartDefinitionTemplate).optionsInit)
-                                (content as IEchartDefinitionTemplate).optionsInit = it.optionsInit;
-                            else
-                                (content as IEchartDefinitionTemplate).chartComponent.resize();
+                            var cchart:IEchartDefinitionTemplate = content as IEchartDefinitionTemplate;
+                            if(cchart && cchart.chartComponent){
+                                cchart.chartComponent.resize();
+                            }
                         }
                         return;
                     }
@@ -64,7 +70,7 @@
     </fx:Script>
 
 	<j:model>
-		<models:ChartsModel localId="listModel"/>
+		<models:ChartsModel localId="appModel"/>
 	</j:model>
 
     <j:beads>
@@ -82,25 +88,28 @@
             <j:HGroup gap="0" percentWidth="100" itemsVerticalAlign="itemsCenter">
                 <j:TabBar id="tabbarApp" width="100%" selectedIndex="-1" sameWidths="true"
                     itemRenderer="com.proj.example.itemRenderers.TabBarThumbnailItemRenderer"
-                    change="selectedChart()">
-                    <js:ArrayList>
-                        <fx:Array>
-                            <vos:TabBarChartVO label="Char1" hash="ecp1" thumbnail="assets/charts/xCFIVk5Ebk.png" description="Pie Chart. 1"/>
-                            <vos:TabBarChartVO label="Char2" hash="ecp2" thumbnail="assets/charts/xlZeV3FwQM.png" description="Pie Chart. 2"/>
-                        </fx:Array>
-                    </js:ArrayList>
+                    change="selectedChart()" dataProvider="{appModel.tabBarAppData}">
                 </j:TabBar>
             </j:HGroup>
         </j:BarRow>
-
+        <j:BarRow localId="barRowConfig">
+            <j:BarSection gap="3" percentWidth="100" >
+                <!--itemsHorizontalAlign="itemsRight"<j:ComboBox width="100%" localId="cbCharts" labelField="desChart" change="selectChart()"/>change="changeHandler()" -->
+                <js:ColorPicker id="myColorPicker">
+				<js:beads>
+					<js:ArrayColorSelectionModel id="arrayColorSelectionModel"/>
+					<views:ColorPickerPopUpWithPalette/>
+					<js:ColorPickerWithEmptyView/>
+				</js:beads>
+			</js:ColorPicker>
+            </j:BarSection>
+        </j:BarRow>
     </j:TopAppBar>
 
     <j:ApplicationMainContent  localId="main" hasTopAppBar="true" selectedContent="welcome">
         <views:WelcomeSection name="welcome"/>
-        <views:EChartsTemplate name="ecp1" style="padding-top:{offsetTopBar}px;"
-                                            optionsInit="{ECC_PIE001.optionsInit}"/>
-        <views:EChartsTemplate name="ecp2" style="margin-top:{offsetTopBar}px;"
-                                            optionsInit="{ECC_PIE002.optionsInit}"/>
+        <views:EChartsTemplate name="ecp1" style="padding-top:{offsetTopBar}px;" itemChart="{appModel.ECC_PIE001}"/>
+        <views:EChartsTemplate name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChart="{appModel.ECC_PIE002}"/>
     </j:ApplicationMainContent>
 
 </j:ApplicationResponsiveView>

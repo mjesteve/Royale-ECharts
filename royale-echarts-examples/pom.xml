@@ -48,6 +48,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <executions>
+
             <execution>
               <id>copy-resources-debug</id>
               <phase>validate</phase>
@@ -61,9 +62,14 @@
                     <directory>src/main/resources</directory>
                     <filtering>true</filtering>
                   </resource>
+                  <resource>
+                    <directory>../royale-echarts/src/main/resources</directory>
+                    <filtering>true</filtering>
+                  </resource>
                 </resources>
               </configuration>
             </execution>
+
             <execution>
               <id>copy-resources-release-assets</id>
               <phase>validate</phase>
@@ -81,6 +87,25 @@
                 </resources>
               </configuration>
             </execution>
+
+            <execution>
+              <id>copy-resources-release-themes</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <!-- Copy the assets to the assets output directory -->
+                <outputDirectory>${compiler.output-dir-release}/themes</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>../royale-echarts/src/main/resources/themes</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>   
+
             <execution>
               <id>copy-resources-release-js</id>
               <phase>validate</phase>
@@ -97,7 +122,8 @@
                   </resource>
                 </resources>
               </configuration>
-            </execution>
+            </execution>   
+
             <execution>
               <id>copy-resources-release</id>
               <phase>validate</phase>
