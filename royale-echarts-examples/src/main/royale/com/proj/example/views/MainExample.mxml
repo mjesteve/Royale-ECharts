@@ -92,7 +92,7 @@
     <j:ApplicationMainContent  localId="main" hasTopAppBar="true" selectedContent="welcome">
         <views:WelcomeSection name="welcome"/>
         <views:EChartsTemplate name="ecp1" style="padding-top:{offsetTopBar}px;" itemChart="{appModel.ECC_PIE001}"/>
-        <views:EChartsTemplate name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChart="{appModel.ECC_PIE002}"/>
+        <!--<views:EChartsTemplate name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChart="{appModel.ECC_PIE002}"/>-->
     </j:ApplicationMainContent>
 
 </j:ResponsiveView>

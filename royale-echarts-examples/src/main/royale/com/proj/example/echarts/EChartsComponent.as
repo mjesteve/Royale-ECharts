@@ -2,6 +2,9 @@ package com.proj.example.echarts
 {
 	import org.apache.royale.html.Container;
 	import org.apache.royale.core.UIBase;
+	import org.apache.royale.net.HTTPService;
+	import org.apache.royale.collections.LazyCollection;
+	import org.apache.royale.collections.parsers.JSONInputParser;
 
 	[DefaultProperty("currentInstance")]
 
@@ -14,6 +17,9 @@ package com.proj.example.echarts
 			super();
 		}
 		public var domInstance:Element = null;
+        static public var serviceJSON:HTTPService;
+        static public var collectionJSON:LazyCollection;
+         
 		/**
 		 * @private
 		 */
@@ -23,6 +29,13 @@ package com.proj.example.echarts
             percentWidth = 100;
             percentHeight = 100;
 			domInstance = this.element;
+            
+            serviceJSON = new HTTPService();
+            collectionJSON = new LazyCollection();
+            collectionJSON.inputParser = new JSONInputParser();
+            collectionJSON.itemConverter = new ThemeDataJSONItemConverter();
+            serviceJSON.addBead(collectionJSON);
+            addBead(serviceJSON);
 		}
         
         private var _currentInstance:Object;
@@ -46,14 +59,26 @@ package com.proj.example.echarts
         public var isConfigure:Boolean;
 
 		private var _themeInstance:Object = null;
-		public function get themeInstance():Object{ return _themeInstance; }
+        [Bindable]
+		public function get themeInstance():Object{
+            return _themeInstance; 
+        }
 		public function set themeInstance(value:Object):void{ 
                          
             if(typeof value == 'string')
             {
-
+                var idxtheme:int = -1
+                if(EChartsThemes.loadTheme(this, value as String, idxtheme))
+                {
+                    _themeInstance = EChartsThemes.themesLoad[idxtheme];
+                    echarts.registerTheme(value as String,_themeInstance);
+                    return;
+                }
+            }else{
+                //Unfinished. Temporary issues.
+                //_themeInstance = value; 
             }
-            _themeInstance = value; 
+            
         }
 
 		public var optsInstance:Object = null;
@@ -64,9 +89,15 @@ package com.proj.example.echarts
 		 * @param opts { devicePixelRatio?: number,  renderer?: string, width?: number|string, height?: number|string }
 		 */
 		public function init(theme:Object=null, opts:Object=null):void
-		{ 
+		{
+            if(isInit) {
+                echarts.dispose(currentInstance);
+            }
 			if(theme)
 				themeInstance = theme;
+            else if(!themeInstance){
+                themeInstance = 'default';
+            }
 			if(opts)
 				optsInstance = opts;
 			// see echarts.init 

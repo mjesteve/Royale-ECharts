@@ -52,7 +52,9 @@
                 <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
                     <j:VGroup localId="cardContent" gap="3" height="100%" width="100%" className="wrapper">
                             <localecharts:EChartsContainer localId="charComp" height="100%" width="100%"
-                            optionsInit="{itemChart.optionsInit}" autoLoad="{itemChart.autoLoad}" />
+                            themeInstance="{itemChart.themeName}" 
+                            autoLoad="{itemChart.autoLoad}" 
+                            optionsInit="{itemChart.optionsInit}"/>
                     </j:VGroup>   
                 </j:CardPrimaryContent>                
             </j:Card> 

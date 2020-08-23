@@ -57,6 +57,7 @@ package com.proj.example.models
 		{
 			if(!_ECC_PIE001){
 				_ECC_PIE001 = new ChartDefExampleVO();
+				_ECC_PIE001.themeName = 'halloween';
 				_ECC_PIE001.autoLoad = true;
 				_ECC_PIE001.optionsInit = {
 					"backgroundColor": "#2c343c",
@@ -178,6 +179,7 @@ package com.proj.example.models
 		{
 			if(!_ECC_PIE002){
 				_ECC_PIE002 = new ChartDefExampleVO();
+				_ECC_PIE002.themeName = 'halloween';
 				_ECC_PIE002.autoLoad = true;
 				_ECC_PIE002.optionsInit = {
 					tooltip: {
