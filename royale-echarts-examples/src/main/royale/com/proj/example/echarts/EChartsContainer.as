@@ -1,4 +1,4 @@
-package com.proj.example.charts
+package com.proj.example.echarts
 {
 
     public class EChartsContainer extends EChartsComponent
@@ -9,25 +9,30 @@ package com.proj.example.charts
             super();
         }
 
+        public var _autoLoad:Boolean = false;
+
+        [Bindable("__NoChangeEvent__")]
+        public function get autoLoad():Boolean{ 
+            return _autoLoad; 
+        }
+        public function set autoLoad(value:Boolean):void
+        { 
+            _autoLoad = value;
+            if (_autoLoad && !isConfigure && _optionsInit)
+                reInit();
+        }
+
         private var _optionsInit:Object;
+
+        [Bindable("__NoChangeEvent__")]
         public function get optionsInit():Object{ 
             return _optionsInit; 
         }
         public function set optionsInit(value:Object):void
         { 
             _optionsInit = value;
-           reInit();            
-        }
-
-        [Bindable("optionsChange")]
-        override public function get options():Object{ 
-            return super.options; 
-        }
-        override public function set options(value:Object):void{
-            if(!_optionsInit)
-                optionsInit = value;
-            
-            super.options = value;
+            if (autoLoad)
+                reInit();
         }
 
         public function reInit():void

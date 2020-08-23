@@ -1,22 +1,20 @@
 package com.proj.example.vos
 {
-    import com.proj.example.charts.IEchartDefinition;
+    [Bindable]
+	public class ChartDefExampleVO
+	{
+		
+        public var title:String;
+        public var subtitle:String;
+        
+		public var optionsInit:Object;
+		public var autoLoad:Boolean;
+        //function get chartComponent():EChartsContainer;
 
-    public class ChartDefExampleVO
-    {
-        public var idChart:int;
-        public var desChart:String;
-        public var typeChart:String;
-        public var component:IEchartDefinition;
-
-        public function ChartDefExampleVO(idChart:int, desChart:String, typeChart:String, component:IEchartDefinition)
+        public function ChartDefExampleVO()
         {
-            this.idChart = idChart;
-            this.desChart = desChart;
-            this.typeChart = typeChart;
-            this.component = component;
+            
         }
-
-    }
+		
+	}
 }
-

@@ -20,6 +20,9 @@ package com.proj.example.charts
 		}
 
         [Bindable]
+        public static var autoLoad:Boolean = true;
+
+        [Bindable]
         public static function get optionsInit():Object
         {
             var dataprovider:Array = [

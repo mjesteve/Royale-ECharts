@@ -1,5 +1,6 @@
 package
 {
+
 	/**
 	 * @externs
 	 */
@@ -31,7 +32,8 @@ package
 		 * document.head.appendChild(script);
 		 * </inject_script>
 		*/
-        public function echarts(){}
+        public function echarts(){
+		}
 		/**
 		 * Creates an ECharts instance, and returns an echartsInstance. You shall not initialize multiple ECharts instances on a single container.
 		 * @param dom HTMLDivElement|HTMLCanvasElement
@@ -85,6 +87,5 @@ package
 		 * @param theme 
 		 */
 		public static function registerTheme(themeName:String=null, theme:Object=null):void{}
-		
 	}
 }

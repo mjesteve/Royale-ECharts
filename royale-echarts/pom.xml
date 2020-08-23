@@ -72,6 +72,14 @@
               <name>js/*</name>
               <path>../src/main/resources/js/*</path>
             </include-file>
+            <include-file>
+              <name>themes/json/*</name>
+              <path>../src/main/resources/themes/json/*</path>
+            </include-file>
+            <include-file>
+              <name>themes/thumb/*</name>
+              <path>../src/main/resources/themes/thumb/*</path>
+            </include-file>
           </includeFiles>
         
 		      <skipExtern>false</skipExtern>

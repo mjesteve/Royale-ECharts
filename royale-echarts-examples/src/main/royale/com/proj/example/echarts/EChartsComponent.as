@@ -1,7 +1,7 @@
-package com.proj.example.charts
+package com.proj.example.echarts
 {
 	import org.apache.royale.html.Container;
-	//import org.apache.royale.core.UIBase;
+	import org.apache.royale.core.UIBase;
 
 	[DefaultProperty("currentInstance")]
 
@@ -29,7 +29,7 @@ package com.proj.example.charts
         public function get currentInstance():Object{ return _currentInstance; }
         public function set currentInstance(value:Object):void{ 
             _currentInstance = value;
-            isInit = (_currentInstance);
+            isInit = (_currentInstance);            
         }
         [Bindable]
         public var isInit:Boolean;
@@ -45,7 +45,17 @@ package com.proj.example.charts
         [Bindable]
         public var isConfigure:Boolean;
 
-		public var themeInstance:Object = null;
+		private var _themeInstance:Object = null;
+		public function get themeInstance():Object{ return _themeInstance; }
+		public function set themeInstance(value:Object):void{ 
+                         
+            if(typeof value == 'string')
+            {
+
+            }
+            _themeInstance = value; 
+        }
+
 		public var optsInstance:Object = null;
     
 		/**
@@ -125,7 +135,7 @@ package com.proj.example.charts
 		 */
         public function resize(opts:Object = null):void
         {
-            if(currentInstance){                
+            if(currentInstance){
                 currentInstance.resize(opts);
             }
         }

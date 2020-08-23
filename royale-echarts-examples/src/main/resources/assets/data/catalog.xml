@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<catalog>
+
+    <chart hash="ecp1">
+        <typeChart>Pie</typeChart>
+        <label>Char1</label>
+        <description> </description>
+        <thumbnail>assets/charts/xCFIVk5Ebk.png</thumbnail>
+		<descChart>
+            <optionsInit>{
+                title: {
+                    text:'Pie Chart'
+                },
+                series : [
+                    {
+                        name: 'Reference Page',
+                        type: 'pie',
+                        radius: '55%',
+                        data:[
+                            {value:400, name:'Searching Engine'},
+                            {value:335, name:'Direct'},
+                            {value:310, name:'Email'},
+                            {value:274, name:'Alliance Advertisement'},
+                            {value:235, name:'Video Advertisement'}
+                        ]
+                    }
+                ]
+            }</optionsInit>
+            <autoLoad>true</autoLoad>  
+        </descChart>
+    </chart>
+
+</catalog>

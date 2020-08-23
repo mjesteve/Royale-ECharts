@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ApplicationResponsiveView xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+    xmlns:vos="com.proj.example.vos.*"
+	xmlns:models="com.proj.example.models.*" 
+    xmlns:localchart="com.proj.example.charts.*" xmlns:views="com.proj.example.views.*"
+    initComplete="onInitComplete()"
+    >
+
+     <fx:Script>
+        <![CDATA[
+        import com.proj.example.vos.TabBarChartVO;
+        import org.apache.royale.jewel.supportClasses.ISelectableContent;
+        import com.proj.example.charts.IEchartDefinitionTemplate;
+
+        private function onInitComplete():void{            
+			//window.addEventListener('resize', autoResizeHandler, false);
+            this.addEventListener("sizeChanged", autoResizeHandler);
+            trace(topappbar.height.toString());
+
+            
+				var dp:Array = [];
+				for (var i:int = 0; i < 30; i++)
+				{
+					var color:uint = uint(Math.random() * 0xFFFFFF);
+					dp.push(color);
+				}
+				arrayColorSelectionModel.dataProvider = dp;
+                
+        }
+
+        [Bindable]
+        public function get offsetTopBar():Number{
+            return topappbar.element.clientHeight + (topappbar.element.clientTop * 2);
+        }
+
+		public function autoResizeHandler(event:Event = null):void
+        {
+            selectedChart();
+        }
+
+        public function selectedChart():void
+        {            
+            var it:TabBarChartVO = (tabbarApp.selectedItem as TabBarChartVO);
+            if(!it){
+                main.selectedContent = "welcome";
+            }else{
+                main.selectedContent= it.hash;                                
+				for (var i:int = 0; i < main.numElements; i++)
+				{
+					var content:ISelectableContent = main.getElementAt(i) as ISelectableContent;
+					if(content.isSelected){                        
+                        if(content is IEchartDefinitionTemplate){
+                            var cchart:IEchartDefinitionTemplate = content as IEchartDefinitionTemplate;
+                            if(cchart && cchart.chartComponent){
+                                cchart.chartComponent.resize();
+                            }
+                        }
+                        return;
+                    }
+				}
+            }
+
+        }
+
+
+        ]]>
+    </fx:Script>
+
+	<j:model>
+		<models:ChartsModel localId="appModel"/>
+	</j:model>
+
+    <j:beads>
+		<js:ContainerDataBinding/>
+		<js:BrowserResizeListener/>
+	</j:beads>
+
+    <j:TopAppBar localId="topappbar" fixed="true" visible="true">
+        <j:BarRow localId="barRowHeader">
+            <j:BarSection gap="0" percentWidth="100">
+                <j:BarTitle text="Integrating Apache ECharts (Incumbating) into Apache Royale"/>
+            </j:BarSection>
+        </j:BarRow>
+        <j:BarRow localId="barRowContent" style ="height:auto;">
+            <j:HGroup gap="0" percentWidth="100" itemsVerticalAlign="itemsCenter">
+                <j:TabBar id="tabbarApp" width="100%" selectedIndex="-1" sameWidths="true"
+                    itemRenderer="com.proj.example.itemRenderers.TabBarThumbnailItemRenderer"
+                    change="selectedChart()" dataProvider="{appModel.tabBarAppData}">
+                </j:TabBar>
+            </j:HGroup>
+        </j:BarRow>
+        <j:BarRow localId="barRowConfig">
+            <j:BarSection gap="3" percentWidth="100" >
+                <!--itemsHorizontalAlign="itemsRight"<j:ComboBox width="100%" localId="cbCharts" labelField="desChart" change="selectChart()"/>change="changeHandler()" -->
+                <js:ColorPicker id="myColorPicker">
+				<js:beads>
+					<js:ArrayColorSelectionModel id="arrayColorSelectionModel"/>
+					<views:ColorPickerPopUpWithPalette/>
+					<js:ColorPickerWithEmptyView/>
+				</js:beads>
+			</js:ColorPicker>
+            </j:BarSection>
+        </j:BarRow>
+    </j:TopAppBar>
+
+    <j:ApplicationMainContent  localId="main" hasTopAppBar="true" selectedContent="welcome">
+        <views:WelcomeSection name="welcome"/>
+        <views:EChartsTemplate name="ecp1" style="padding-top:{offsetTopBar}px;" itemChart="{appModel.ECC_PIE001}"/>
+        <views:EChartsTemplate name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChart="{appModel.ECC_PIE002}"/>
+    </j:ApplicationMainContent>
+
+</j:ApplicationResponsiveView>
