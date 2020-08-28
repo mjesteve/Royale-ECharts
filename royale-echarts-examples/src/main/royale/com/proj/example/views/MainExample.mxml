@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<j:ApplicationResponsiveView xmlns:fx="http://ns.adobe.com/mxml/2009"
+<j:ResponsiveView xmlns:fx="http://ns.adobe.com/mxml/2009"
     xmlns:j="library://ns.apache.org/royale/jewel"
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
@@ -18,17 +18,7 @@
         private function onInitComplete():void{            
 			//window.addEventListener('resize', autoResizeHandler, false);
             this.addEventListener("sizeChanged", autoResizeHandler);
-            trace(topappbar.height.toString());
-
-            
-				var dp:Array = [];
-				for (var i:int = 0; i < 30; i++)
-				{
-					var color:uint = uint(Math.random() * 0xFFFFFF);
-					dp.push(color);
-				}
-				arrayColorSelectionModel.dataProvider = dp;
-                
+            trace(topappbar.height.toString());               
         }
 
         [Bindable]
@@ -94,14 +84,7 @@
         </j:BarRow>
         <j:BarRow localId="barRowConfig">
             <j:BarSection gap="3" percentWidth="100" >
-                <!--itemsHorizontalAlign="itemsRight"<j:ComboBox width="100%" localId="cbCharts" labelField="desChart" change="selectChart()"/>change="changeHandler()" -->
-                <js:ColorPicker id="myColorPicker">
-				<js:beads>
-					<js:ArrayColorSelectionModel id="arrayColorSelectionModel"/>
-					<views:ColorPickerPopUpWithPalette/>
-					<js:ColorPickerWithEmptyView/>
-				</js:beads>
-			</js:ColorPicker>
+                <html:H3 text="[[ Reserved to options settings - Themes ]]"/>
             </j:BarSection>
         </j:BarRow>
     </j:TopAppBar>
@@ -112,4 +95,4 @@
         <views:EChartsTemplate name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChart="{appModel.ECC_PIE002}"/>
     </j:ApplicationMainContent>
 
-</j:ApplicationResponsiveView>
+</j:ResponsiveView>
