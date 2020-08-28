@@ -1,6 +1,9 @@
 package com.proj.example.echarts
 {
 
+	import org.apache.royale.utils.ObjectMap;
+
+	//[DefaultProperty("currentInstance")]
     public class EChartsContainer extends EChartsComponent
     {
         
@@ -9,7 +12,7 @@ package com.proj.example.echarts
             super();
         }
 
-        public var _autoLoad:Boolean = false;
+        public var _autoLoad:Boolean;
 
         [Bindable("__NoChangeEvent__")]
         public function get autoLoad():Boolean{ 

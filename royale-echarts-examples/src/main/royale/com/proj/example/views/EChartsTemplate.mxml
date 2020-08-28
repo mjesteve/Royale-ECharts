@@ -52,9 +52,11 @@
                 <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
                     <j:VGroup localId="cardContent" gap="3" height="100%" width="100%" className="wrapper">
                             <localecharts:EChartsContainer localId="charComp" height="100%" width="100%"
-                            themeInstance="{itemChart.themeName}" 
-                            autoLoad="{itemChart.autoLoad}" 
-                            optionsInit="{itemChart.optionsInit}"/>
+                            autoLoad="true" optionsInit="{itemChart.optionsInit}">
+                                <localecharts:beads>
+                                    <localecharts:EChartsThemeBead themeInstance="{itemChart.themeName}"/>
+                                </localecharts:beads>
+                            </localecharts:EChartsContainer>
                     </j:VGroup>   
                 </j:CardPrimaryContent>                
             </j:Card> 

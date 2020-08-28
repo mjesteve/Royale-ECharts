@@ -5,8 +5,10 @@ package com.proj.example.echarts
 	import org.apache.royale.net.HTTPService;
 	import org.apache.royale.collections.LazyCollection;
 	import org.apache.royale.collections.parsers.JSONInputParser;
+	import org.apache.royale.core.IBead;
+    import org.apache.royale.events.Event;
 
-	[DefaultProperty("currentInstance")]
+	//[DefaultProperty("currentInstance")]
 
 	COMPILE::JS
 	public class EChartsComponent extends Container
@@ -15,10 +17,11 @@ package com.proj.example.echarts
         public function EChartsComponent()
 		{
 			super();
+            addEventListener("beadsAdded", beadsAddedHandler);
 		}
 		public var domInstance:Element = null;
         static public var serviceJSON:HTTPService;
-        static public var collectionJSON:LazyCollection;
+        static public var collectionJSON:LazyCollection;        
          
 		/**
 		 * @private
@@ -29,14 +32,35 @@ package com.proj.example.echarts
             percentWidth = 100;
             percentHeight = 100;
 			domInstance = this.element;
-            
-            serviceJSON = new HTTPService();
-            collectionJSON = new LazyCollection();
-            collectionJSON.inputParser = new JSONInputParser();
-            collectionJSON.itemConverter = new ThemeDataJSONItemConverter();
-            serviceJSON.addBead(collectionJSON);
-            addBead(serviceJSON);
 		}
+
+        public function beadsAddedHandler(event:Event):void
+        {
+            var ibeadact:IBead;
+            ibeadact = this.getBeadByType(EChartsThemeTemplates);
+            if(ibeadact == null)
+            {
+                trace("no bead");
+            }else{
+                trace ("si bead");
+            }
+            /*var ibeadact:IBead;
+            ibeadact = this.getBeadByType(HTTPService);
+            if(ibeadact == null)
+            {
+               serviceJSON = new HTTPService();
+                //collectionJSON = new LazyCollection();
+                //collectionJSON.inputParser = new JSONInputParser();
+                //collectionJSON.itemConverter = new ThemeDataJSONItemConverter();            
+                //serviceJSON.addBead(collectionJSON);
+                //serviceJSON.addEventListener("complete", loadThemeComplete);
+                addBead(serviceJSON);
+            }else{
+                serviceJSON = IBead(ibeadact) as HTTPService;
+            }
+            //<js:HTTPService id="codeTextLoader" url="as3code.txt" complete="code_txt = codeTextLoader.data;"/>*/
+            removeEventListener("beadsAdded", beadsAddedHandler);
+        }
         
         private var _currentInstance:Object;
         public function get currentInstance():Object{ return _currentInstance; }
@@ -46,6 +70,62 @@ package com.proj.example.echarts
         }
         [Bindable]
         public var isInit:Boolean;
+
+        //private var itemThemeInProgress:Object;
+        private var _withThemeBead:Boolean = false;
+        public function get withThemeBead():Boolean{ return _withThemeBead; }
+        public function set withThemeBead(value:Boolean):void
+        { 
+            _withThemeBead = value; 
+        }
+
+		private var _themeInstance:Object = null;
+        [Bindable("themeInstanceChange")]
+		public function get themeInstance():Object{
+            return _themeInstance; 
+        }
+		public function set themeInstance(value:Object):void
+        {
+            /*
+            if(typeof value == 'string')
+            {
+                //vo: index is int, item is {themeName:'wonderland', thumb:'themes/thumb/wonderland.png', theme:null, isReg:false}
+                itemThemeInProgress = EChartsThemes.themeInfoLoad(value as String);
+                if(itemThemeInProgress.index != -1)
+                {
+                    if(itemThemeInProgress.isReg){
+                        _themeInstance = value;
+                        return;
+                    }
+                    //Exist - Not Load
+                    if(!itemThemeInProgress.theme)
+                    {                        
+                        EChartsThemes.loadTheme(this, value as String);
+                    }
+                }else{
+                    itemThemeInProgress = null;
+                }
+            }else{
+                //Unfinished. Temporary issues.
+                //_themeInstance = value; 
+            }*/
+            if(_themeInstance === value)
+                return;
+
+            _themeInstance = value; 
+            if(withThemeBead)
+                init(value);
+        }
+        
+        public function loadThemeComplete(themeInProgress:String, event:Event=null):void
+        {
+            if(!withThemeBead)
+                return;
+
+            echarts.registerTheme(themeInProgress,EChartsThemeTemplates.themesLoad[themeInProgress].theme);
+            EChartsThemeTemplates.updateReg(themeInProgress,true);
+            themeInstance = themeInProgress;
+        }
 
         protected var _options:Object;
         [Bindable("optionsChange")]
@@ -57,29 +137,6 @@ package com.proj.example.echarts
         }
         [Bindable]
         public var isConfigure:Boolean;
-
-		private var _themeInstance:Object = null;
-        [Bindable]
-		public function get themeInstance():Object{
-            return _themeInstance; 
-        }
-		public function set themeInstance(value:Object):void{ 
-                         
-            if(typeof value == 'string')
-            {
-                var idxtheme:int = -1
-                if(EChartsThemes.loadTheme(this, value as String, idxtheme))
-                {
-                    _themeInstance = EChartsThemes.themesLoad[idxtheme];
-                    echarts.registerTheme(value as String,_themeInstance);
-                    return;
-                }
-            }else{
-                //Unfinished. Temporary issues.
-                //_themeInstance = value; 
-            }
-            
-        }
 
 		public var optsInstance:Object = null;
     
@@ -96,7 +153,7 @@ package com.proj.example.echarts
 			if(theme)
 				themeInstance = theme;
             else if(!themeInstance){
-                themeInstance = 'default';
+                //themeInstance = 'default';
             }
 			if(opts)
 				optsInstance = opts;

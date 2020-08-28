@@ -13,6 +13,7 @@ package com.proj.example.echarts
 
     public class EChartsThemes
     {
+
         public static var themesLoad:ArrayList = new ArrayList([
             {themeName:'default', thumb:'themes/thumb/default.png', theme:null, isReg:false},
             {themeName:'light', thumb:'themes/thumb/light.png', theme:null, isReg:true},
@@ -35,7 +36,7 @@ package com.proj.example.echarts
         {
         }
 
-        private static function themeInfoLoad(themeName:String):Object
+        static public function themeInfoLoad(themeName:String):Object
         {            
             for(var i:int = 0; i<themesLoad.length; i++)
             {
@@ -47,75 +48,63 @@ package com.proj.example.echarts
             return {index:-1,item:null};
         }
 
-        private static var inProgress:Boolean=false;
+        static public var inProgress:Boolean=false;
+        static public var themeInProgress:int=-1;
         
         /*private static var service:HTTPService;
         private static var collection:LazyCollection;*/
 
-		public static function loadTheme(parentchart:EChartsComponent,themeName:String=null, outIdxTheme:int = -1):Boolean
+		public static function loadTheme(parentchart:EChartsComponent,themeName:String=null,themeIndex:int=-1):void
         {
+            if(!themeName && themeIndex == -1)
+                return;
+
             do 
             {
-              if(!inProgress)
-              {
-                inProgress = true;
-
-                var objtheme:Object = themeInfoLoad(themeName);
-                outIdxTheme = objtheme.index
-                if(outIdxTheme != -1)
+                if(!inProgress)
                 {
-                    if(!objtheme.item.theme && !objtheme.item.isReg)
-                    {
-                        var service:HTTPService = EChartsComponent.serviceJSON;
-                        service.url = "themes/json/"+themeName+".json";
-                        //service.addEventListener("complete", completeHandler);
-                        service.addEventListener("complete", 
-                            function(e:Event):void{                          
-                                try
-                                {
-                                    var collection:LazyCollection = EChartsComponent.collectionJSON;
-			                        var objData:Object = collection.getItemAt(0) as Object;
+                    if(!themeName && themeIndex != -1)
+                        themeName = themesLoad[themeIndex].themeName;
+                    else if(themeIndex == -1 && themeName)
+                        themeIndex = themeInfoLoad(themeName).index;
+                    
+                    inProgress = true;
+                    themeInProgress = themeIndex;
+                    var service:HTTPService = EChartsComponent.serviceJSON;
+                    service.url = "themes/json/"+themeName+".json";
+                    service.addEventListener("complete", 
+                            function(e:Event):void{ 
+                                var objData:Object = EChartsComponent.serviceJSON.data;
+                                var jsonData:Object = JSON.parse(objData as String);
+                                themesLoad[themeIndex].theme = jsonData;
+                                
+                                inProgress = true;
+                            } );
+                    service.send();
+                
+                }            
+            } while(!inProgress);
+        }
 
-                                    //var objData:String = e.target.data as String;
-                                    var txt:String = objData as String;
-                                    var jsonData:Object = JSON.parse(txt);
+        static private function completeHandler(event:Event):void
+        {/*
+            var collection:LazyCollection = EChartsComponent.collectionJSON;
+			var a:Object = collection.getItemAt(0);
+            
+			var objData:Object = serviceJSON.data;
+            var jsonData:Object = JSON.parse(objData as String);
                                     themesLoad[outIdxTheme].theme = jsonData;
                                     objtheme.item.theme = jsonData;
 
                                     echarts.registerTheme(themeName,objtheme.item.theme);
                                     objtheme.item.isReg = true;
                                     themesLoad[outIdxTheme].isReg = true;
-
-                                }
-                                catch (error:Error)
-                                {
-                                    trace(error.message);
-                                }
-                            }
-                        );
-                        service.send();
-                    }
-                    else if(!objtheme.item.isReg && objtheme.item.theme)
-                    {
-                        echarts.registerTheme(themeName,objtheme.item.theme);
-                        objtheme.item.isReg = true;
-                        themesLoad[outIdxTheme].isReg = true;
-                    }
-                }
-
-                inProgress = false;
-                return objtheme.item.isReg;
-              }  
-            
-            } while(!inProgress);
-
-            return false;
-        }
-
-        static private function completeHandler(event:Event):void
-        {
-            var collection:LazyCollection = EChartsComponent.collectionJSON;
-			var a:Object = collection.getItemAt(0);
+                        {
+                            _themeInstance = EChartsThemes.themesLoad[idxtheme];
+                            echarts.registerTheme(value as String,_themeInstance);
+                            return;
+                        }
+*/
         }
 
 /*		public static function loadTheme(themeName:String=null,outIdxTheme:int = -1):Boolean
