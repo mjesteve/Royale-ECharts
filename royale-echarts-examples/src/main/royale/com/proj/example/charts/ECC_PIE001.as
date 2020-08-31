@@ -12,7 +12,7 @@ package com.proj.example.charts
 		override public function addedToParent():void
 		{
 			super.addedToParent();
-            setOption(optionsInit);
+            setOption(optionChartInit);
 		}        
 		override public function init(theme:Object=null, opts:Object=null):void
 		{ 			
@@ -24,7 +24,7 @@ package com.proj.example.charts
         public static var autoLoad:Boolean = true;
 
         [Bindable]
-        public static function get optionsInit():Object
+        public static function get optionChartInit():Object
         {
             return {
                 title: {

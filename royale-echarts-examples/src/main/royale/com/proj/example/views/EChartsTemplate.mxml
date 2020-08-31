@@ -10,21 +10,40 @@
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
 	    import com.proj.example.echarts.EChartsContainer;
-
-        private var _itemChart:ChartDefExampleVO;    
+	    import com.proj.example.echarts.model.EChartsModel;
+            
         [Bindable]
-		public function get itemChart():ChartDefExampleVO
+        [Inject(source="echartsModel", required="true")]
+        public var echartsModel:EChartsModel;
+
+        private var _itemChartDef:ChartDefExampleVO;    
+        [Bindable]
+		public function get itemChartDef():ChartDefExampleVO
         {
-            return _itemChart;
+            return _itemChartDef;
         }
-        public function set itemChart(value:ChartDefExampleVO):void
+        public function set itemChartDef(value:ChartDefExampleVO):void
         {
-            _itemChart = value;
+            _itemChartDef = value;
         }
 
         public function get chartComponent():EChartsContainer
         {
             return charComp;
+        }
+
+		public function set themeInstance(value:Object):void
+        {
+            if(themeBead.themeInstance === value)
+                return;
+            themeBead.themeInstance = value;
+        }
+
+        public function initInstance(themeNameDef:String=null):void
+        {
+            if(themeNameDef)
+                themeBead.themeInstance = themeNameDef;
+            charComp.reInit();
         }
 
         ]]>
@@ -43,7 +62,7 @@
             <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
                 <j:CardHeader>
                         <j:BarSection>
-                            <html:H3 text="{itemChart.title}" className="block-with-text primary-dark"/>
+                            <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
                         </j:BarSection>
                 </j:CardHeader>
                 <j:CardExpandedContent>
@@ -52,9 +71,10 @@
                 <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
                     <j:VGroup localId="cardContent" gap="3" height="100%" width="100%" className="wrapper">
                             <localecharts:EChartsContainer localId="charComp" height="100%" width="100%"
-                            autoLoad="true" optionsInit="{itemChart.optionsInit}">
+                            echartsModel="{echartsModel}"
+                            autoLoad="{itemChartDef.autoLoad}" optionChartInit="{itemChartDef.optionChartInit}">
                                 <localecharts:beads>
-                                    <localecharts:EChartsThemeBead themeInstance="{itemChart.themeName}"/>
+                                    <localecharts:EChartsThemeBead localId="themeBead" themeInstance="{itemChartDef.themeName}"/>
                                 </localecharts:beads>
                             </localecharts:EChartsContainer>
                     </j:VGroup>   

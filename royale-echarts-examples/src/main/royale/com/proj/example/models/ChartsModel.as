@@ -59,7 +59,7 @@ package com.proj.example.models
 				_ECC_PIE001 = new ChartDefExampleVO();
 				_ECC_PIE001.themeName = 'halloween';
 				_ECC_PIE001.autoLoad = true;
-				_ECC_PIE001.optionsInit = {
+				_ECC_PIE001.optionChartInit = {
 					"backgroundColor": "#2c343c",
 					"animation": true,
 					"animationThreshold": 2000,
@@ -174,14 +174,100 @@ package com.proj.example.models
 			return _ECC_PIE001;
 		}
 
+		private var _ECCT_PIE001:ChartDefExampleVO;
+		public function get ECCT_PIE001():ChartDefExampleVO
+		{
+			if(!_ECCT_PIE001){
+				_ECCT_PIE001 = new ChartDefExampleVO();
+				_ECCT_PIE001.themeName = 'halloween';
+				_ECCT_PIE001.autoLoad = false;
+				_ECCT_PIE001.optionChartInit = {
+					"series": [
+						{
+							"type": "pie",
+							"name": "Access Source",
+							"clockwise": true,
+							"data": [
+								{"name": "Video Ads","value": 235},
+								{"name": "Affiliate Advertising","value": 274},
+								{"name": "Mail Marketing","value": 310},
+								{"name": "Direct access","value": 335},
+								{"name": "Search Engine","value": 400}
+							],
+							"radius": "55%",
+							"center": ["50%","50%"],
+							"roseType": "radius",
+							"label": {
+								"show": true,
+								"position": "top",
+								"margin": 8
+							},
+							"tooltip": {
+								"show": true,
+								"trigger": "item",
+								"triggerOn": "mousemove|click",
+								"axisPointer": {
+									"type": "line"
+								},
+								"formatter": "{a} <br/>{b}: {c} ({d}%)",
+								"textStyle": {
+									"fontSize": 14
+								},
+								"borderWidth": 0
+							},
+							"rippleEffect": {
+								"show": true,
+								"brushType": "stroke",
+								"scale": 2.5,
+								"period": 4
+							}
+						}
+					],
+					"legend": [
+						{
+							"data": ["Video Ads","Affiliate Advertising","Mail Marketing","direct interview","search engine"],
+							"selected": {},
+							"show": false,
+							"padding": 5,	"itemGap": 10,	"itemWidth": 25,	"itemHeight": 14
+						}
+					],
+					"tooltip": {
+						"show": true,
+						"trigger": "item",
+						"triggerOn": "mousemove|click",
+						"axisPointer": {
+							"type": "line"
+						},
+						"textStyle": {
+							"fontSize": 14
+						},
+						"borderWidth": 0
+					},
+					"title": [
+						{
+							"text": "Customized Pie",
+							"left": "center",
+							"top": "20",
+							"padding": 5,
+							"itemGap": 10,
+							"textStyle": {
+								"color": "#fff"
+							}
+						}
+					]
+				};
+			}
+			return _ECCT_PIE001;
+		}
+
 		private var _ECC_PIE002:ChartDefExampleVO;
 		public function get ECC_PIE002():ChartDefExampleVO
 		{
 			if(!_ECC_PIE002){
 				_ECC_PIE002 = new ChartDefExampleVO();
-				_ECC_PIE002.themeName = 'halloween';
-				_ECC_PIE002.autoLoad = true;
-				_ECC_PIE002.optionsInit = {
+				_ECC_PIE002.themeName = 'vintage';
+				_ECC_PIE002.autoLoad = false;
+				_ECC_PIE002.optionChartInit = {
 					tooltip: {
 						trigger:'item',
 						formatter:'{a} <br/>{b}: {c} ({d}%)'
@@ -194,7 +280,7 @@ package com.proj.example.models
 					},
 					series: [
 						{
-							name:'Access source',
+							name:'Access Source',
 							type:'pie',
 							selectedMode:'single',
 							radius: [0, '30%'],
@@ -211,7 +297,7 @@ package com.proj.example.models
 							]
 						},
 						{
-							name:'Access source',
+							name:'Access Source',
 							type:'pie',
 							radius: ['40%', '55%'],
 							label: {

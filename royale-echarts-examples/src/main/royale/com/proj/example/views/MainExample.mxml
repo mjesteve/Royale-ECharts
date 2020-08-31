@@ -4,8 +4,10 @@
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:vos="com.proj.example.vos.*"
-	xmlns:models="com.proj.example.models.*" 
-    xmlns:localchart="com.proj.example.charts.*" xmlns:views="com.proj.example.views.*"
+	xmlns:models="com.proj.example.models.*"
+    xmlns:echartmodel="com.proj.example.echarts.models.*"
+    xmlns:localchart="com.proj.example.charts.*" 
+    xmlns:views="com.proj.example.views.*" 
     initComplete="onInitComplete()"
     >
 
@@ -14,11 +16,39 @@
         import com.proj.example.vos.TabBarChartVO;
         import org.apache.royale.jewel.supportClasses.ISelectableContent;
         import com.proj.example.charts.IEchartDefinitionTemplate;
+        import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
+        import com.proj.example.echarts.model.EChartsModel;
+        import com.proj.example.echarts.events.EChartsEvent;
+            
+        [Bindable]
+        [Inject(source="echartsModel", required="true")]
+        public var echartsModel:EChartsModel;
+
+        [PostConstruct]
+        public function setUpCrux():void 
+        {            
+            trace("setUpCrux");
+            var evt:EChartsEvent = new EChartsEvent(EChartsEvent.ON_INICIALIZE);
+            evt.withThemesSupport = true;
+            dispatchEvent(evt);
+        }
+          
+        [EventHandler(event="EChartsEvent.ON_AFTERINICIALIZE", scope="global")]
+        public function echartsAfterInitEvent(event:EChartsEvent):void
+        {                 
+            //load the charts
+            trace("echartsAfterInitEvent");  
+            
+            main.selectedContent = "welcome";
+            listTheme.selectedIndex = 0;
+			ecp1.initInstance(listTheme.selectedItem.themeName);
+            ecp2.initInstance(listTheme.selectedItem.themeName);
+        }
 
         private function onInitComplete():void{            
 			//window.addEventListener('resize', autoResizeHandler, false);
             this.addEventListener("sizeChanged", autoResizeHandler);
-            trace(topappbar.height.toString());               
+            trace(topappbar.height.toString());   
         }
 
         [Bindable]
@@ -45,6 +75,7 @@
                         if(content is IEchartDefinitionTemplate){
                             var cchart:IEchartDefinitionTemplate = content as IEchartDefinitionTemplate;
                             if(cchart && cchart.chartComponent){
+                                //if(cchart.itemChartDef.themeName != currentTheme.themeName)
                                 cchart.chartComponent.resize();
                             }
                         }
@@ -55,9 +86,42 @@
 
         }
 
+        private var _currentTheme:EChartsThemeTemplateVO;
+        [Bindable]
+		public function get currentTheme():EChartsThemeTemplateVO{
+            return _currentTheme; 
+        }
+		public function set currentTheme(value:EChartsThemeTemplateVO):void
+        {
+            if(_currentTheme === value)
+                return;
+            _currentTheme = value;
+        }
+
+        public function theme_Change():void
+        {            
+            if(_currentTheme && _currentTheme.themeName == listTheme.selectedItem.themeName)
+                return;
+            if( !listTheme.selectedItem.isReg )
+            {
+                //cargar y registrar
+            }
+            else
+            {
+                //aplicar tema
+            }
+			ecp1.initInstance(listTheme.selectedItem.themeName);
+            ecp2.initInstance(listTheme.selectedItem.themeName);
+        }
 
         ]]>
     </fx:Script>
+
+	<fx:Style>
+		.side-tab-content {
+			background-color: #f6f6f6;
+		}
+	</fx:Style>
 
 	<j:model>
 		<models:ChartsModel localId="appModel"/>
@@ -75,24 +139,25 @@
             </j:BarSection>
         </j:BarRow>
         <j:BarRow localId="barRowContent" style ="height:auto;">
-            <j:HGroup gap="0" percentWidth="100" itemsVerticalAlign="itemsCenter">
-                <j:TabBar id="tabbarApp" width="100%" selectedIndex="-1" sameWidths="true"
-                    itemRenderer="com.proj.example.itemRenderers.TabBarThumbnailItemRenderer"
+            <j:HGroup gap="0" percentWidth="100" itemsHorizontalAlign="itemsCenter" itemsVerticalAlign="itemsCenter">
+                <j:TabBar id="tabbarApp" selectedIndex="-1" sameWidths="true"
+                    className="tabbarAppItemRenderer"
                     change="selectedChart()" dataProvider="{appModel.tabBarAppData}">
                 </j:TabBar>
             </j:HGroup>
         </j:BarRow>
-        <j:BarRow localId="barRowConfig">
-            <j:BarSection gap="3" percentWidth="100" >
-                <html:H3 text="[[ Reserved to options settings - Themes ]]"/>
-            </j:BarSection>
+        <j:BarRow localId="barRowConfig" style ="height:auto;">
+            <j:HGroup gap="0" itemsVerticalAlign="itemsCenter">                
+                <views:SelectThemeList id="listTheme" change="theme_Change()"/>
+            </j:HGroup>
         </j:BarRow>
     </j:TopAppBar>
 
     <j:ApplicationMainContent  localId="main" hasTopAppBar="true" selectedContent="welcome">
         <views:WelcomeSection name="welcome"/>
-        <views:EChartsTemplate name="ecp1" style="padding-top:{offsetTopBar}px;" itemChart="{appModel.ECC_PIE001}"/>
-        <!--<views:EChartsTemplate name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChart="{appModel.ECC_PIE002}"/>-->
+        <views:EChartsTemplate localId="ecp1" name="ecp1" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_PIE001}"/>
+        <views:EChartsTemplate localId="ecp2" name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChartDef="{appModel.ECC_PIE002}"/>
     </j:ApplicationMainContent>
+    
 
 </j:ResponsiveView>

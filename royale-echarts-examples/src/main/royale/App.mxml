@@ -3,6 +3,9 @@
 			   xmlns:j="library://ns.apache.org/royale/jewel"
 			   xmlns:js="library://ns.apache.org/royale/basic"
                xmlns:views="com.proj.example.views.*"
+			   xmlns:crux="library://ns.apache.org/royale/crux"
+			   xmlns:echartsmodel="com.proj.example.echarts.model.*"
+			   xmlns:echartscontrol="com.proj.example.echarts.controller.*"
                initialize="setUp()"
 			   >
 
@@ -26,6 +29,33 @@
 
 	<j:beads>
 		<js:ClassAliasBead/>
+
+		<crux:JSStageEvents packageExclusionFilter="_default_"/>
+		<crux:Crux>
+			<!-- BeanProviders simply contain the non-display objects that Crux should process. -->
+			<crux:beanProviders>
+				<!-- an inline beanProvider -->
+				<crux:BeanProvider>
+					<echartsmodel:EChartsModel id="echartsModel"/>
+					<echartscontrol:EChartsController/>
+				</crux:BeanProvider>
+			</crux:beanProviders>
+
+			<crux:config>
+				<crux:CruxConfig>
+					<crux:eventPackages>
+						<fx:Array>
+							<fx:String>com.proj.example.echarts.events.*</fx:String>
+						</fx:Array>
+					</crux:eventPackages>
+					<crux:viewPackages>
+						<fx:Array>
+							<fx:String>com.proj.example.views.*</fx:String>
+						</fx:Array>
+					</crux:viewPackages>
+				</crux:CruxConfig>
+			</crux:config>
+		</crux:Crux>
 	</j:beads>
 
 	<j:initialView>

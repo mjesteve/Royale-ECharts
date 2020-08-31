@@ -6,7 +6,7 @@
         "type": "chrome",
         "request": "launch",
         "sourceMaps": true,
-        "url": "http://localhost:8080/RoyaleEcharts//index.html",
+        "url": "http://localhost:8080/RoyaleEcharts/index.html",
         "webRoot": "${workspaceFolder}\\target\\javascript\\bin\\js-debug"
         },
         {

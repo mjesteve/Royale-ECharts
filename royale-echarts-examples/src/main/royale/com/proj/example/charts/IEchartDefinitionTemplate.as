@@ -7,8 +7,8 @@ package com.proj.example.charts
 	public interface IEchartDefinitionTemplate
 	{
 		
-		function get itemChart():ChartDefExampleVO;
-        function set itemChart(value:ChartDefExampleVO):void;
+		function get itemChartDef():ChartDefExampleVO;
+        function set itemChartDef(value:ChartDefExampleVO):void;
         
         function get chartComponent():EChartsContainer;
 		

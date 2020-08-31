@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+	xmlns:localIt="com.proj.example.itemRenderers.*" 
+    initComplete="onInitialize(event)"
+    itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsCenter">
+    <fx:Metadata>
+            [Event(name="change",type="org.apache.royale.events.Event")]
+    </fx:Metadata>
+    <fx:Script>
+        <![CDATA[
+            import org.apache.royale.core.IUIBase;
+            import org.apache.royale.utils.callLater;
+            import org.apache.royale.collections.ArrayList;
+            import com.proj.example.echarts.EChartsThemeTemplates;
+            import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
+	        
+            
+            protected function onInitialize(event:Event):void {}
+
+            [Bindable]
+            public function get dataProvider():ArrayList{ 
+                return EChartsThemeTemplates.themesLoadArrayList(); 
+            }
+            
+            private var _labelField:String = "themeName";
+            [Bindable]
+            public function get labelField():String{ return _labelField; }
+            public function set labelField(value:String):void { _labelField = value; }
+
+            private var _imgField:String = "thumb";
+            [Bindable]
+            public function get imgField():String{ return _imgField; }
+            public function set imgField(value:String):void { _imgField = value; }
+            
+            public function set selectedIndex(value:int):void {
+                if(list.selectedIndex == value)
+                    return;
+                list.selectedIndex = value;                
+            }
+
+            private var _selectedItem:EChartsThemeTemplateVO;
+            [Bindable]
+            public function get selectedItem():EChartsThemeTemplateVO{
+                _selectedItem = list.selectedItem as EChartsThemeTemplateVO;
+                return _selectedItem;
+            }
+            public function set selectedItem(value:EChartsThemeTemplateVO):void
+            {
+                if(_selectedItem === value)
+                    return;
+                _selectedItem = value;
+            }
+
+            private var _open:Boolean;
+            [Bindable]
+            public function get open():Boolean { return list.visible; }
+            public function set open(value:Boolean):void {                
+                var ev:Event = new Event("popUpShow");
+                ev.target = this;
+                if(value){ 
+                    handlePopupShow(ev);         
+                }else{
+                    handlePopupHide(ev);
+                }
+                list.visible = value; 
+            }
+
+            public function theme_Change(event:Event):void{
+                //Visibilidad imagen/listado            
+                open = false;
+                dispatchEvent(new Event("change"));                
+            }
+
+            public function btnImage_Click(event:Event):void
+            {
+                //Visibilidad imagen/listado
+               open = true;
+               list.scrollToIndex(list.selectedIndex);
+            }  
+            	
+            protected function handleControlMouseDown(event:MouseEvent):void
+            {			
+                event.stopImmediatePropagation();
+            }
+            
+            protected function handlePopupShow(event:Event):void
+            {
+                if(!event.target.hasEventListener(MouseEvent.MOUSE_DOWN,handleControlMouseDown)){
+                    IEventDispatcher(event.target).addEventListener(MouseEvent.MOUSE_DOWN, handleControlMouseDown);
+                    callLater(function():void {
+                        IUIBase(event.target).topMostEventDispatcher.addEventListener(MouseEvent.MOUSE_DOWN, handleTopMostEventDispatcherMouseDown);
+                    });
+                }
+            }
+            
+            protected function handleTopMostEventDispatcherMouseDown(event:MouseEvent):void
+            {
+                open = false;
+            }
+            
+            protected function handlePopupHide(event:Event):void
+            {
+                if(event.target.hasEventListener(MouseEvent.MOUSE_DOWN,handleControlMouseDown)){
+                    IEventDispatcher(event.target).removeEventListener(MouseEvent.MOUSE_DOWN, handleControlMouseDown);
+                    IUIBase(event.target).topMostEventDispatcher.removeEventListener(MouseEvent.MOUSE_DOWN, handleTopMostEventDispatcherMouseDown);
+                }
+            }
+        ]]>
+    </fx:Script>
+
+     <j:beads>
+        <js:ContainerDataBinding/>       
+		<js:BrowserResizeListener/> 
+        <j:Paddings padding="20"/>
+    </j:beads>
+    
+    <j:List localId="list" visible="false" className="themeSelectItemRenderer" height="102" width="100%"
+        dataProvider="{dataProvider}" labelField="{labelField}" change="theme_Change(event)">
+        <j:beads>
+            <j:TileHorizontalLayout/>
+        </j:beads>
+        <!--
+        <j:itemRenderer>
+            <localIt:ImageItemRenderer labelField="{labelField}" toolTipField="{imgField}"/>
+        </j:itemRenderer>-->
+    </j:List>
+    <j:ImageButton localId="image" width="125" visible="{!open}"
+        src="{list.selectedItem ? list.selectedItem[imgField]: ''}" click="btnImage_Click(event)" >
+        <j:beads>
+            <!--<j:ResponsiveSize phoneWidth="100"/>-->
+            <js:ErrorImage emptyIsError="true"/>
+            <j:ToolTip toolTip="Select Theme"/>
+        </j:beads>
+    </j:ImageButton>                     
+    <j:IconButton unboxed="true" style="color: white;" visible="{!open}">
+        <j:icon>
+            <js:FontAwesomeIcon text="{FontAwesome5IconType.COG}" faStyle="{FontAwesomeIcon.SOLID}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+        </j:icon>
+        <j:beads>
+            <j:ToolTip toolTip="Custom"/>
+        </j:beads>
+    </j:IconButton>
+    <j:IconButton unboxed="true" style="color: white;" visible="{!open}">
+        <j:icon>
+            <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+        </j:icon>
+        <j:beads>
+            <j:ToolTip toolTip="Refresh"/>
+        </j:beads>
+    </j:IconButton>
+</j:HGroup>

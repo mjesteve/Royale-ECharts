@@ -21,19 +21,19 @@ package com.proj.example.echarts
         public function set autoLoad(value:Boolean):void
         { 
             _autoLoad = value;
-            if (_autoLoad && !isConfigure && _optionsInit)
+            if (_autoLoad && !isConfigure && _optionChartInit)
                 reInit();
         }
 
-        private var _optionsInit:Object;
+        private var _optionChartInit:Object;
 
         [Bindable("__NoChangeEvent__")]
-        public function get optionsInit():Object{ 
-            return _optionsInit; 
+        public function get optionChartInit():Object{ 
+            return _optionChartInit; 
         }
-        public function set optionsInit(value:Object):void
+        public function set optionChartInit(value:Object):void
         { 
-            _optionsInit = value;
+            _optionChartInit = value;
             if (autoLoad)
                 reInit();
         }
@@ -46,7 +46,7 @@ package com.proj.example.echarts
                 clear();
 
             if(currentInstance){
-                setOption(_optionsInit);                
+                setOption(_optionChartInit);                
                 resize({width: 'auto', height: 'auto'});
             }
         }

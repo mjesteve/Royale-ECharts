@@ -76,3 +76,12 @@
   background-color: white;
 }
 
+.tabbarAppItemRenderer
+{
+    IItemRenderer: ClassReference("com.proj.example.itemRenderers.TabBarThumbnailItemRenderer");
+}
+
+.themeSelectItemRenderer
+{
+    IItemRenderer: ClassReference("com.proj.example.itemRenderers.ThemeImageItemRenderer");
+}

@@ -15,7 +15,7 @@ package com.proj.example.charts
         public function set options(value:Object):void{ _options = value; }
         
         
-        public function optionsInit():Object
+        public function optionChartInit():Object
         {
             var dataprovider:Array = [
                         { name: 'Acummulated', value: 70, caption: '70:00'},
