@@ -17,7 +17,7 @@
         import org.apache.royale.jewel.supportClasses.ISelectableContent;
         import com.proj.example.charts.IEchartDefinitionTemplate;
         import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
-        import com.proj.example.echarts.model.EChartsModel;
+        import com.proj.example.echarts.models.EChartsModel;
         import com.proj.example.echarts.events.EChartsEvent;
             
         [Bindable]

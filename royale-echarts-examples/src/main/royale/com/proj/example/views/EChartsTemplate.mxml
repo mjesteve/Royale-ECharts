@@ -10,7 +10,7 @@
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
 	    import com.proj.example.echarts.EChartsContainer;
-	    import com.proj.example.echarts.model.EChartsModel;
+	    import com.proj.example.echarts.models.EChartsModel;
             
         [Bindable]
         [Inject(source="echartsModel", required="true")]

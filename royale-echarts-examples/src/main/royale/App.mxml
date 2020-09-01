@@ -4,8 +4,8 @@
 			   xmlns:js="library://ns.apache.org/royale/basic"
                xmlns:views="com.proj.example.views.*"
 			   xmlns:crux="library://ns.apache.org/royale/crux"
-			   xmlns:echartsmodel="com.proj.example.echarts.model.*"
-			   xmlns:echartscontrol="com.proj.example.echarts.controller.*"
+			   xmlns:echartsmodel="com.proj.example.echarts.models.*"
+			   xmlns:echartscontrol="com.proj.example.echarts.controllers.*"
                initialize="setUp()"
 			   >
 
@@ -38,6 +38,10 @@
 				<crux:BeanProvider>
 					<echartsmodel:EChartsModel id="echartsModel"/>
 					<echartscontrol:EChartsController/>
+				</crux:BeanProvider>
+				<crux:BeanProvider>
+					<echartsmodel:EChartsThemesModel id="echartsThemesModel"/>
+					<echartscontrol:EChartsThemesController/>
 				</crux:BeanProvider>
 			</crux:beanProviders>
 

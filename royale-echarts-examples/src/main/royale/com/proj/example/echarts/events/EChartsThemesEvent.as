@@ -4,7 +4,7 @@ package com.proj.example.echarts.events
 	import com.proj.example.echarts.vos.EChartsInstanceVO;
 	import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
 
-	public class EChartsEvent extends Event
+	public class EChartsThemesEvent extends Event
     {
 		
 		public static const ON_INICIALIZE:String = "onInicialize";
@@ -21,14 +21,15 @@ package com.proj.example.echarts.events
 		public static const ON_COMPLETE_LOADTHEMEFROMFILE:String = "onCompleteLoadThemeFromFile";
 		public static const ON_ERROR_LOADTHEMEFROMFILE:String = "onErrorLoadThemeFromFile";
 
-		public function EChartsEvent(type:String, echartInstance:EChartsInstanceVO = null, bubbles:Boolean=true, cancelable:Boolean=false)
+		public static const ON_REGISTERTHEME:String = "onRegister";
+		public static const ON_COMPLETE_REGISTERTHEME:String = "onCompleteRegister";
+
+		public function EChartsThemesEvent(type:String,itemSelTheme:EChartsThemeTemplateVO = null, bubbles:Boolean=true, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
-			this.echartInstance = echartInstance;
+			this.itemSelTheme = itemSelTheme;
 		}
-						
-        public var echartInstance:EChartsInstanceVO;
-		public var withThemesSupport:Boolean = false;
+
 		public var itemSelTheme:EChartsThemeTemplateVO;
         public var status:String;
     }

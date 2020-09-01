@@ -5,15 +5,21 @@ package com.proj.example.echarts
 {
 	import org.apache.royale.utils.ObjectMap;
     import org.apache.royale.events.Event;
+    import org.apache.royale.events.EventDispatcher;
     import org.apache.royale.net.URLLoader;
     import org.apache.royale.net.URLRequest;
     import org.apache.royale.net.HTTPConstants;
     import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
     import org.apache.royale.collections.ArrayList;
 
-    [Bindable]
-    public class EChartsThemeTemplates
-    {        
+    public class EChartsThemeTemplates extends EventDispatcher
+    {
+		public function EChartsThemeTemplates(){
+			super()
+		}
+
+        static public var serviceJSON:URLLoader = new URLLoader();
+
 		static private var _themesLoad:ObjectMap;
 		static public function get themesLoad():ObjectMap
 		{
@@ -37,7 +43,7 @@ package com.proj.example.echarts
 			return _themesLoad;
 		}
 
-		static public function itemTheme(themeName:String):EChartsThemeTemplateVO
+		static public function itemThemeFromName(themeName:String):EChartsThemeTemplateVO
 		{
 			if(_themesLoad[themeName])
                 return _themesLoad[themeName] as EChartsThemeTemplateVO;
@@ -59,8 +65,8 @@ package com.proj.example.echarts
 
         static public function updateConfigTheme(themeName:String,themeConfig:Object):void{
             trace(">>>>> updateConfigTheme:", themeName);
-            if(itemTheme(themeName)){
-                itemTheme(themeName).jsonConfig = themeConfig;
+            if(itemThemeFromName(themeName)){
+                itemThemeFromName(themeName).jsonConfig = themeConfig;
             	trace(">>>>> updateConfigTheme SET OK");
             }
             trace(">>>>> EXIT updateConfigTheme:", themeName);
@@ -72,8 +78,8 @@ package com.proj.example.echarts
 			if(!themeName)
 				return;
 			
-            if(itemTheme(themeName) ){
-				if(!itemTheme(themeName).custom){
+            if(itemThemeFromName(themeName) ){
+				if(!itemThemeFromName(themeName).custom){
             		trace(">>>>> loadTheme. EXIST themeName NO custom.",themeName);
                 	loadFromFile(themeName);
 				}else{
@@ -85,51 +91,68 @@ package com.proj.example.echarts
 
         }
 
-        static private var _themeNameLoading:String;
-        static public var serviceJSON:URLLoader = new URLLoader();
+		static public var itemLoadingTheme:EChartsThemeTemplateVO;
+		
 		static private function loadFromFile(themeName:String):void
 		{			
             trace(">>>>> loadFromFile. themeName loadInProgress:",themeName, loadInProgress);
-			if(!loadInProgress && !itemTheme(themeName).jsonConfig)
+			if(loadInProgress) return;
+
+			itemLoadingTheme = itemThemeFromName(themeName);
+			if( itemLoadingTheme )
 			{
-				loadInProgress = true;
-				_themeNameLoading = themeName;
-				serviceJSON.addEventListener(HTTPConstants.IO_ERROR, loadThemeFromTemplateError);
-				serviceJSON.addEventListener(HTTPConstants.COMPLETE, loadThemeFromTemplateComplete);         
-				serviceJSON.load(new URLRequest("themes/json/"+themeName+".json"));
-            	trace(">>>>> loadFromFile. serviceJSON.load themeName", _themeNameLoading);
-			} 
-            trace(">>>>> EXIT loadFromFile. themeName loadInProgress:",_themeNameLoading, loadInProgress);
+				if(!itemLoadingTheme.jsonConfig)
+				{
+					trace(">>>>> loadFromFile. EXIST themeName NO custom.",themeName);
+					loadInProgress = true;
+					serviceJSON.addEventListener(HTTPConstants.IO_ERROR, loadThemeFromTemplateError);
+					serviceJSON.addEventListener(HTTPConstants.COMPLETE, loadThemeFromTemplateComplete);         
+					serviceJSON.load(new URLRequest("themes/json/"+themeName+".json"));
+					trace(">>>>> loadFromFile. serviceJSON.load themeName", itemLoadingTheme.themeName);				
+				}
+				else
+				{
+					trace(">>>>> loadTheme. EXIST themeName custom or preload.",itemLoadingTheme.themeName);
+					//WIP
+				}
+            
+			}else{
+				//WIP
+			}
+			trace(">>>>> EXIT loadFromFile. themeName, loadInProgress",themeName, loadInProgress);
+
 		}
 
         static private function loadThemeFromTemplateComplete(e:Event):void
 		{            
-            trace(">>>>> loadThemeFromTemplateComplete:", _themeNameLoading);
+            trace(">>>>> loadThemeFromTemplateComplete:", itemLoadingTheme.themeName);
             serviceJSON.removeEventListener(HTTPConstants.COMPLETE, loadThemeFromTemplateComplete);
+
 			var objData:Object = serviceJSON.data;
 			var jsonData:Object = JSON.parse(objData as String);
-            trace(">>>>> DATA loadThemeFromTemplateComplete _themeNameLoading:", _themeNameLoading, objData);
-			updateConfigTheme(_themeNameLoading,jsonData);
-			registerTheme(_themeNameLoading,jsonData); 
+            trace(">>>>> DATA loadThemeFromTemplateComplete _themeNameLoading:", itemLoadingTheme.themeName, objData);
+
+			updateConfigTheme(itemLoadingTheme.themeName,jsonData);			
+			registerTheme(itemLoadingTheme.themeName,jsonData); 
 			loadInProgress = false;
-            trace(">>>>> EXIT loadThemeFromTemplateComplete. themeName loadInProgress:",_themeNameLoading, loadInProgress);
-			_themeNameLoading = "";
+            trace(">>>>> EXIT loadThemeFromTemplateComplete. themeName loadInProgress:",itemLoadingTheme.themeName, loadInProgress);
+			itemLoadingTheme = null;
         } 
 
         static private function loadThemeFromTemplateError(e:Event):void{
-            trace(">>>>> loadThemeFromTemplateError:", _themeNameLoading);
+            trace(">>>>> loadThemeFromTemplateError:", itemLoadingTheme.themeName);
             serviceJSON.removeEventListener(HTTPConstants.IO_ERROR, loadThemeFromTemplateError);
 			loadInProgress = false;
-            _themeNameLoading = "";
+			itemLoadingTheme = null;
             trace(">>>>> EXIT loadThemeFromTemplateError");
         } 
 
         static public function registerTheme(themeName:String,themeConfig:Object):void{
             trace(">>>>> registerTheme:", themeName);
-            if(itemTheme(themeName)){
+            if(itemThemeFromName(themeName)){
 				echarts.registerTheme(themeName,themeConfig);
             	trace(">>>>> registerTheme SET OK");
-                itemTheme(themeName).isReg = true;
+                itemThemeFromName(themeName).isReg = true;
             }
             trace(">>>>> EXIT registerTheme:", themeName);
         }
@@ -143,11 +166,11 @@ package com.proj.example.echarts
 					countCustomTheme++;
 					themeName = "custom_"+countCustomTheme.toString();
 				}else{
-					if(itemTheme(themeName))
+					if(itemThemeFromName(themeName))
 						themeName="";
 				}
 			}
-			while(themeName && itemTheme(themeName));
+			while(themeName && itemThemeFromName(themeName));
 			_themesLoad[themeName] = new EChartsThemeTemplateVO(themeName, null, themeConfig, false, true);
 		}
 

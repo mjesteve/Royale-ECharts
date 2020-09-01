@@ -3,7 +3,7 @@ package com.proj.example.echarts
 	import org.apache.royale.html.Container;
 	import org.apache.royale.core.IBead;
     import org.apache.royale.events.Event;
-    import com.proj.example.echarts.model.EChartsModel;
+    import com.proj.example.echarts.models.EChartsModel;
     import com.proj.example.echarts.events.EChartsEvent;
     import com.proj.example.echarts.vos.EChartsInstanceVO;
 
