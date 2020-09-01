@@ -38,13 +38,18 @@ package com.proj.example.echarts
         
 		protected function get hostComponent():EChartsComponent
 		{
-			return (_strand as EChartsComponent);
+			return _strand as EChartsComponent;
 		}
         
 		protected function get echartsModel():EChartsModel
 		{
 			return hostComponent.echartsModel;
 		}
+
+        private function get dispatcher():IEventDispatcher
+        {
+            return _strand as IEventDispatcher;
+        }
 
         private var _enabled:Boolean = true;
         public function get enabled():Boolean{ return _enabled; }
@@ -84,7 +89,7 @@ package com.proj.example.echarts
                     else if(themeObj.jsonConfig)
                     {
                         _themeNameRegistering = themename;                        
-                        (_strand as IEventDispatcher).dispatchEvent(new EChartsThemesEvent(
+                        dispatcher.dispatchEvent(new EChartsThemesEvent(
                             EChartsThemesEvent.ON_REGISTERTHEME,themeObj)
                         );
 
@@ -92,7 +97,7 @@ package com.proj.example.echarts
                     {	
                         trace("theme "+themename+" Not load");
                         _themeNameLoading = themename;                     
-                        (_strand as IEventDispatcher).dispatchEvent(new EChartsThemesEvent(
+                        dispatcher.dispatchEvent(new EChartsThemesEvent(
                             EChartsThemesEvent.ON_LOADTHEMEFROMFILE,themeObj)
                         );
                     }
@@ -131,12 +136,16 @@ package com.proj.example.echarts
                 hostComponent.themeInstance = event.itemSelTheme;
             else{    
                 _themeNameRegistering = _themeNameLoading;                    
-                (_strand as IEventDispatcher).dispatchEvent(new EChartsThemesEvent(
+                dispatcher.dispatchEvent(new EChartsThemesEvent(
                     EChartsThemesEvent.ON_REGISTERTHEME,themeObj)
                 );
             }
             _themeNameLoading = "";
-            _lastExecute = NaN;
+            if(!isNaN(_lastExecute))
+            {
+                clearTimeout(_lastExecute);
+                _lastExecute = NaN;
+            }
         }
           
         [EventHandler(event="EChartsThemesEvent.ON_WAIT_LOADTHEMEFROMFILE", scope="global")]
@@ -153,7 +162,7 @@ package com.proj.example.echarts
         private function delayRetry(valueTheme:EChartsThemeTemplateVO):void{
             //We know that the Theme exists and that it was not loaded. 
             trace("delayRetry:", valueTheme);                     
-            (_strand as IEventDispatcher).dispatchEvent(new EChartsThemesEvent(
+            dispatcher.dispatchEvent(new EChartsThemesEvent(
                 EChartsThemesEvent.ON_LOADTHEMEFROMFILE,valueTheme)
             );
             /*if(EChartsThemeTemplates.loadInProgress)
@@ -167,16 +176,17 @@ package com.proj.example.echarts
             }ON_ERROR_LOADTHEMEFROMFILE
             trace("EXIT delayRetry:", valueTheme);*/
         }
-
-        private function loadThemeFromTemplateError(e:Event):void{
-            trace("loadThemeFromTemplateError:", _themeNameLoading);
-            EChartsThemeTemplates.serviceJSON.removeEventListener(HTTPConstants.IO_ERROR, loadThemeFromTemplateError);
+          
+        [EventHandler(event="EChartsThemesEvent.ON_ERROR_LOADTHEMEFROMFILE", scope="global")]
+        private function onErrorLoadThemeFromFile(e:Event):void{
+            trace("onErrorLoadThemeFromFile:", _themeNameLoading);
+            EChartsThemeTemplates.serviceJSON.removeEventListener(HTTPConstants.IO_ERROR, onErrorLoadThemeFromFile);
             if(!isNaN(_lastExecute))
             {
                 clearTimeout(_lastExecute);
                 _lastExecute = NaN;
             }
-            trace("EXIT loadThemeFromTemplateError:",  _themeNameLoading);
+            trace("EXIT onErrorLoadThemeFromFile:",  _themeNameLoading);
             _themeNameLoading = "";
         } 
 
