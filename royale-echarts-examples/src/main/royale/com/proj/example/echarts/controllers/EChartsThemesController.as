@@ -145,6 +145,7 @@ package com.proj.example.echarts.controllers
                 registerTheme(model.itemLoadingTheme);
                 model.initComplete = true;
                 dispatcher.dispatchEvent(new EChartsThemesEvent(EChartsThemesEvent.ON_AFTERINICIALIZE));
+                trace("theme default init", model.themesLoad[ model.itemLoadingTheme.themeName]);
             }
             model.loadInProgress = false;
             model.itemLoadingTheme = null;
@@ -200,7 +201,8 @@ package com.proj.example.echarts.controllers
 			echarts.registerTheme(it.themeName,it.jsonConfig);
             trace(">>>>> registerTheme SET OK");
             it.isReg = true;
-            dispatcher.dispatchEvent(new EChartsThemesEvent(EChartsThemesEvent.ON_COMPLETE_REGISTERTHEME, it));
+            if(model.initComplete)
+                dispatcher.dispatchEvent(new EChartsThemesEvent(EChartsThemesEvent.ON_COMPLETE_REGISTERTHEME, it));
             trace(">>>>> EXIT registerTheme:", it.themeName);
         }
 

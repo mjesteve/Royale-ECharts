@@ -57,6 +57,7 @@ package com.proj.example.echarts.beads
         }
 
         private var _enabled:Boolean = true;
+        [Bindable]
         public function get enabled():Boolean{ return _enabled; }
         public function set enabled(value:Boolean):void{ 
             //WIP

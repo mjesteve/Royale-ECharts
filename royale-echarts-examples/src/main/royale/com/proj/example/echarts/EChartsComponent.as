@@ -8,6 +8,7 @@ package com.proj.example.echarts
     import com.proj.example.echarts.vos.EChartsInstanceVO;
     import com.proj.example.echarts.models.EChartsThemesModel;
     import com.proj.example.echarts.beads.EChartsThemeBead;
+    import com.proj.example.echarts.events.EChartsThemesEvent;
 
 	//[DefaultProperty("currentInstance")]
 
@@ -68,6 +69,62 @@ package com.proj.example.echarts
         {
             trace("afterinit in component");
         }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_COMPLETE_LOADTHEMEFROMFILE", scope="global")]
+        public function onCompleteLoadThemeFromFile(event:EChartsThemesEvent):void
+        {
+            trace("onCompleteLoadThemeFromFile");
+            /*if(event.itemSelTheme.themeName != _themeNameLoading) return;
+
+            
+            var themeObj:EChartsThemeTemplateVO = echartsThemesModel.itemThemeFromName(_themeNameLoading);
+            if(themeObj.isReg)
+                hostComponent.themeInstance = event.itemSelTheme;
+            else{    
+                _themeNameRegistering = _themeNameLoading;                    
+                dispatcher.dispatchEvent(new EChartsThemesEvent(
+                    EChartsThemesEvent.ON_REGISTERTHEME,themeObj)
+                );
+            }
+            _themeNameLoading = "";
+            if(!isNaN(_lastExecute))
+            {
+                clearTimeout(_lastExecute);
+                _lastExecute = NaN;
+            }*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_COMPLETE_REGISTERTHEME", scope="global")]
+        public function onCompleteRegister(event:EChartsThemesEvent):void
+        {
+            trace("afterRegisterThemesEvent");
+            /*if(event.itemSelTheme.themeName != _themeNameRegistering) return;
+
+            _themeNameRegistering = "";
+            hostComponent.themeInstance = event.itemSelTheme;*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_WAIT_LOADTHEMEFROMFILE", scope="global")]
+        public function onWaitLoadThemeFromFile(event:EChartsThemesEvent):void
+        {
+            trace("onWaitLoadThemeFromFile");
+            /*if(event.itemSelTheme.themeName != _themeNameLoading) return;
+
+            _lastExecute = setTimeout(delayRetry,1000,event.itemSelTheme);
+            trace("Id setTimeout:", _lastExecute.toString());*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_ERROR_LOADTHEMEFROMFILE", scope="global")]
+        private function onErrorLoadThemeFromFile(e:Event):void{
+            trace("onErrorLoadThemeFromFile:");
+            /*if(!isNaN(_lastExecute))
+            {
+                clearTimeout(_lastExecute);
+                _lastExecute = NaN;
+            }
+            trace("EXIT onErrorLoadThemeFromFile:",  _themeNameLoading);
+            _themeNameLoading = "";*/
+        } 
 
         private var _currentInstance:Object;
         public function get currentInstance():Object{ return _currentInstance; }
