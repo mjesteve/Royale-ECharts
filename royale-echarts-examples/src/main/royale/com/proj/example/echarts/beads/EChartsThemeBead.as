@@ -1,23 +1,23 @@
-package com.proj.example.echarts
+package com.proj.example.echarts.beads
 {
 
     import org.apache.royale.core.Bead;
     import org.apache.royale.core.IStrand;
     import org.apache.royale.events.Event;
-    import org.apache.royale.net.HTTPConstants;
+    import org.apache.royale.events.IEventDispatcher;
     import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
     import com.proj.example.echarts.models.EChartsModel;
     import com.proj.example.echarts.models.EChartsThemesModel;
-    import org.apache.royale.events.IEventDispatcher;
     import com.proj.example.echarts.events.EChartsThemesEvent;
+    import com.proj.example.echarts.EChartsComponent;
 
     public class EChartsThemeBead extends Bead
     {
             
-        [Bindable]
+        /*[Bindable]
         [Inject(source="echartsThemesModel", required="true")]
         public var echartsThemesModel:EChartsThemesModel;
-
+        */
         public function EChartsThemeBead() {
             super();
         }
@@ -45,6 +45,11 @@ package com.proj.example.echarts
 		{
 			return hostComponent.echartsModel;
 		}
+        
+		protected function get echartsThemesModel():EChartsThemesModel
+		{
+			return hostComponent.echartsThemesModel;
+		}
 
         private function get dispatcher():IEventDispatcher
         {
@@ -68,7 +73,7 @@ package com.proj.example.echarts
         }
 		public function set themeInstance(value:Object):void
         {
-            if(!enabled || !echartsModel || !echartsModel.withThemesSupport)
+            if(!enabled || !echartsModel || !echartsModel.withThemesSupport || !echartsThemesModel)
                 return;
 
             trace("set themeInstance BEAD "+value);
@@ -180,7 +185,6 @@ package com.proj.example.echarts
         [EventHandler(event="EChartsThemesEvent.ON_ERROR_LOADTHEMEFROMFILE", scope="global")]
         private function onErrorLoadThemeFromFile(e:Event):void{
             trace("onErrorLoadThemeFromFile:", _themeNameLoading);
-            EChartsThemeTemplates.serviceJSON.removeEventListener(HTTPConstants.IO_ERROR, onErrorLoadThemeFromFile);
             if(!isNaN(_lastExecute))
             {
                 clearTimeout(_lastExecute);

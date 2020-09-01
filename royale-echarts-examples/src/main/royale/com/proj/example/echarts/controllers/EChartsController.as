@@ -65,7 +65,7 @@ package com.proj.example.echarts.controllers
 			model.withThemesSupport = withThemesSupport;
             if(withThemesSupport)                
                 dispatcher.dispatchEvent(new EChartsThemesEvent(
-                    EChartsThemesEvent.ON_AFTERINICIALIZE, 
+                    EChartsThemesEvent.ON_INICIALIZE, 
                     new EChartsThemeTemplateVO(model.themeNameTemplateDefault)));
             else{ 
 			    model.initComplete = true;
@@ -78,7 +78,7 @@ package com.proj.example.echarts.controllers
         {
             trace("afterInitThemesEvent");
             model.initComplete = true;
-            if(event.status != ""){
+            if(event.status){
                 trace("Error: "+ event.status);
                 model.withThemesSupport = false;
             }

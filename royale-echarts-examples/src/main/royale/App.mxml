@@ -55,6 +55,7 @@
 					<crux:viewPackages>
 						<fx:Array>
 							<fx:String>com.proj.example.views.*</fx:String>
+							<fx:String>com.proj.example.echarts.*</fx:String>
 						</fx:Array>
 					</crux:viewPackages>
 				</crux:CruxConfig>

@@ -6,27 +6,39 @@ package com.proj.example.echarts
     import com.proj.example.echarts.models.EChartsModel;
     import com.proj.example.echarts.events.EChartsEvent;
     import com.proj.example.echarts.vos.EChartsInstanceVO;
+    import com.proj.example.echarts.models.EChartsThemesModel;
+    import com.proj.example.echarts.beads.EChartsThemeBead;
 
 	//[DefaultProperty("currentInstance")]
 
 	COMPILE::JS
 	public class EChartsComponent extends Container
     {
+        [Bindable]
+        [Inject(source="echartsModel", required="true")]
+        public var echartsModel:EChartsModel;
+
+        [Bindable]
+        [Inject(source="echartsThemesModel", required="true")]
+        public var echartsThemesModel:EChartsThemesModel;
 	
+       /* private var _echartsModel:EChartsModel;
+        [Bindable]
+        public function get echartsModel():EChartsModel{ return _echartsModel; }
+        public function set echartsModel(value:EChartsModel):void{ _echartsModel = value; }
+         
+        private var _echartsThemesModel:EChartsThemesModel;
+        [Bindable]
+        public function get echartsThemesModel():EChartsThemesModel{ return _echartsThemesModel; }
+        public function set echartsThemesModel(value:EChartsThemesModel):void{ _echartsThemesModel = value; }
+        */
         public function EChartsComponent()
 		{
 			super();
             addEventListener("beadsAdded", beadsAddedHandler);
 		}
 		public var domInstance:Element = null;
-        /*
-        [Bindable]
-        [Inject(source="echartsModel", required="true")]*/
-        private var _echartsModel:EChartsModel;
-        [Bindable]
-        public function get echartsModel():EChartsModel{ return _echartsModel; }
-        public function set echartsModel(value:EChartsModel):void{ _echartsModel = value; }
-         
+        
 		/**
 		 * @private
 		 */
@@ -50,7 +62,13 @@ package com.proj.example.echarts
             }
             
         }
-        
+          
+        [EventHandler(event="EChartsEvent.ON_AFTERINICIALIZE", scope="global")]
+        public function echartsAfterInitEvent(event:EChartsEvent):void
+        {
+            trace("afterinit in component");
+        }
+
         private var _currentInstance:Object;
         public function get currentInstance():Object{ return _currentInstance; }
         public function set currentInstance(value:Object):void
