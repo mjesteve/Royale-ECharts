@@ -14,8 +14,8 @@
             import org.apache.royale.core.IUIBase;
             import org.apache.royale.utils.callLater;
             import org.apache.royale.collections.ArrayList;
-            import com.proj.example.echarts.EChartsThemeTemplates;
-            import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
+            import com.echarts.components.EChartsThemeTemplates;
+            import com.echarts.components.vos.EChartsThemeTemplateVO;
 	        
             
             protected function onInitialize(event:Event):void {}

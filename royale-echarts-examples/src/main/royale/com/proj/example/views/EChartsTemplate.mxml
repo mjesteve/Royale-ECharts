@@ -9,10 +9,8 @@
 
     <fx:Script>
         <![CDATA[
-        import com.proj.example.vos.ChartDefExampleVO;
-	    import com.proj.example.echarts.EChartsContainer;
-	    import com.proj.example.echarts.models.EChartsModel;
-	    import com.proj.example.echarts.models.EChartsThemesModel;
+	    import com.echarts.echarts.vos.ChartDefExampleVO;
+	    import com.echarts.components.EChartsContainer;
 /*            
         [Bindable]
         [Inject(source="echartsModel", required="true")]

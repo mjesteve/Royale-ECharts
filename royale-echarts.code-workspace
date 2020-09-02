@@ -2,9 +2,15 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "royale-echarts"
+		},
+		{
+			"path": "royale-echarts-examples"
 		}
 	],
 	"settings": {
-		"as3mxml.sdk.framework": "D:\\Apache\\apache-royale-0.9.8-iest"
+		"as3mxml.sdk.framework": "d:\\Trabajo\\Apache_Royale\\apache-royale-0.9.7-bin-js\\royale-asjs"
 	}
 }

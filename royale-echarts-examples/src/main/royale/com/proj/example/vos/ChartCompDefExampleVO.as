@@ -1,7 +1,7 @@
 package com.proj.example.vos
 {
-    import com.proj.example.charts.IEchartDefinition;
-    import com.proj.example.echarts.EChartsComponent;
+    import com.echarts.charts.IEchartDefinition;
+    import com.echarts.components.EChartsComponent;
 
     public class ChartCompDefExampleVO
     {

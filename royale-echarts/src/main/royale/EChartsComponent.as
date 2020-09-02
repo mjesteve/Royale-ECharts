@@ -1,7 +1,8 @@
-package 
+package
 {
 	//import org.apache.royale.core.UIBase;
     import org.apache.royale.html.Container;
+    import com.echarts.echarts;
 	
 	[DefaultProperty("currentInstance")]
 
