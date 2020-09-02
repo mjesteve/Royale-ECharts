@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [ 
+        {
+        "name": "Launch Chrome (localhost debug)",
+        "type": "chrome",
+        "request": "launch",
+        "sourceMaps": true,
+        "url": "http://localhost:8080/RoyaleEcharts/index.html",
+        "webRoot": "${workspaceFolder}\\royale-echarts-examples\\target\\javascript\\bin\\js-debug"
+        },
+        {
+            "name": "Royal ECharts (Debug version)",
+            "type": "chrome",
+            "request": "launch",
+            "sourceMaps": true,
+            "url": "file:///${workspaceRoot}/royale-echarts-examples/target/javascript/bin/js-debug/index.html",
+            "webRoot": "${workspaceRoot}/royale-echarts-examples/target/javascript/bin/js-debug"
+        }
+    
+    ]
+}
