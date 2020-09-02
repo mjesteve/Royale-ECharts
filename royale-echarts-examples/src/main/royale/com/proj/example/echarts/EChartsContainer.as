@@ -1,8 +1,6 @@
 package com.proj.example.echarts
 {
 
-	import org.apache.royale.utils.ObjectMap;
-
 	//[DefaultProperty("currentInstance")]
     public class EChartsContainer extends EChartsComponent
     {

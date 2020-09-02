@@ -2,6 +2,7 @@
 @namespace "http://www.w3.org/1999/xhtml";
 @namespace js "library://ns.apache.org/royale/basic";
 @namespace j "library://ns.apache.org/royale/jewel";
+@namespace v "com.proj.example.views.*";
 
   .Application {
     font-family: 'Open Sans', serif, sans-serif;
@@ -27,7 +28,12 @@
     margin-right: auto;
     text-align: center;
   }
-
+/*
+  v|MainExample {
+    IBeadModel: ClassReference("com.proj.example.echarts.models.EChartsModel");
+    IBeadController: ClassReference("com.proj.example.echarts.controllers.EChartsController");
+  }
+*/
 #cardThumbnail{
   background: white;
   padding: 10px;

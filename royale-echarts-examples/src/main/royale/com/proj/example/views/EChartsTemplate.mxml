@@ -4,18 +4,24 @@
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     implements="com.proj.example.charts.IEchartDefinitionTemplate"
-    xmlns:localecharts="com.proj.example.echarts.*">
+    xmlns:localecharts="com.proj.example.echarts.*"
+    xmlns:localechartsbead="com.proj.example.echarts.beads.*">
 
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
 	    import com.proj.example.echarts.EChartsContainer;
-	    import com.proj.example.echarts.model.EChartsModel;
-            
+	    import com.proj.example.echarts.models.EChartsModel;
+	    import com.proj.example.echarts.models.EChartsThemesModel;
+/*            
         [Bindable]
         [Inject(source="echartsModel", required="true")]
         public var echartsModel:EChartsModel;
 
+        [Bindable]
+        [Inject(source="echartsThemesModel", required="true")]
+        public var echartsThemesModel:EChartsThemesModel;
+*/
         private var _itemChartDef:ChartDefExampleVO;    
         [Bindable]
 		public function get itemChartDef():ChartDefExampleVO
@@ -71,10 +77,9 @@
                 <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
                     <j:VGroup localId="cardContent" gap="3" height="100%" width="100%" className="wrapper">
                             <localecharts:EChartsContainer localId="charComp" height="100%" width="100%"
-                            echartsModel="{echartsModel}"
                             autoLoad="{itemChartDef.autoLoad}" optionChartInit="{itemChartDef.optionChartInit}">
                                 <localecharts:beads>
-                                    <localecharts:EChartsThemeBead localId="themeBead" themeInstance="{itemChartDef.themeName}"/>
+                                    <localechartsbead:EChartsThemeBead localId="themeBead" themeInstance="{itemChartDef.themeName}"/>
                                 </localecharts:beads>
                             </localecharts:EChartsContainer>
                     </j:VGroup>   

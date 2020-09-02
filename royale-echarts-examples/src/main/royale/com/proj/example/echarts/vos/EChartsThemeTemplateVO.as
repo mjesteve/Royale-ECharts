@@ -10,7 +10,7 @@ package com.proj.example.echarts.vos
         public var isReg:Boolean;
         public var custom:Boolean;
 
-        public function EChartsThemeTemplateVO(themeName:String, thumb:String, jsonConfig:Object = null, isReg:Boolean = false, custom:Boolean = false)
+        public function EChartsThemeTemplateVO(themeName:String, thumb:String = null, jsonConfig:Object = null, isReg:Boolean = false, custom:Boolean = false)
         {
             this.themeName = themeName;
             this.thumb = thumb;

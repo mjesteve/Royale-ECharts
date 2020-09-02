@@ -3,30 +3,36 @@ package com.proj.example.echarts
 	import org.apache.royale.html.Container;
 	import org.apache.royale.core.IBead;
     import org.apache.royale.events.Event;
-    import com.proj.example.echarts.model.EChartsModel;
+    import com.proj.example.echarts.models.EChartsModel;
     import com.proj.example.echarts.events.EChartsEvent;
     import com.proj.example.echarts.vos.EChartsInstanceVO;
+    import com.proj.example.echarts.models.EChartsThemesModel;
+    import com.proj.example.echarts.beads.EChartsThemeBead;
+    import com.proj.example.echarts.events.EChartsThemesEvent;
 
 	//[DefaultProperty("currentInstance")]
 
 	COMPILE::JS
 	public class EChartsComponent extends Container
     {
-	
+        	
+        private var _echartsModel:EChartsModel;
+        [Bindable]
+        public function get echartsModel():EChartsModel{ return _echartsModel; }
+        public function set echartsModel(value:EChartsModel):void{ _echartsModel = value; }
+         
+        private var _echartsThemesModel:EChartsThemesModel;
+        [Bindable]
+        public function get echartsThemesModel():EChartsThemesModel{ return _echartsThemesModel; }
+        public function set echartsThemesModel(value:EChartsThemesModel):void{ _echartsThemesModel = value; }
+        
         public function EChartsComponent()
 		{
 			super();
             addEventListener("beadsAdded", beadsAddedHandler);
 		}
 		public var domInstance:Element = null;
-        /*
-        [Bindable]
-        [Inject(source="echartsModel", required="true")]*/
-        private var _echartsModel:EChartsModel;
-        [Bindable]
-        public function get echartsModel():EChartsModel{ return _echartsModel; }
-        public function set echartsModel(value:EChartsModel):void{ _echartsModel = value; }
-         
+        
 		/**
 		 * @private
 		 */
@@ -50,7 +56,69 @@ package com.proj.example.echarts
             }
             
         }
-        
+          
+        [EventHandler(event="EChartsEvent.ON_AFTERINICIALIZE", scope="global")]
+        public function echartsAfterInitEvent(event:EChartsEvent):void
+        {
+            trace("afterinit in component");
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_COMPLETE_LOADTHEMEFROMFILE", scope="global")]
+        public function onCompleteLoadThemeFromFile(event:EChartsThemesEvent):void
+        {
+            trace("onCompleteLoadThemeFromFile");
+            /*if(event.itemSelTheme.themeName != _themeNameLoading) return;
+
+            
+            var themeObj:EChartsThemeTemplateVO = echartsThemesModel.itemThemeFromName(_themeNameLoading);
+            if(themeObj.isReg)
+                hostComponent.themeInstance = event.itemSelTheme;
+            else{    
+                _themeNameRegistering = _themeNameLoading;                    
+                dispatcher.dispatchEvent(new EChartsThemesEvent(
+                    EChartsThemesEvent.ON_REGISTERTHEME,themeObj)
+                );
+            }
+            _themeNameLoading = "";
+            if(!isNaN(_lastExecute))
+            {
+                clearTimeout(_lastExecute);
+                _lastExecute = NaN;
+            }*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_COMPLETE_REGISTERTHEME", scope="global")]
+        public function onCompleteRegister(event:EChartsThemesEvent):void
+        {
+            trace("afterRegisterThemesEvent");
+            /*if(event.itemSelTheme.themeName != _themeNameRegistering) return;
+
+            _themeNameRegistering = "";
+            hostComponent.themeInstance = event.itemSelTheme;*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_WAIT_LOADTHEMEFROMFILE", scope="global")]
+        public function onWaitLoadThemeFromFile(event:EChartsThemesEvent):void
+        {
+            trace("onWaitLoadThemeFromFile");
+            /*if(event.itemSelTheme.themeName != _themeNameLoading) return;
+
+            _lastExecute = setTimeout(delayRetry,1000,event.itemSelTheme);
+            trace("Id setTimeout:", _lastExecute.toString());*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_ERROR_LOADTHEMEFROMFILE", scope="global")]
+        private function onErrorLoadThemeFromFile(e:Event):void{
+            trace("onErrorLoadThemeFromFile:");
+            /*if(!isNaN(_lastExecute))
+            {
+                clearTimeout(_lastExecute);
+                _lastExecute = NaN;
+            }
+            trace("EXIT onErrorLoadThemeFromFile:",  _themeNameLoading);
+            _themeNameLoading = "";*/
+        } 
+
         private var _currentInstance:Object;
         public function get currentInstance():Object{ return _currentInstance; }
         public function set currentInstance(value:Object):void

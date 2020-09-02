@@ -5,9 +5,10 @@
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:vos="com.proj.example.vos.*"
 	xmlns:models="com.proj.example.models.*"
-    xmlns:echartmodel="com.proj.example.echarts.models.*"
-    xmlns:localchart="com.proj.example.charts.*" 
     xmlns:views="com.proj.example.views.*" 
+    xmlns:localchart="com.proj.example.charts.*" 
+			   xmlns:echartsmodel="com.proj.example.echarts.models.*"
+			   xmlns:echartscontroller="com.proj.example.echarts.controllers.*"
     initComplete="onInitComplete()"
     >
 
@@ -17,9 +18,18 @@
         import org.apache.royale.jewel.supportClasses.ISelectableContent;
         import com.proj.example.charts.IEchartDefinitionTemplate;
         import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
-        import com.proj.example.echarts.model.EChartsModel;
+        import com.proj.example.echarts.models.EChartsModel;
         import com.proj.example.echarts.events.EChartsEvent;
-            
+
+        private function onInitComplete():void{            
+			//window.addEventListener('resize', autoResizeHandler, false);
+            this.addEventListener("sizeChanged", autoResizeHandler);
+            trace(topappbar.height.toString());  
+            var evt:EChartsEvent = new EChartsEvent(EChartsEvent.ON_INICIALIZE);
+            evt.withThemesSupport = true;
+            dispatchEvent(evt); 
+        }
+            /*
         [Bindable]
         [Inject(source="echartsModel", required="true")]
         public var echartsModel:EChartsModel;
@@ -32,7 +42,7 @@
             evt.withThemesSupport = true;
             dispatchEvent(evt);
         }
-          
+*/          
         [EventHandler(event="EChartsEvent.ON_AFTERINICIALIZE", scope="global")]
         public function echartsAfterInitEvent(event:EChartsEvent):void
         {                 
@@ -41,14 +51,8 @@
             
             main.selectedContent = "welcome";
             listTheme.selectedIndex = 0;
-			ecp1.initInstance(listTheme.selectedItem.themeName);
-            ecp2.initInstance(listTheme.selectedItem.themeName);
-        }
-
-        private function onInitComplete():void{            
-			//window.addEventListener('resize', autoResizeHandler, false);
-            this.addEventListener("sizeChanged", autoResizeHandler);
-            trace(topappbar.height.toString());   
+			//ecp1.initInstance(listTheme.selectedItem.themeName);
+            //ecp2.initInstance(listTheme.selectedItem.themeName);
         }
 
         [Bindable]
@@ -111,17 +115,11 @@
                 //aplicar tema
             }
 			ecp1.initInstance(listTheme.selectedItem.themeName);
-            ecp2.initInstance(listTheme.selectedItem.themeName);
+            //ecp2.initInstance(listTheme.selectedItem.themeName);
         }
 
         ]]>
     </fx:Script>
-
-	<fx:Style>
-		.side-tab-content {
-			background-color: #f6f6f6;
-		}
-	</fx:Style>
 
 	<j:model>
 		<models:ChartsModel localId="appModel"/>
@@ -129,7 +127,9 @@
 
     <j:beads>
 		<js:ContainerDataBinding/>
-		<js:BrowserResizeListener/>
+		<js:BrowserResizeListener/><!--
+        <echartsmodel:EChartsModel/>
+        <echartscontroller:EChartsController/>-->
 	</j:beads>
 
     <j:TopAppBar localId="topappbar" fixed="true" visible="true">
@@ -156,7 +156,7 @@
     <j:ApplicationMainContent  localId="main" hasTopAppBar="true" selectedContent="welcome">
         <views:WelcomeSection name="welcome"/>
         <views:EChartsTemplate localId="ecp1" name="ecp1" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_PIE001}"/>
-        <views:EChartsTemplate localId="ecp2" name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChartDef="{appModel.ECC_PIE002}"/>
+        <!--<views:EChartsTemplate localId="ecp2" name="ecp2" style="margin-top:{offsetTopBar}px;"  itemChartDef="{appModel.ECC_PIE002}"/>-->
     </j:ApplicationMainContent>
     
 
