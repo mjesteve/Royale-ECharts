@@ -51,11 +51,19 @@ package com.proj.example.echarts.controllers
 		{
 			_strand = value;
 			_model = _strand.getBeadByType(IBeadModel) as IBeadModel;
-            dispatcher.addEventListener(EChartsEvent.ON_INICIALIZE,initializeEcharts);
+
             themesController = new EChartsThemesController();
             themesController.setModel(new EChartsThemesModel);
             _strand.addBead(themesController);
+
+            createListeners()
 		}
+
+        protected function createListeners():void
+        {
+            dispatcher.addEventListener(EChartsEvent.ON_INICIALIZE,initializeEcharts);
+
+        }
 
         protected var themesController:EChartsThemesController;
 
