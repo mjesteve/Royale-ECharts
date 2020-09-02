@@ -10,7 +10,7 @@
     <fx:Script>
         <![CDATA[
 	    import com.echarts.echarts.vos.ChartDefExampleVO;
-	    import com.echarts.components.EChartsContainer;
+	    import com.echarts.EChartsContainer;
 /*            
         [Bindable]
         [Inject(source="echartsModel", required="true")]

@@ -1,0 +1,107 @@
+/*
+ * Copyright (C) 2009, Codeoscopic S.A. - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * Copyright (C) 2009, Codeoscopic S.A. - Todos Los Derechos Reservados
+ * La copia no autorizada de este archivo, a través de cualquier medio está estrictamente prohibida
+ * Privado y confidencial
+ */
+ {
+    "config": "royale",
+    "type": "lib",
+    "compilerOptions": {
+        "debug": true,
+        "targets": [
+            // "SWF",
+            "JSRoyale"
+        ],
+        "namespace": [
+            {
+                "uri": "library://ns.apache.org/royale/echarts",
+                "manifest": "src/main/resources/echarts-manifest.xml"
+            }
+        ],
+        "define": [
+            {
+                "name": "COMPILE::JS",
+                "value": true
+            },
+            {
+                "name": "COMPILE::SWF",
+                "value": false
+            }
+        ],
+        "source-path": [
+            "src/main/royale"
+        ],
+        "include-classes": [
+            "ChartsClasses"
+        ],
+        "include-sources": [
+            "src/main/royale"
+        ],
+        // "library-path": [
+        //     "${royalelib}/js/libs/MXRoyaleJS.swc"
+        // ],
+        // "js-library-path": [
+        //     "${royalelib}/js/libs/MXRoyaleJS.swc"
+        // ],
+        "source-map": true,
+        "output": "target/royale-echarts-1.0-SNAPSHOT-js.swc"
+    }
+}
+{
+    "config": "royale",
+    "type": "lib",
+    "compilerOptions": {
+        "debug": true,
+        "targets": [
+            "JSRoyale"
+        ],
+        "namespace": [
+            {
+                "uri": "library://ns.iest.com/winplusweb",
+                "manifest": "src/main/resources/security-manifest.xml"
+            },
+            {
+                "uri": "library://ns.iest.com/winplusweb",
+                "manifest": "../royalearq/src/main/resources/arq-manifest.xml"
+            },
+            {
+                "uri": "library://ns.iest.com/winplusweb",
+                "manifest": "../royalecomponents/src/main/resources/components-manifest.xml"
+            },
+            {
+                "uri": "library://ns.iest.com/winplusweb",
+                "manifest": "../royaledto/src/main/resources/components-manifest.xml"
+            },
+            {
+                "uri": "library://ns.iest.com/winplusweb",
+                "manifest": "../royalecommons/src/main/resources/components-manifest.xml"
+            }
+        ],
+        "include-classes": [
+            "SecurityClasses"
+        ],
+        "include-sources": [
+            "src/main/royale"
+        ],
+        "source-path": [
+            "src/main/royale",
+            "../royaledto/src/main/royale/",
+            "../royalearq/src/main/royale/",
+            "../royalecomponents/src/main/royale/",
+            "../royalecommons/src/main/royale/"
+        ],
+        "library-path": [
+            "${royalelib}/js/libs/MXRoyale-0.9.8-SNAPSHOT-js.swc"
+        ],
+        "js-library-path": [
+            "${royalelib}/js/libs/MXRoyale-0.9.8-SNAPSHOT-js.swc"
+        ],
+        "source-map": true,
+        //"remove-circulars": true,
+        "output": "target/echartsCharts.swc"
+    }
+}

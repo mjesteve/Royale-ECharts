@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2009, Codeoscopic S.A. - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ *
+ * Copyright (C) 2009, Codeoscopic S.A. - Todos Los Derechos Reservados
+ * La copia no autorizada de este archivo, a través de cualquier medio está estrictamente prohibida
+ * Privado y confidencial
+ */
+ {
+    "config": "royale",
+    "type": "lib",
+    "compilerOptions": {
+        "debug": true,
+        "targets": [
+            // "SWF",
+            "JSRoyale"
+        ],
+        "namespace": [
+            {
+                "uri": "library://ns.apache.org/royale/echarts",
+                "manifest": "src/main/resources/echarts-manifest.xml"
+            }
+        ],
+        "define": [
+            {
+                "name": "COMPILE::JS",
+                "value": true
+            },
+            {
+                "name": "COMPILE::SWF",
+                "value": false
+            }
+        ],
+        "source-path": [
+            "src/main/royale"
+        ],
+        "include-classes": [
+            "ComponentsClasses"
+        ],
+        "include-sources": [
+            "src/main/royale"
+        ],
+        // "library-path": [
+        //     "${royalelib}/js/libs/MXRoyaleJS.swc"
+        // ],
+        // "js-library-path": [
+        //     "${royalelib}/js/libs/MXRoyaleJS.swc"
+        // ],
+        "source-map": true,
+        "output": "target/echartsComponents.swc"
+    }
+}
