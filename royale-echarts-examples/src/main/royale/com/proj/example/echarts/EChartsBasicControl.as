@@ -1,7 +1,6 @@
 package com.proj.example.echarts
 {
 	import org.apache.royale.core.StyledUIBase;
-	import org.apache.royale.core.IBead;
     import org.apache.royale.events.Event;
     import com.proj.example.echarts.events.EChartsEvent;
     import com.proj.example.echarts.vos.EChartsInstanceVO;
@@ -34,10 +33,11 @@ package com.proj.example.echarts
 		{
 			super();			
 			typeNames = "";
-
+            //test
             addEventListener("beadsAdded", beadsAddedHandler);
 		}
 
+        //test
         public function beadsAddedHandler(event:Event):void
         {
             removeEventListener("beadsAdded", beadsAddedHandler);            

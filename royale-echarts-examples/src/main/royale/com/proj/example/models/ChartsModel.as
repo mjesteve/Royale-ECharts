@@ -31,17 +31,18 @@ package com.proj.example.models
 		{
 			if(!_tabBarAppData){
 				var arData:Array = new Array();
+
 				var it:TabBarChartVO = new TabBarChartVO();
 				it.hash="ecp1";
-				it.thumbnail="assets/charts/xCFIVk5Ebk.png";				
-				var descChart:ChartDefExampleVO = ECC_PIE001;
+				it.thumbnail="assets/charts/ECC_PIE001.png";				
+				var descChart:ChartDefExampleVO = ECCT_PIE001;
 				it.label = descChart.title;
 				it.description = descChart.title + '\n' + descChart.subtitle;
 				arData.push(it);
 
 				it = new TabBarChartVO();
 				it.hash="ecp2";
-				it.thumbnail="assets/charts/xlZeV3FwQM.png";
+				it.thumbnail="assets/charts/ECC_PIE002.png";
 				descChart = ECC_PIE002;
 				it.label = descChart.title;
 				it.description = descChart.title + '\n' + descChart.subtitle;
@@ -179,7 +180,8 @@ package com.proj.example.models
 		{
 			if(!_ECCT_PIE001){
 				_ECCT_PIE001 = new ChartDefExampleVO();
-				_ECCT_PIE001.themeName = 'halloween';
+				_ECCT_PIE001.title = "Custom Pie Rouse";
+				_ECCT_PIE001.themeName = 'dark';
 				_ECCT_PIE001.autoLoad = false;
 				_ECCT_PIE001.optionChartInit = {
 					"series": [
@@ -243,18 +245,15 @@ package com.proj.example.models
 						},
 						"borderWidth": 0
 					},
-					"title": [
-						{
-							"text": "Customized Pie",
-							"left": "center",
-							"top": "20",
-							"padding": 5,
-							"itemGap": 10,
-							"textStyle": {
-								"color": "#fff"
-							}
-						}
-					]
+    toolbox: {
+        show: true,
+        feature: {
+            mark: {show: true},
+            dataView: {show: true, readOnly: false},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    }
 				};
 			}
 			return _ECCT_PIE001;
@@ -265,7 +264,8 @@ package com.proj.example.models
 		{
 			if(!_ECC_PIE002){
 				_ECC_PIE002 = new ChartDefExampleVO();
-				_ECC_PIE002.themeName = 'vintage';
+				_ECC_PIE002.title = "Nested Pies";
+				_ECC_PIE002.themeName = 'light';
 				_ECC_PIE002.autoLoad = true;
 				_ECC_PIE002.optionChartInit = {
 					tooltip: {
@@ -278,6 +278,15 @@ package com.proj.example.models
 						data: ['Direct','Marketing Advertising','Search Engine','Email Marketing','Affiliate Advertising',
 						'Video Advertising','Baidu','Google','Bing','Other']
 					},
+    toolbox: {
+        show: true,
+        feature: {
+            mark: {show: true},
+            dataView: {show: true, readOnly: false},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
 					series: [
 						{
 							name:'Access Source',

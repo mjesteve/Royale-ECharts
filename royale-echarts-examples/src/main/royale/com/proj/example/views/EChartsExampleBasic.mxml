@@ -28,8 +28,7 @@
 
             if(!charComp.isInit)
             {
-                var opts:Object = {width: 'auto', height: 'auto'};
-                charComp.init('',opts);
+                charComp.init(itemChartDef.themeName,opts);
             }
             else
             {
@@ -43,13 +42,15 @@
             trace("despues de inicializarse");
             if(!charComp.isInit && charComp.autoLoad && charComp.configOption)
             {
-                charComp.init('dark');
+                charComp.init( itemChartDef.themeName);
             }
         }
 
         private function afterInit(event:EChartsEvent):void{
             trace("despues de configurarse");
         }
+        
+        private var opts:Object = {width: 'auto', height: 'auto'};
 
         ]]>
     </fx:Script>

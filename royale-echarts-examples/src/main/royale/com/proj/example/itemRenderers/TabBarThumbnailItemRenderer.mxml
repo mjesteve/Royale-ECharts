@@ -29,7 +29,7 @@ limitations under the License.
 			import com.proj.example.vos.TabBarChartVO;
             
             [Bindable("dataChange")]
-            public function get tabButton():TabBarChartVO
+            public function get dataThumb():TabBarChartVO
             {
                 return data as TabBarChartVO;
             }
@@ -43,13 +43,13 @@ limitations under the License.
 
     <j:Card id="cardThumbnail">
         <j:beads>
-            <j:ToolTip localId="tt" toolTip="{tabButton.description}"/>
+            <j:ToolTip localId="tt" toolTip="{dataThumb.description}"/>
         </j:beads>
         <j:CardHeader>
-            <j:Label text="{tabButton.label}" className="primary" style="font-size: 0.75em;"/>            
+            <j:Label text="{dataThumb.label}" className="primary" style="font-size: 0.75em;"/>            
         </j:CardHeader>
         <j:CardExpandedContent itemsHorizontalAlign="itemsCenter" itemsVerticalAlign="itemsCenter">
-            <j:Image localId="img" src="{tabButton.thumbnail}" width="100">
+            <j:Image localId="img" src="{dataThumb.thumbnail}" width="100">
                 <j:beads>
                     <j:ResponsiveSize phoneWidth="75"/>
                     <js:ErrorImage emptyIsError="true"/>
