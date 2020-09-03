@@ -32,5 +32,6 @@ package com.proj.example.echarts.events
 
 		public var itemSelTheme:EChartsThemeTemplateVO;
         public var status:String;
+		public var register:Boolean;
     }
 }

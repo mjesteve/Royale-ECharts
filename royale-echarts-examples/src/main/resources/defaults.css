@@ -28,6 +28,10 @@
     margin-right: auto;
     text-align: center;
   }
+  
+.echarts-content > * {
+  flex: 1 0 auto;
+}
 /*
   v|MainExample {
     IBeadModel: ClassReference("com.proj.example.echarts.models.EChartsModel");

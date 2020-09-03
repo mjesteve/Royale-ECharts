@@ -7,8 +7,6 @@ package com.proj.example.echarts.vos
         private var _id:String;
         public function get id():String
         {
-            if(!_id && _jsInstance)
-                _id = _jsInstance.id;
             return _id; 
         }
         public function set id(value:String):void{ _id = value; }
@@ -16,16 +14,25 @@ package com.proj.example.echarts.vos
         private var _jsInstance:Object;
         public function get jsInstance():Object{ return _jsInstance; }
         public function set jsInstance(value:Object):void{ 
-            _jsInstance = value; 
-            if(!_id)
-                _id = _jsInstance.id;
-        }
-        
-        public var isInit:Boolean;
+            try
+            {
+                if(value)
+                    _id = value['id'] as String;
+                else
+                    _id = "";
+                _jsInstance = value; 
+                    
+            }
+            catch (error:Error)
+            {
+                trace(error.message);
 
-        public function EChartsInstanceVO(jsInstance:Object=null) 
+            }
+        }
+
+        public function EChartsInstanceVO(jsinstance:Object=null) 
         {
-            this.jsInstance = jsInstance;
+            jsInstance = jsinstance;
         }
 
     }

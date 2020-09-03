@@ -14,17 +14,30 @@
             import org.apache.royale.core.IUIBase;
             import org.apache.royale.utils.callLater;
             import org.apache.royale.collections.ArrayList;
-            import com.proj.example.echarts.EChartsThemeTemplates;
             import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
+            import com.proj.example.echarts.EChartsThemeLoader;
+            import org.apache.royale.utils.ObjectMap;
 	        
             
             protected function onInitialize(event:Event):void {}
 
             [Bindable]
             public function get dataProvider():ArrayList{ 
-                return EChartsThemeTemplates.themesLoadArrayList(); 
+                return themeTemplateToArrayList(); 
             }
-            
+
+            private function themeTemplateToArrayList():ArrayList
+            {
+                var ar:ArrayList = new ArrayList();
+                var dic:ObjectMap = EChartsThemeLoader.themeTemplate;
+                for(var key:String in dic)
+                {
+                    if(dic[key] is EChartsThemeTemplateVO)
+                        ar.addItem(dic[key] as EChartsThemeTemplateVO);
+                }
+                return ar;
+            }
+
             private var _labelField:String = "themeName";
             [Bindable]
             public function get labelField():String{ return _labelField; }

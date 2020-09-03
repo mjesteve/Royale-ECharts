@@ -266,7 +266,7 @@ package com.proj.example.models
 			if(!_ECC_PIE002){
 				_ECC_PIE002 = new ChartDefExampleVO();
 				_ECC_PIE002.themeName = 'vintage';
-				_ECC_PIE002.autoLoad = false;
+				_ECC_PIE002.autoLoad = true;
 				_ECC_PIE002.optionChartInit = {
 					tooltip: {
 						trigger:'item',
