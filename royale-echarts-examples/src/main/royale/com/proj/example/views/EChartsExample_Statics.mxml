@@ -134,7 +134,6 @@
 		.mainPrin {
             background-color: #384E6B;
         }
-
         .wrapper {
             outline: 1px dashed navy;
         }
