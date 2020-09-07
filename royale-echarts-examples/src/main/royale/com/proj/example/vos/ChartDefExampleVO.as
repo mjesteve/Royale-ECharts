@@ -10,6 +10,7 @@ package com.proj.example.vos
 		public var optionChartInit:Object;
 		public var autoLoad:Boolean;
         public var themeName:String;
+        public var eventHandlers:Array;
 
         public function ChartDefExampleVO()
         {
