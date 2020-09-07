@@ -6,89 +6,12 @@
     xmlns:localbeads="com.proj.example.beads.layouts.*"
     xmlns:vos="com.proj.example.vos.*"
 	xmlns:models="com.proj.example.models.*"
-    xmlns:views="com.proj.example.views.*" 
-    initComplete="onInitComplete()"
+    xmlns:views="com.proj.example.views.*"
     >
 
      <fx:Script>
         <![CDATA[
-        import com.proj.example.vos.TabBarChartVO;
-        import org.apache.royale.jewel.supportClasses.ISelectableContent;
-        import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
-        import com.proj.example.charts.IEchartExampleBasic;
-
-        private function onInitComplete():void{            
-			//window.addEventListener('resize', autoResizeHandler, false);
-            //this.addEventListener("sizeChanged", selectedChart);
-            main.selectedContent = "welcome";
-            listTheme.setSelectedItemFromName('default');
-        }
-
-        [Bindable]
-        public function get offsetTopBar():Number{
-            //The height of the Top Bar is not set correctly, the ApplicationMainContent does not have the Padding-Top either: 
-            //it assigns 66 (it matches the minHeight of the Top Bar 'has-topappbar') instead of 255.64, the actual height of the Top Bar.
-            // trace(topappbar.height.toString());  = 977 (incorrect)
-            // trace(topappbar.element.clientTop + topappbar.element.clientHeight); = 240 //(incorrect)
-            // trace(barRowHeader.height + barRowContent.height + barRowConfig.height); = 240 //(incorrect)
-
-            //The padding-top that we want to assign is 20. (To be computed from the completion of topappbar)
-            //The AplicationMainContent should start at this point
-            var top:Number = 255 - barRowHeader.height + 20;
-            return top + topappbar.element.clientTop;
-        }
-
-        public function selectedChart():void
-        {            
-            var it:TabBarChartVO = (tabbarApp.selectedItem as TabBarChartVO);
-            if(!it){
-                main.selectedContent = "welcome";
-            }else{
-                main.selectedContent= it.hash;                                
-				for (var i:int = 0; i < main.numElements; i++)
-				{
-					var content:ISelectableContent = main.getElementAt(i) as ISelectableContent;
-					if(content.isSelected){                        
-                        if(content is IEchartExampleBasic){
-                            var cchart:IEchartExampleBasic = content as IEchartExampleBasic;
-                            cchart.activate();
-                        }
-                        return;
-                    }
-				}
-            }
-
-        }
-
-        private var _currentTheme:EChartsThemeTemplateVO;
-        [Bindable]
-		public function get currentTheme():EChartsThemeTemplateVO{
-            return _currentTheme; 
-        }
-		public function set currentTheme(value:EChartsThemeTemplateVO):void
-        {
-            if(_currentTheme === value)
-                return;
-            _currentTheme = value;
-        }
-
-        public function theme_Change():void
-        {            
-            if(_currentTheme && _currentTheme.themeName == listTheme.selectedItem.themeName)
-                return;
-            if( !listTheme.selectedItem.isReg )
-            {
-                //cargar y registrar
-            }
-            else
-            {
-                //aplicar tema
-            }
-			//ecp1.initInstance(listTheme.selectedItem.themeName);
-            //ecp2.initInstance(listTheme.selectedItem.themeName);
-            selectedChart();
-        }
-
+     
         ]]>
     </fx:Script>
 
@@ -101,37 +24,8 @@
 		<js:BrowserResizeListener/>
 	</j:beads>
 
-    <j:TopAppBar localId="topappbar" fixed="true" visible="true">
-        <j:BarRow localId="barRowHeader">
-            <j:BarSection gap="0" percentWidth="100">
-                <j:BarTitle text="Integrating Apache ECharts (Incumbating) into Apache Royale"/>
-            </j:BarSection>
-        </j:BarRow>
-        <j:BarRow localId="barRowContent" style ="height:auto;">
-            <j:HGroup gap="0" percentWidth="100" itemsHorizontalAlign="itemsCenter" itemsVerticalAlign="itemsCenter">
-                <j:TabBar id="tabbarApp" selectedIndex="-1" sameWidths="true"
-                    className="tabbarAppItemRenderer"
-                    change="selectedChart()" dataProvider="{appModel.tabBarAppData}">
-                </j:TabBar>
-            </j:HGroup>
-        </j:BarRow>
-        <j:BarRow localId="barRowConfig" style ="height:auto;">
-            <j:HGroup gap="0" itemsVerticalAlign="itemsCenter">
-                <j:beads>
-                    <j:Paddings padding="20"/>
-                </j:beads>
-                <views:SelectThemeList id="listTheme" change="theme_Change()"/>
-            </j:HGroup>
-        </j:BarRow>
-    </j:TopAppBar>
-
     <j:ApplicationMainContent  localId="main" hasTopAppBar="true">
-        <j:beads>
-            <j:Paddings paddingBottom="20" paddingLeft="20" paddingRight="20"/>
-        </j:beads>
-        <views:WelcomeSection name="welcome"/>
-        <views:EChartsExampleBasic localId="ecp1" name="ecp1" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_PIE001}"/>
-        <views:EChartsExampleBasic localId="ecp2" name="ecp2" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECC_PIE002}"/>
+        <views:EChartsExample_Statics/>
     </j:ApplicationMainContent>
     
 
