@@ -9,6 +9,6 @@ package com.proj.example.charts
 		function get itemChartDef():ChartDefExampleVO;
         function set itemChartDef(value:ChartDefExampleVO):void;
 
-		function refresh():void;
+		function activate():void;
 	}
 }

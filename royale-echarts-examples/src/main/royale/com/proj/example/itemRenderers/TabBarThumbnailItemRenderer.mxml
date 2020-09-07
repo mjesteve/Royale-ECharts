@@ -48,7 +48,7 @@ limitations under the License.
         <j:CardHeader>
             <j:Label text="{dataThumb.label}" className="primary" style="font-size: 0.75em;"/>            
         </j:CardHeader>
-        <j:CardExpandedContent itemsHorizontalAlign="itemsCenter" itemsVerticalAlign="itemsCenter">
+        <j:CardExpandedContent itemsHorizontalAlign="itemsCenter" itemsVerticalAlign="itemsCenter" minHeight="44">
             <j:Image localId="img" src="{dataThumb.thumbnail}" width="100">
                 <j:beads>
                     <j:ResponsiveSize phoneWidth="75"/>

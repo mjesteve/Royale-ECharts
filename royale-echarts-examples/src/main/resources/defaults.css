@@ -75,7 +75,9 @@
   -moz-box-shadow:    0px 0px 5px 3px burlywood;
   box-shadow:         0px 0px 5px 3px burlywood;
 }*/
-#tabbarApp .indicator>.indicatorContent{
+/* Since the beginning of September it does not work:
+#tabbarApp .indicator>.indicatorContent{*/
+#tabbarApp .indicator-content{
   background-color: white;
 }
 

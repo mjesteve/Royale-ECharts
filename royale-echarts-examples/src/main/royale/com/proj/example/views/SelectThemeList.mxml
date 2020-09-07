@@ -21,23 +21,6 @@
             
             protected function onInitialize(event:Event):void {}
 
-            [Bindable]
-            public function get dataProvider():ArrayList{ 
-                return themeTemplateToArrayList(); 
-            }
-
-            private function themeTemplateToArrayList():ArrayList
-            {
-                var ar:ArrayList = new ArrayList();
-                var dic:ObjectMap = EChartsThemeLoader.themeTemplate;
-                for(var key:String in dic)
-                {
-                    if(dic[key] is EChartsThemeTemplateVO)
-                        ar.addItem(dic[key] as EChartsThemeTemplateVO);
-                }
-                return ar;
-            }
-
             private var _labelField:String = "themeName";
             [Bindable]
             public function get labelField():String{ return _labelField; }
@@ -54,6 +37,40 @@
                 list.selectedIndex = value;                
             }
 
+            private var _onlyThemesNative:Boolean = false;
+            [Bindable]
+            public function get onlyThemesNative():Boolean{ return _onlyThemesNative; }
+            public function set onlyThemesNative(value:Boolean):void 
+            {
+                if(_onlyThemesNative != value) {
+                    _onlyThemesNative = value;
+                }
+            }
+
+            [Bindable]
+            public function get dataProvider():ArrayList{ 
+                var ar:ArrayList = themeTemplateToArrayList();
+                return ar;
+            }
+
+            private function themeTemplateToArrayList():ArrayList
+            {
+                var ar:ArrayList = new ArrayList();
+                var dic:ObjectMap = EChartsThemeLoader.themeTemplate;
+                for(var key:String in dic)
+                {
+                    if(dic[key] is EChartsThemeTemplateVO)
+                    {
+                        if(_onlyThemesNative && (dic[key] as EChartsThemeTemplateVO).isNative)                        
+                                ar.addItem(dic[key] as EChartsThemeTemplateVO);
+                        
+                        else if(!_onlyThemesNative && !(dic[key] as EChartsThemeTemplateVO).isNative)
+                                ar.addItem(dic[key] as EChartsThemeTemplateVO);
+                    }
+                }
+                return ar;
+            }
+
             private var _selectedItem:EChartsThemeTemplateVO;
             [Bindable]
             public function get selectedItem():EChartsThemeTemplateVO{
@@ -65,6 +82,30 @@
                 if(_selectedItem === value)
                     return;
                 _selectedItem = value;
+            }
+            private var _themeSelectedPending:String;
+            public function setSelectedItemFromName(themeName:String):void
+            {
+                if(!list.dataProvider)
+                    _themeSelectedPending = themeName;
+                else
+                {
+                    _themeSelectedPending = "";
+                    if(list.selectedItem && list.selectedItem.themeName == themeName)
+                        return;
+                    
+                    var len:int = list.dataProvider.length;
+                    for(var index:int = 0; index < len; index++)
+                    {                     
+                        var item:EChartsThemeTemplateVO = list.dataProvider.source[index] as EChartsThemeTemplateVO;
+                        if(item.themeName == themeName){
+                            selectedItem = item;
+                            image.src = item[imgField];
+                            break;
+                        }
+                    }
+
+                }
             }
 
             private var _open:Boolean;
@@ -127,10 +168,9 @@
      <j:beads>
         <js:ContainerDataBinding/>       
 		<js:BrowserResizeListener/> 
-        <j:Paddings padding="20"/>
     </j:beads>
     
-    <j:List localId="list" visible="false" className="themeSelectItemRenderer" height="102" width="100%"
+    <j:List localId="list" visible="false" className="themeSelectItemRenderer" height="{onlyThemesNative?50:102}" percentWidth="100"
         dataProvider="{dataProvider}" labelField="{labelField}" change="theme_Change(event)">
         <j:beads>
             <j:TileHorizontalLayout/>
@@ -140,15 +180,15 @@
             <localIt:ImageItemRenderer labelField="{labelField}" toolTipField="{imgField}"/>
         </j:itemRenderer>-->
     </j:List>
-    <j:ImageButton localId="image" width="125" visible="{!open}"
+    <j:ImageButton localId="image" width="{onlyThemesNative?32:125}" visible="{!open}"
         src="{list.selectedItem ? list.selectedItem[imgField]: ''}" click="btnImage_Click(event)" >
         <j:beads>
             <!--<j:ResponsiveSize phoneWidth="100"/>-->
             <js:ErrorImage emptyIsError="true"/>
             <j:ToolTip toolTip="Select Theme"/>
         </j:beads>
-    </j:ImageButton>                     
-    <j:IconButton unboxed="true" style="color: white;" visible="{!open}">
+    </j:ImageButton>    
+    <j:IconButton unboxed="true" style="color: white;" visible="{!open &amp;&amp; !onlyThemesNative?true:false}">
         <j:icon>
             <js:FontAwesomeIcon text="{FontAwesome5IconType.COG}" faStyle="{FontAwesomeIcon.SOLID}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
         </j:icon>
@@ -156,7 +196,7 @@
             <j:ToolTip toolTip="Custom"/>
         </j:beads>
     </j:IconButton>
-    <j:IconButton unboxed="true" style="color: white;" visible="{!open}">
+    <j:IconButton unboxed="true" style="color: white;" visible="{!open &amp;&amp; !onlyThemesNative?true:false}">
         <j:icon>
             <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
         </j:icon>

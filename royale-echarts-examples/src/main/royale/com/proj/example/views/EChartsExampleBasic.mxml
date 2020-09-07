@@ -4,12 +4,25 @@
     xmlns:j="library://ns.apache.org/royale/jewel"
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
-    xmlns:localecharts="com.proj.example.echarts.*">
+    xmlns:views="com.proj.example.views.*" 
+    xmlns:localecharts="com.proj.example.echarts.*"
+    initComplete="onInitComplete()">
 
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
         import com.proj.example.echarts.events.EChartsEvent;
+        import org.apache.royale.core.BindableCSSStyles;
+
+        private function onInitComplete():void{
+            this.addEventListener("sizeChanged", autoResizeHandler,false);
+			//window.addEventListener('resize', autoResizeHandler, false);
+        }
+        public function autoResizeHandler(event:Event = null):void
+        {
+            if(charComp.isInit)            
+                charComp.resize();
+        }
 
         private var _itemChartDef:ChartDefExampleVO;    
         [Bindable]
@@ -20,70 +33,91 @@
         public function set itemChartDef(value:ChartDefExampleVO):void
         {            
             _itemChartDef = value;
-        }
-
-        public function refresh():void
-        {
-            //update all
-
-            if(!charComp.isInit)
+            if(_itemChartDef)            
             {
-                charComp.init(itemChartDef.themeName,opts);
+                listTheme.setSelectedItemFromName(_itemChartDef.themeName);
+                btnLoad.visible = !_itemChartDef.autoLoad;
+                listTheme.visible = _itemChartDef.autoLoad;
+            }else{                
+                btnLoad.visible = listTheme.visible = false;
             }
-            else
-            {
-                if(charComp.configOption)
-                    charComp.setOption();
-                charComp.resize();
-            }
-        }
-
-        private function afterConfig(event:EChartsEvent):void{
-            trace("despues de inicializarse");
-            if(!charComp.isInit && charComp.autoLoad && charComp.configOption)
-            {
-                charComp.init( itemChartDef.themeName);
-            }
-        }
-
-        private function afterInit(event:EChartsEvent):void{
-            trace("despues de configurarse");
         }
         
+        [Bindable]
         private var opts:Object = {width: 'auto', height: 'auto'};
+
+        public function activate():void
+        {
+            trace("IsInit",charComp.isInit,"IsConfig",charComp.isConfigure,"autoload",charComp.autoLoad);
+            var requestInitialize:Boolean = (!charComp.isInit);
+            var requestConfig:Boolean = (!charComp.isConfigure);
+            var adjustSize:Boolean = true;
+
+            if(!charComp.isInit || !charComp.isConfigure)
+            {
+                if(charComp.autoLoad)
+                    charComp.refreshOption(requestInitialize,requestConfig,adjustSize);                
+            }else{            
+                charComp.refreshOption(requestInitialize,requestConfig,adjustSize);
+            }
+        }
+
+        private function initialize():void
+        {
+            charComp.refreshOption(true,true,true);
+        }
+
+        private function completeConfigHandler(event:EChartsEvent):void
+        {
+           trace("completeConfigHandler(event)");
+        }
+
+        private function completeInitHandler(event:EChartsEvent):void
+        {
+           trace("completeInitHandler(event)");
+           listTheme.visible = charComp.isInit;
+           btnLoad.visible = !charComp.isInit; 
+        }
+
+        public function theme_Change():void
+        {            
+            if(_itemChartDef && charComp.themeName == listTheme.selectedItem.themeName)
+                return;
+            if( listTheme.selectedItem.isReg )
+            {
+                charComp.UpdateTheme(listTheme.selectedItem.themeName);
+            }
+        }
 
         ]]>
     </fx:Script>
     
     <j:beads>
         <js:ViewDataBinding/>
+		<js:BrowserResizeListener/>
     </j:beads>
-    
-    <j:Grid gap="true" width="100%" height="100%">
-        <j:beads>
-            <j:Paddings padding="20"/>
-        </j:beads>  
-        <j:GridCell desktopNumerator="1" desktopDenominator="1" tabletNumerator="1" tabletDenominator="1" phoneNumerator="1" phoneDenominator="1">
-
-            <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
-                <j:CardHeader>
-                        <j:BarSection>
-                            <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
-                        </j:BarSection>
-                </j:CardHeader>
-                <j:CardExpandedContent>
-                    
-                </j:CardExpandedContent>
-                <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
-                    <j:VGroup localId="cardContent" gap="3" height="100%" width="100%" className="wrapper">
-                            <localecharts:EChartsBasicControl localId="charComp" height="100%" width="100%"
-                            autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}"
-                            onConfig="afterConfig(event)" onInicialize="afterInit(event)"/>
-                    </j:VGroup>   
-                </j:CardPrimaryContent>                
-            </j:Card> 
-            
-        </j:GridCell>
-    </j:Grid>
-
+    <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
+        <j:CardHeader>
+            <j:BarSection width="80%" gap="5">
+                <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
+                <html:H5 text="{itemChartDef.subtitle}" className="block-with-text primary-dark"/>
+            </j:BarSection>
+            <j:BarSection width="20%" itemsHorizontalAlign="itemsRight" gap="0" itemsVerticalAlign="itemsCenter">                
+                <views:SelectThemeList id="listTheme" onlyThemesNative="true" change="theme_Change()"/>
+                <j:IconButton localId="btnLoad" unboxed="true" click="initialize()">
+                    <j:icon>
+                        <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                    </j:icon>
+                    <j:beads>
+                        <j:ToolTip toolTip="Load"/>
+                    </j:beads>
+                </j:IconButton>
+            </j:BarSection>
+        </j:CardHeader>
+        <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
+            <localecharts:EChartsBasicControl localId="charComp" height="100%" width="100%"
+            autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+            onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)" />
+        </j:CardPrimaryContent>                
+    </j:Card> 
 </j:ScrollableSectionContent>

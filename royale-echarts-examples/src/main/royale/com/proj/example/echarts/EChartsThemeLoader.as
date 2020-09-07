@@ -30,9 +30,14 @@ package com.proj.example.echarts
 		{
 			if(_themeTemplate == null){
 				_themeTemplate = new ObjectMap();
-				_themeTemplate['default'] = new EChartsThemeTemplateVO('default', 'themes/thumb/default.png');
+				_themeTemplate['default'] = new EChartsThemeTemplateVO('default', 'themes/thumb/defaultmin.png',null,true,false,true);
+				_themeTemplate['light'] = new EChartsThemeTemplateVO('light', 'themes/thumb/lightmin.png',null,true,false,true);
+				_themeTemplate['dark'] = new EChartsThemeTemplateVO('dark', 'themes/thumb/darkmin.png',null,true,false,true);
+
+				_themeTemplate['defaultB'] = new EChartsThemeTemplateVO('defaultB', 'themes/thumb/default.png');
+				_themeTemplate['lightB'] = new EChartsThemeTemplateVO('lightB', 'themes/thumb/light.png');
+				_themeTemplate['darkB'] = new EChartsThemeTemplateVO('darkB', 'themes/thumb/dark.png');
 				_themeTemplate['chalk'] = new EChartsThemeTemplateVO('chalk', 'themes/thumb/chalk.png');
-				_themeTemplate['dark'] = new EChartsThemeTemplateVO('dark', 'themes/thumb/dark.png');
 				_themeTemplate['essos'] = new EChartsThemeTemplateVO('essos', 'themes/thumb/essos.png');
 				_themeTemplate['halloween'] = new EChartsThemeTemplateVO('halloween', 'themes/thumb/halloween.png');				
 				_themeTemplate['infographic'] = new EChartsThemeTemplateVO('infographic', 'themes/thumb/infographic.png');

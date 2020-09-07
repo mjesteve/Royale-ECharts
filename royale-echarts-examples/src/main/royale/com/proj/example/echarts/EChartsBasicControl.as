@@ -6,9 +6,19 @@ package com.proj.example.echarts
     import com.proj.example.echarts.vos.EChartsInstanceVO;
     import org.apache.royale.core.WrappedHTMLElement;
     import org.apache.royale.html.util.addElementToWrapper;
+    import org.apache.royale.core.UIBase;
+    import org.apache.royale.utils.sendEvent;
+    import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
+    import org.apache.royale.html.elements.B;
 	
-	[Event(name="onConfig", type="com.proj.example.echarts.events.EChartsEvent")]
-	[Event(name="onInicialize", type="com.proj.example.echarts.events.EChartsEvent")]
+    /**
+     *  Indicates that the initialization of the EChartsInstance is complete.  
+     */
+	[Event(name="onCompleteInicialize", type="com.proj.example.echarts.events.EChartsEvent")]
+    /**
+     *  Indicates that the configuration of the EChartsInstance is complete.  
+     */
+	[Event(name="onCompleteConfig", type="com.proj.example.echarts.events.EChartsEvent")]
 	/**
 	 * The default property uses when additional MXML content appears within an element's
 	 * definition in an MXML file.
@@ -16,7 +26,7 @@ package com.proj.example.echarts
 	[DefaultProperty("instanceECharts")]
 
 	COMPILE::JS
-	public class EChartsBasicControl extends StyledUIBase
+	public class EChartsBasicControl extends UIBase
     {
 
 		/**
@@ -29,6 +39,9 @@ package com.proj.example.echarts
             return element;
         }
 
+        /**
+         *  Constructor.
+         */
         public function EChartsBasicControl()
 		{
 			super();			
@@ -49,6 +62,13 @@ package com.proj.example.echarts
             percentWidth = 100;
             percentHeight = 100;
 		}
+		/**
+		 * Dispatches a "layoutNeeded" event
+		 */
+		public function layoutNeeded():void
+		{
+			sendEvent(this,"layoutNeeded");
+		}
 
         private var globalECharts:EChartsLoader = EChartsLoader.instance;
 
@@ -67,14 +87,14 @@ package com.proj.example.echarts
 
         private var _isInit:Boolean;
         public function get isInit():Boolean{ return _isInit; }
-        [Bindable("onInicialize")]
+        [Bindable("onCompleteInicialize")]
         public function set isInit(value:Boolean):void{ 
             _isInit = value; 
             dispatchEvent(new EChartsEvent(EChartsEvent.ON_COMPLETE_INICIALIZE));
         }
 
         private var _isConfigure:Boolean;
-        [Bindable("onConfig")]
+        [Bindable("onCompleteConfig")]
         public function get isConfigure():Boolean{ 
             return _isConfigure; 
         }
@@ -88,27 +108,46 @@ package com.proj.example.echarts
         public function get configOption():Object{ 
             return _configOption; 
         }
-        public function set configOption(value:Object):void{ 
+        public function set configOption(value:Object):void
+        { 
             if(_configOption != value)
             {
-                if(!_configOption)
-                {
-                    //initialize
-                    _configOption = value;
-                    if(_autoLoad)
-                        init();
-                }
-                else
-                {
-                    _configOption = value;
-                    setOption();
-                }
-                
+                _configOption = value;                
             }
 
         }
 
+        //For now we only deal with named themes
+        private var _oldThemeName:String = '';
+		/**
+		 * @param theme Object|string
+		 */
+        private var _themeName:String = 'default';
+        [Bindable("themeNameChange")]
+        public function get themeName():String{ return _themeName; }
+        public function set themeName(value:String):void
+        {
+            if(_themeName != value){
+
+                var itTheme:EChartsThemeTemplateVO = EChartsThemeLoader.itemThemeFromName(value);
+                if(itTheme)
+                {
+                    //theme native or template
+                    if(itTheme.isNative){
+                        _themeName = itTheme.themeName;
+                    }else{
+                        //Load template
+                    }
+
+                }
+            }
+        }
+
+		/**
+		 * @param opts { devicePixelRatio?: number,  renderer?: string, width?: number|string, height?: number|string }
+		 */
 		private var _optsInstance:Object = null;
+        [Bindable("optsInstanceChange")]
 		public function get optsInstance():Object{ return _optsInstance; }
 		public function set optsInstance(value:Object):void{ _optsInstance = value; }
 
@@ -126,7 +165,8 @@ package com.proj.example.echarts
                 //Deleted
                 objInstance = new EChartsInstanceVO(_instanceECharts);
                 echarts.dispose(_instanceECharts);
-                dispatchEvent(new EChartsEvent(EChartsEvent.ON_DEL, objInstance));
+                if(globalECharts.echartsInstances[objInstance.id])
+                    delete globalECharts.echartsInstances[objInstance.id];
             }
             else if(value)
             {
@@ -141,54 +181,120 @@ package com.proj.example.echarts
             isInit = (_instanceECharts ? true : false);
         }
     
+        private var _initiationInProcess:Boolean = false;
 		/**
 		 * Creates an ECharts instance, and returns an echartsInstance.
-		 * @param theme Object|string
-		 * @param opts { devicePixelRatio?: number,  renderer?: string, width?: number|string, height?: number|string }
+		 * @param make Configuration item and data after init.
 		 */
-		public function init(theme:Object=null, opts:Object=null):void
+		public function init(make:Boolean = false):void
 		{
-            if(instanceECharts) {
-                clear();
-            }
-			if(opts)
-				optsInstance = opts;
-			// see echarts.init 
-			instanceECharts = echarts.init(element,theme,_optsInstance);
+            if(_initiationInProcess)
+                return;
 
-            if(_configOption)
-                setOption();
+            _initiationInProcess = true;
+
+            if(_instanceECharts)
+            {
+                if(_oldThemeName == _themeName) //Current theme applied
+                    instanceECharts = null;
+                else //Theme pending to apply
+                    clear();
+            }
+			// see echarts.init 
+			instanceECharts = echarts.init(element,_themeName,_optsInstance);
+            
+            _oldThemeName = _themeName;
+            
+            if(make)
+                setOption(_configOption);
+            
+            _initiationInProcess = false;
 		}
+    
+		/**
+		 * Update Theme Instance Echarts.
+		 */
+        public function UpdateTheme(themeName:String=null):void
+        {
+            if(!_instanceECharts) 
+                return;
+
+            if(_themeName == themeName)
+                return;
+
+            if(_oldThemeName == _themeName) //Current theme applied
+                instanceECharts = null;
+            else //Theme pending to apply
+                clear();
+            
+            _themeName = themeName;
+
+			init(true);
+        }
 		/**
 		 * Configuration item, data, universal interface, all parameters and data can all be modified through setOption.
 		 * @param option Configuration item and data.
-		 * @param notMarge Optional; states whether not to merge with previous option; false by default, stating merging.
 		 * @param lazyUpdate Optional; states whether not to update chart immediately; false by default, stating update immediately.
 		 * @param silent Optional; states whether not to prevent triggering events when calling setOption; false by default, stating trigger events.
+         * 
+         * 
+		 * @param notMarge Optional; states whether not to merge with previous option; false by default, stating merging.
 		 */
         public function setOption(config:Object=null, lazyUpdate:Boolean=false, silent:Boolean=false):void
         {
-            if(!config)
-                config = _configOption;
-            if(instanceECharts){
-                instanceECharts.setOption(config,{notMerge: true, lazyUpdate: lazyUpdate, silent: silent});
-                isConfigure = _configOption?true:false;
-            }
+            if(!_instanceECharts)
+                return;
+
+            if(!_initiationInProcess)
+                clear();
+            
+            _configOption = config;
+                
+            _instanceECharts.setOption(_configOption,{notMerge: true, lazyUpdate: lazyUpdate, silent: silent});
+            isConfigure = true;
         }
 		/**
-         * Api Royale. Update de Option Object not Merge
+         * Api Royale. Update de Option Object Merge
          * @param option 
          * @param lazyUpdate 
          * @param silent 
          */
         public function updateOption(config:Object, lazyUpdate:Boolean=false, silent:Boolean=false):void
         {
-            _configOption = config;
-            if(!instanceECharts)
+            if(!_instanceECharts)
                 return;
 
-            instanceECharts.setOption(_configOption,{notMerge: false, lazyUpdate: lazyUpdate, silent: silent});
-            isConfigure = _configOption?true:false;
+            _configOption = config;
+
+            _instanceECharts.setOption(_configOption,{notMerge: false, lazyUpdate: lazyUpdate, silent: silent});
+            isConfigure = true;
+        }
+		/**
+         * Api Royale. Refresh de Option Object Merge
+         * @param requestInitialize 
+         * @param requestConfig 
+         * @param adjustSize 
+         */
+        public function refreshOption(requestInitialize:Boolean = false, requestConfig:Boolean = false, adjustSize:Boolean = false):void
+        {
+            if(!_instanceECharts){
+                if(requestInitialize){
+                    init(true);
+                    if(adjustSize)
+                        resize();
+                }
+                return;                    
+            }
+
+            if(!isConfigure){
+                if(requestConfig)
+                    setOption(true);
+            }
+            else if(requestConfig)
+                updateOption(_configOption);
+
+            if(adjustSize)
+                resize();
         }
 		/**
 		 * Gets option object maintained in current instance, which contains configuration item and data merged 
@@ -196,8 +302,8 @@ package com.proj.example.echarts
 		 * @return Object
 		 */
         public function getOption():Object{
-            if(instanceECharts){
-                return instanceECharts.getOption();
+            if(_instanceECharts){
+                return _instanceECharts.getOption();
             }else{
                 return null;
             }
@@ -206,9 +312,8 @@ package com.proj.example.echarts
 		 * Clears current instance; removes all components and series in current instance.
 		 */
         public function clear():void{
-            if(instanceECharts){
-                instanceECharts.clear();
-                configOption = null;
+            if(_instanceECharts && _isConfigure){
+                _instanceECharts.clear();
                 isConfigure = false;
             }
         }
@@ -221,10 +326,11 @@ package com.proj.example.echarts
 		 */
         public function resize(opts:Object = null):void
         {
-            if(instanceECharts){
-                instanceECharts.resize(opts);
+            if(_instanceECharts){
+                _instanceECharts.resize(opts);
             }
         }
+
 		/**
 		 * Group name to be used in echarts.connection
 		 */
@@ -233,15 +339,15 @@ package com.proj.example.echarts
         public function set group(value:String):void
         { 
             _group = value; 
-            instanceECharts.group = _group;
+            _instanceECharts.group = _group;
         }
 		/**
 		 * Gets width of ECharts instance container
 		 */
         public function getWidth():Number
         { 
-            if(instanceECharts){
-                return instanceECharts.getWidth();
+            if(_instanceECharts){
+                return _instanceECharts.getWidth();
             }else{
                 return 0;
             }
@@ -251,8 +357,8 @@ package com.proj.example.echarts
 		 */
         public function getHeight():Number
         { 
-            if(instanceECharts){
-                return instanceECharts.getHeight();
+            if(_instanceECharts){
+                return _instanceECharts.getHeight();
             }else{
                 return 0;
             }
@@ -266,8 +372,8 @@ package com.proj.example.echarts
 		 */
         public function on(eventName:String, handler:Function, query:Object = null, context:Object=null):void
         {
-            if(instanceECharts){                
-                instanceECharts.on(eventName, handler);
+            if(_instanceECharts){                
+                _instanceECharts.on(eventName, handler);
             }
         }
 		/**
@@ -277,8 +383,8 @@ package com.proj.example.echarts
 		 */
         public function off(eventName:String, handler:Function = null):void
         {
-            if(instanceECharts){                
-                instanceECharts.off(eventName, handler);
+            if(_instanceECharts){                
+                _instanceECharts.off(eventName, handler);
             }
         }
                         /*

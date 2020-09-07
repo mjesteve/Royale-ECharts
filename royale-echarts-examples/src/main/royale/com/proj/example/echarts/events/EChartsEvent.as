@@ -6,8 +6,8 @@ package com.proj.example.echarts.events
 
 	public class EChartsEvent extends Event
     {
-		public static const ON_COMPLETE_INICIALIZE:String = "onInicialize";
-		public static const ON_COMPLETE_CONFIG:String = "onConfig";
+		public static const ON_COMPLETE_INICIALIZE:String = "onCompleteInicialize";
+		public static const ON_COMPLETE_CONFIG:String = "onCompleteConfig";
 		
 		public static const ON_INICIALIZE:String = "onInicialize";
 		public static const ON_AFTERINICIALIZE:String = "onAfterInicialize";

@@ -3,6 +3,7 @@
     xmlns:j="library://ns.apache.org/royale/jewel"
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
+    xmlns:localbeads="com.proj.example.beads.layouts.*"
     xmlns:vos="com.proj.example.vos.*"
 	xmlns:models="com.proj.example.models.*"
     xmlns:views="com.proj.example.views.*" 
@@ -18,21 +19,23 @@
 
         private function onInitComplete():void{            
 			//window.addEventListener('resize', autoResizeHandler, false);
-            this.addEventListener("sizeChanged", autoResizeHandler);
-            trace(topappbar.height.toString());  
-            
+            //this.addEventListener("sizeChanged", selectedChart);
             main.selectedContent = "welcome";
-            listTheme.selectedIndex = 0;
+            listTheme.setSelectedItemFromName('default');
         }
 
         [Bindable]
         public function get offsetTopBar():Number{
-            return topappbar.element.clientHeight + (topappbar.element.clientTop * 2);
-        }
+            //The height of the Top Bar is not set correctly, the ApplicationMainContent does not have the Padding-Top either: 
+            //it assigns 66 (it matches the minHeight of the Top Bar 'has-topappbar') instead of 255.64, the actual height of the Top Bar.
+            // trace(topappbar.height.toString());  = 977 (incorrect)
+            // trace(topappbar.element.clientTop + topappbar.element.clientHeight); = 240 //(incorrect)
+            // trace(barRowHeader.height + barRowContent.height + barRowConfig.height); = 240 //(incorrect)
 
-		public function autoResizeHandler(event:Event = null):void
-        {
-            selectedChart();
+            //The padding-top that we want to assign is 20. (To be computed from the completion of topappbar)
+            //The AplicationMainContent should start at this point
+            var top:Number = 255 - barRowHeader.height + 20;
+            return top + topappbar.element.clientTop;
         }
 
         public function selectedChart():void
@@ -48,7 +51,7 @@
 					if(content.isSelected){                        
                         if(content is IEchartExampleBasic){
                             var cchart:IEchartExampleBasic = content as IEchartExampleBasic;
-                            cchart.refresh();
+                            cchart.activate();
                         }
                         return;
                     }
@@ -94,7 +97,7 @@
 	</j:model>
 
     <j:beads>
-		<js:ContainerDataBinding/>
+		<js:ViewDataBinding/>
 		<js:BrowserResizeListener/>
 	</j:beads>
 
@@ -113,13 +116,19 @@
             </j:HGroup>
         </j:BarRow>
         <j:BarRow localId="barRowConfig" style ="height:auto;">
-            <j:HGroup gap="0" itemsVerticalAlign="itemsCenter">                
+            <j:HGroup gap="0" itemsVerticalAlign="itemsCenter">
+                <j:beads>
+                    <j:Paddings padding="20"/>
+                </j:beads>
                 <views:SelectThemeList id="listTheme" change="theme_Change()"/>
             </j:HGroup>
         </j:BarRow>
     </j:TopAppBar>
 
-    <j:ApplicationMainContent  localId="main" hasTopAppBar="true" selectedContent="welcome">
+    <j:ApplicationMainContent  localId="main" hasTopAppBar="true">
+        <j:beads>
+            <j:Paddings paddingBottom="20" paddingLeft="20" paddingRight="20"/>
+        </j:beads>
         <views:WelcomeSection name="welcome"/>
         <views:EChartsExampleBasic localId="ecp1" name="ecp1" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_PIE001}"/>
         <views:EChartsExampleBasic localId="ecp2" name="ecp2" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECC_PIE002}"/>
