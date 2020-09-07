@@ -7,9 +7,9 @@ package com.proj.example.vos
         public var title:String;
         public var subtitle:String;
         
-		public var optionsInit:Object;
+		public var optionChartInit:Object;
 		public var autoLoad:Boolean;
-        //function get chartComponent():EChartsContainer;
+        public var themeName:String;
 
         public function ChartDefExampleVO()
         {

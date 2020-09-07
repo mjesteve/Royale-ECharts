@@ -31,17 +31,18 @@ package com.proj.example.models
 		{
 			if(!_tabBarAppData){
 				var arData:Array = new Array();
+
 				var it:TabBarChartVO = new TabBarChartVO();
 				it.hash="ecp1";
-				it.thumbnail="assets/charts/xCFIVk5Ebk.png";				
-				var descChart:ChartDefExampleVO = ECC_PIE001;
+				it.thumbnail="assets/charts/ECCT_PIE001.png";				
+				var descChart:ChartDefExampleVO = ECCT_PIE001;
 				it.label = descChart.title;
 				it.description = descChart.title + '\n' + descChart.subtitle;
 				arData.push(it);
 
 				it = new TabBarChartVO();
 				it.hash="ecp2";
-				it.thumbnail="assets/charts/xlZeV3FwQM.png";
+				it.thumbnail="assets/charts/ECC_PIE002.png";
 				descChart = ECC_PIE002;
 				it.label = descChart.title;
 				it.description = descChart.title + '\n' + descChart.subtitle;
@@ -52,13 +53,175 @@ package com.proj.example.models
 			return _tabBarAppData;
 		}
 
+		private var _ECCT_PIE001:ChartDefExampleVO;
+		public function get ECCT_PIE001():ChartDefExampleVO
+		{
+			if(!_ECCT_PIE001){
+				_ECCT_PIE001 = new ChartDefExampleVO();
+				_ECCT_PIE001.title = "Custom Pie Rose";
+				_ECCT_PIE001.subtitle = "(Auto-Load chart)";
+				_ECCT_PIE001.themeName = 'default';
+				_ECCT_PIE001.autoLoad = true;
+				_ECCT_PIE001.optionChartInit = {
+					toolbox: getToolBoxStd(false),
+					visualMap: {
+						show: false,
+						min: 80,
+						max: 600,
+						inRange: {
+							colorLightness: [0, 1]
+						}
+					},
+					series: [
+						{
+							name:'Access source',
+							type:'pie',
+							radius: '55%',
+							data:[
+								{value:235, name:'Video ad'},
+								{value:274, name:'Affiliate Advertising'},
+								{value:310, name:'Mail marketing'},
+								{value:335, name:'Direct access'},
+								{value:400, name:'search engine'}
+							],
+							roseType:'angle',
+							itemStyle: {
+								normal: {
+									color:'#c23531',
+									shadowBlur: 200,
+									shadowColor:'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						}
+					]
+				};
+			}
+			return _ECCT_PIE001;
+		}
+
+		private function getToolBoxStd(withtooltip:Boolean = true):Object
+		{
+			var obj:Object = new Object();
+			obj = {
+						show: true, right: 5, top: 5,
+						showTitle: !withtooltip, // hide the default text so they don't overlap each other
+						feature: {
+							saveAsImage: {show: true, title: 'Save As Image'},
+							restore: {show: true, title: 'Restore'},
+							dataView: {show: true, readOnly: false, title: 'Data View'}
+						},
+						tooltip: { // same as option.tooltip
+							show: withtooltip,
+							formatter: function (param) {
+								return param.title; 
+							},
+							backgroundColor: '#eee',
+							textStyle: {color:'#999',fontSize: 12},
+							extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);' // user-defined CSS styles
+						}
+					};
+			return obj;
+		}
+		private var _ECC_PIE002:ChartDefExampleVO;
+		public function get ECC_PIE002():ChartDefExampleVO
+		{
+			if(!_ECC_PIE002){
+				_ECC_PIE002 = new ChartDefExampleVO();
+				_ECC_PIE002.title = "Nested Pies";
+				_ECC_PIE002.subtitle = "(Manual loading)";
+				_ECC_PIE002.themeName = 'default';
+				_ECC_PIE002.autoLoad = false;
+				_ECC_PIE002.optionChartInit = {
+					toolbox: getToolBoxStd(true),
+					tooltip: {
+						trigger:'item',
+						formatter:'{a} <br/>{b}: {c} ({d}%)'
+					},
+					legend: {
+						orient:'vertical',
+						left: 5, top: 5,
+						data: ['Direct','Marketing Ads','Search Engine','Mail Marketing','Affiliate Ads','Video Ads','Baidu','Google','Bing','Other']
+					},
+					series: [
+						{
+							name:'Access source Level 1',
+							type:'pie',
+							selectedMode:'single',
+							radius: [0, '30%'],
+							label: {
+								position:'inner'
+							},
+							labelLine: {
+								show: false
+							},
+							data: [
+								{value: 335, name:'Direct', selected: true},
+								{value: 679, name:'Marketing Ads'},
+								{value: 1548, name:'Search Engine'}
+							]
+						},
+						{
+							name:'Access source Level 2',
+							type:'pie',
+							radius: ['40%', '55%'],
+							label: {
+								alignTo: 'none', position:'outer', distanceToLabelLine: 10,
+								formatter:'{a|{a}}{abg|}\n{hr|}\n {b|{b}: {c}} {per|{d}%}',
+								backgroundColor:'#eee',
+								borderColor:'#aaa',
+								borderWidth: 1,
+								borderRadius: 4,
+								rich: {
+									a: {
+										color:'#999',
+										lineHeight: 22,
+										align:'center'
+									},
+									hr: {
+										borderColor:'#aaa',
+										width: '100%',
+										borderWidth: 0.5,
+										height: 0
+									},
+									b: {
+										color:'#000',
+										fontSize: 12,
+										lineHeight: 33
+									},
+									per: {
+										fontSize: 12,
+										color:'#eee',
+										backgroundColor:'#334455',
+										padding: [4, 4],
+										borderRadius: 2
+									}
+								}
+							},
+							data: [
+								{value: 335, name:'Direct'},
+								{value: 310, name:'Mail Marketing'},
+								{value: 234, name:'Affiliate Ads'},
+								{value: 135, name:'Video Ads'},
+								{value: 1048, name:'Baidu'},
+								{value: 251, name:'Google'},
+								{value: 147, name:'Bing'},
+								{value: 102, name:'Other'}
+							]
+						}
+					]
+				};
+			}
+			return _ECC_PIE002;
+		}
+
 		private var _ECC_PIE001:ChartDefExampleVO;
 		public function get ECC_PIE001():ChartDefExampleVO
 		{
 			if(!_ECC_PIE001){
 				_ECC_PIE001 = new ChartDefExampleVO();
+				_ECC_PIE001.themeName = 'halloween';
 				_ECC_PIE001.autoLoad = true;
-				_ECC_PIE001.optionsInit = {
+				_ECC_PIE001.optionChartInit = {
 					"backgroundColor": "#2c343c",
 					"animation": true,
 					"animationThreshold": 2000,
@@ -171,104 +334,6 @@ package com.proj.example.models
 				};
 			}
 			return _ECC_PIE001;
-		}
-
-		private var _ECC_PIE002:ChartDefExampleVO;
-		public function get ECC_PIE002():ChartDefExampleVO
-		{
-			if(!_ECC_PIE002){
-				_ECC_PIE002 = new ChartDefExampleVO();
-				_ECC_PIE002.autoLoad = true;
-				_ECC_PIE002.optionsInit = {
-					tooltip: {
-						trigger:'item',
-						formatter:'{a} <br/>{b}: {c} ({d}%)'
-					},
-					legend: {
-						orient:'vertical',
-						left: 10,
-						data: ['Direct','Marketing Advertising','Search Engine','Email Marketing','Affiliate Advertising',
-						'Video Advertising','Baidu','Google','Bing','Other']
-					},
-					series: [
-						{
-							name:'Access source',
-							type:'pie',
-							selectedMode:'single',
-							radius: [0, '30%'],
-							label: {
-								position:'inner'
-							},
-							labelLine: {
-								show: false
-							},
-							data: [
-								{value: 335, name:'Direct', selected: true},
-								{value: 679, name:'Marketing Ads'},
-								{value: 1548, name:'search engine'}
-							]
-						},
-						{
-							name:'Access source',
-							type:'pie',
-							radius: ['40%', '55%'],
-							label: {
-								formatter:'{a|{a}}{abg|}\n{hr|}\n {b|{b}:}{c} {per|{d}%}',
-								backgroundColor:'#eee',
-								borderColor:'#aaa',
-								borderWidth: 1,
-								borderRadius: 4,
-								// shadowBlur:3,
-								// shadowOffsetX: 2,
-								// shadowOffsetY: 2,
-								// shadowColor:'#999',
-								// padding: [0, 7],
-								rich: {
-									a: {
-										color:'#999',
-										lineHeight: 22,
-										align:'center'
-									},
-									// abg: {
-									// backgroundColor:'#333',
-									// width: '100%',
-									// align:'right',
-									// height: 22,
-									// borderRadius: [4, 4, 0, 0]
-									// },
-									hr: {
-										borderColor:'#aaa',
-										width: '100%',
-										borderWidth: 0.5,
-										height: 0
-									},
-									b: {
-										fontSize: 16,
-										lineHeight: 33
-									},
-									per: {
-										color:'#eee',
-										backgroundColor:'#334455',
-										padding: [2, 4],
-										borderRadius: 2
-									}
-								}
-							},
-							data: [
-								{value: 335, name:'Direct'},
-								{value: 310, name:'Mail marketing'},
-								{value: 234, name:'Affiliate Ads'},
-								{value: 135, name:'Video ad'},
-								{value: 1048, name:'Baidu'},
-								{value: 251, name:'Google'},
-								{value: 147, name:'Bing'},
-								{value: 102, name:'Other'}
-							]
-						}
-					]
-				};
-			}
-			return _ECC_PIE002;
 		}
 		
 	}

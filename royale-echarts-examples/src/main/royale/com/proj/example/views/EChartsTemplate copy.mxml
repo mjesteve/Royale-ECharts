@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+    implements="com.proj.example.charts.IEchartDefinitionTemplate"
+    xmlns:localecharts="com.proj.example.echarts.*"
+    xmlns:localechartsbead="com.proj.example.echarts.beads.*">
+
+    <fx:Script>
+        <![CDATA[
+        import com.proj.example.vos.ChartDefExampleVO;
+	    import com.proj.example.echarts.EChartsContainer;
+	    import com.proj.example.echarts.models.EChartsModel;
+	    import com.proj.example.echarts.models.EChartsThemesModel;
+/*            
+        [Bindable]
+        [Inject(source="echartsModel", required="true")]
+        public var echartsModel:EChartsModel;
+
+        [Bindable]
+        [Inject(source="echartsThemesModel", required="true")]
+        public var echartsThemesModel:EChartsThemesModel;
+*/
+        private var _itemChartDef:ChartDefExampleVO;    
+        [Bindable]
+		public function get itemChartDef():ChartDefExampleVO
+        {
+            return _itemChartDef;
+        }
+        public function set itemChartDef(value:ChartDefExampleVO):void
+        {
+            _itemChartDef = value;
+        }
+
+        public function get chartComponent():EChartsContainer
+        {
+            return charComp;
+        }
+
+		public function set themeInstance(value:Object):void
+        {
+            if(themeBead.themeInstance === value)
+                return;
+            themeBead.themeInstance = value;
+        }
+
+        public function initInstance(themeNameDef:String=null):void
+        {
+            if(themeNameDef)
+                themeBead.themeInstance = themeNameDef;
+            charComp.reInit();
+        }
+
+        ]]>
+    </fx:Script>
+    
+    <j:beads>
+        <js:ViewDataBinding/>
+    </j:beads>
+    
+    <j:Grid gap="true" width="100%" height="100%">
+        <j:beads>
+            <j:Paddings padding="20"/>
+        </j:beads>  
+        <j:GridCell desktopNumerator="1" desktopDenominator="1" tabletNumerator="1" tabletDenominator="1" phoneNumerator="1" phoneDenominator="1">
+
+            <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
+                <j:CardHeader>
+                        <j:BarSection>
+                            <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
+                        </j:BarSection>
+                </j:CardHeader>
+                <j:CardExpandedContent>
+                    
+                </j:CardExpandedContent>
+                <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
+                    <j:VGroup localId="cardContent" gap="3" height="100%" width="100%" className="wrapper">
+                            <localecharts:EChartsContainer localId="charComp" height="100%" width="100%"
+                            autoLoad="{itemChartDef.autoLoad}" optionChartInit="{itemChartDef.optionChartInit}">
+                                <localecharts:beads>
+                                    <localechartsbead:EChartsThemeBead localId="themeBead" themeInstance="{itemChartDef.themeName}"/>
+                                </localecharts:beads>
+                            </localecharts:EChartsContainer>
+                    </j:VGroup>   
+                </j:CardPrimaryContent>                
+            </j:Card> 
+            
+        </j:GridCell>
+    </j:Grid>
+
+</j:ScrollableSectionContent>

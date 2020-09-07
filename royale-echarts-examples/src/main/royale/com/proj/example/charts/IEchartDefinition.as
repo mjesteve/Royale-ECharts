@@ -7,6 +7,6 @@ package com.proj.example.charts
 		function get options():Object;
         function set options(value:Object):void;
         
-		function optionsInit():Object;
+		function optionChartInit():Object;
 	}
 }

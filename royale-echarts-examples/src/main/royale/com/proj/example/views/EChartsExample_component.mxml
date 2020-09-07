@@ -142,7 +142,7 @@
                         <j:CardPrimaryContent style="border-top: 1px solid #d2dadf;" itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" >
                             <j:VGroup localId="cardContent" gap="3" height="85%" width="85%" className="wrapper">
                                     <localchart:EChartsContainer localId="charComp" height="100%" width="100%"
-                                    optionsInit="{ECC_PIE002.optionsInit}" />
+                                    optionChartInit="{ECC_PIE002.optionChartInit}" />
                                     <j:Button text="reInit" visible="{charComp.isInit}" click="charComp.reInit();"/>
                                     <j:Button text="Refresh" visible="{charComp.isConfigure}" click="charComp.updateOption( { title: {text:'Pie-Doughnut Chart Person - Update 1'} } );"/>
                             </j:VGroup>   

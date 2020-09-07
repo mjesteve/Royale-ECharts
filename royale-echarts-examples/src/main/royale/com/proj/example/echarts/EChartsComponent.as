@@ -1,19 +1,38 @@
 package com.proj.example.echarts
 {
 	import org.apache.royale.html.Container;
-	import org.apache.royale.core.UIBase;
+	import org.apache.royale.core.IBead;
+    import org.apache.royale.events.Event;
+    import com.proj.example.echarts.models.EChartsModel;
+    import com.proj.example.echarts.events.EChartsEvent;
+    import com.proj.example.echarts.vos.EChartsInstanceVO;
+    import com.proj.example.echarts.models.EChartsThemesModel;
+    import com.proj.example.echarts.beads.EChartsThemeBead;
+    import com.proj.example.echarts.events.EChartsThemesEvent;
 
-	[DefaultProperty("currentInstance")]
+	//[DefaultProperty("currentInstance")]
 
 	COMPILE::JS
 	public class EChartsComponent extends Container
     {
-	
+        	
+        private var _echartsModel:EChartsModel;
+        [Bindable]
+        public function get echartsModel():EChartsModel{ return _echartsModel; }
+        public function set echartsModel(value:EChartsModel):void{ _echartsModel = value; }
+         
+        private var _echartsThemesModel:EChartsThemesModel;
+        [Bindable]
+        public function get echartsThemesModel():EChartsThemesModel{ return _echartsThemesModel; }
+        public function set echartsThemesModel(value:EChartsThemesModel):void{ _echartsThemesModel = value; }
+        
         public function EChartsComponent()
 		{
 			super();
+            addEventListener("beadsAdded", beadsAddedHandler);
 		}
 		public var domInstance:Element = null;
+        
 		/**
 		 * @private
 		 */
@@ -24,15 +43,120 @@ package com.proj.example.echarts
             percentHeight = 100;
 			domInstance = this.element;
 		}
-        
+
+        private var _themeBead:EChartsThemeBead;
+        public function beadsAddedHandler(event:Event):void
+        {
+            removeEventListener("beadsAdded", beadsAddedHandler);
+            
+            var ibeadact:IBead = this.getBeadByType(EChartsThemeBead);
+            if(ibeadact)
+            {
+                _themeBead = ibeadact as EChartsThemeBead;
+            }
+            
+        }
+          
+        [EventHandler(event="EChartsEvent.ON_AFTERINICIALIZE", scope="global")]
+        public function echartsAfterInitEvent(event:EChartsEvent):void
+        {
+            trace("afterinit in component");
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_COMPLETE_LOADTHEMEFROMFILE", scope="global")]
+        public function onCompleteLoadThemeFromFile(event:EChartsThemesEvent):void
+        {
+            trace("onCompleteLoadThemeFromFile");
+            /*if(event.itemSelTheme.themeName != _themeNameLoading) return;
+
+            
+            var themeObj:EChartsThemeTemplateVO = echartsThemesModel.itemThemeFromName(_themeNameLoading);
+            if(themeObj.isReg)
+                hostComponent.themeInstance = event.itemSelTheme;
+            else{    
+                _themeNameRegistering = _themeNameLoading;                    
+                dispatcher.dispatchEvent(new EChartsThemesEvent(
+                    EChartsThemesEvent.ON_REGISTERTHEME,themeObj)
+                );
+            }
+            _themeNameLoading = "";
+            if(!isNaN(_lastExecute))
+            {
+                clearTimeout(_lastExecute);
+                _lastExecute = NaN;
+            }*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_COMPLETE_REGISTERTHEME", scope="global")]
+        public function onCompleteRegister(event:EChartsThemesEvent):void
+        {
+            trace("afterRegisterThemesEvent");
+            /*if(event.itemSelTheme.themeName != _themeNameRegistering) return;
+
+            _themeNameRegistering = "";
+            hostComponent.themeInstance = event.itemSelTheme;*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_WAIT_LOADTHEMEFROMFILE", scope="global")]
+        public function onWaitLoadThemeFromFile(event:EChartsThemesEvent):void
+        {
+            trace("onWaitLoadThemeFromFile");
+            /*if(event.itemSelTheme.themeName != _themeNameLoading) return;
+
+            _lastExecute = setTimeout(delayRetry,1000,event.itemSelTheme);
+            trace("Id setTimeout:", _lastExecute.toString());*/
+        }
+          
+        [EventHandler(event="EChartsThemesEvent.ON_ERROR_LOADTHEMEFROMFILE", scope="global")]
+        private function onErrorLoadThemeFromFile(e:Event):void{
+            trace("onErrorLoadThemeFromFile:");
+            /*if(!isNaN(_lastExecute))
+            {
+                clearTimeout(_lastExecute);
+                _lastExecute = NaN;
+            }
+            trace("EXIT onErrorLoadThemeFromFile:",  _themeNameLoading);
+            _themeNameLoading = "";*/
+        } 
+
         private var _currentInstance:Object;
         public function get currentInstance():Object{ return _currentInstance; }
-        public function set currentInstance(value:Object):void{ 
+        public function set currentInstance(value:Object):void
+        {
+            var objInstance:EChartsInstanceVO;  
+
+            if(!value && _currentInstance){
+                objInstance = new EChartsInstanceVO(_currentInstance);
+                echarts.dispose(_currentInstance);
+                dispatchEvent(new EChartsEvent(EChartsEvent.ON_DEL, objInstance));
+            }
+            else if(value)
+            {
+                objInstance = new EChartsInstanceVO(value);
+                dispatchEvent(new EChartsEvent(EChartsEvent.ON_ADD, objInstance));
+            }
+
             _currentInstance = value;
-            isInit = (_currentInstance);            
+            isInit = (_currentInstance ? true : false);
         }
+
         [Bindable]
         public var isInit:Boolean;
+
+		private var _themeInstance:Object;
+        [Bindable("themeInstanceChange")]
+		public function get themeInstance():Object{
+            return _themeInstance; 
+        }
+		public function set themeInstance(value:Object):void
+        {
+            if(_themeInstance === value)
+                return;
+
+            _themeInstance = value; 
+            if(_themeBead)
+                init(value);
+        }
 
         protected var _options:Object;
         [Bindable("optionsChange")]
@@ -45,17 +169,6 @@ package com.proj.example.echarts
         [Bindable]
         public var isConfigure:Boolean;
 
-		private var _themeInstance:Object = null;
-		public function get themeInstance():Object{ return _themeInstance; }
-		public function set themeInstance(value:Object):void{ 
-                         
-            if(typeof value == 'string')
-            {
-
-            }
-            _themeInstance = value; 
-        }
-
 		public var optsInstance:Object = null;
     
 		/**
@@ -64,13 +177,19 @@ package com.proj.example.echarts
 		 * @param opts { devicePixelRatio?: number,  renderer?: string, width?: number|string, height?: number|string }
 		 */
 		public function init(theme:Object=null, opts:Object=null):void
-		{ 
+		{
+            if(currentInstance) {
+                currentInstance = null;
+            }
 			if(theme)
 				themeInstance = theme;
+            else if(!_themeInstance){
+                //themeInstance = 'default';
+            }
 			if(opts)
 				optsInstance = opts;
 			// see echarts.init 
-			currentInstance = echarts.init(domInstance,themeInstance,optsInstance);
+			currentInstance = echarts.init(domInstance,_themeInstance,optsInstance);
             if(_options)
                 setOption(_options);
 		}
