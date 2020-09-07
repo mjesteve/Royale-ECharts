@@ -9,7 +9,6 @@ package com.proj.example.echarts
     import org.apache.royale.core.UIBase;
     import org.apache.royale.utils.sendEvent;
     import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
-    import org.apache.royale.html.elements.B;
 	
     /**
      *  Indicates that the initialization of the EChartsInstance is complete.  

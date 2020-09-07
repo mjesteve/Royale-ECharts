@@ -48,6 +48,14 @@ package com.proj.example.models
 				it.description = descChart.title + '\n' + descChart.subtitle;
 				arData.push(it);
 
+				it = new TabBarChartVO();
+				it.hash="ecp3";
+				it.thumbnail="assets/charts/ECCT_CUSTOM1.png";
+				descChart = ECCT_CUSTOM1;
+				it.label = descChart.title;
+				it.description = descChart.title + '\n' + descChart.subtitle;
+				arData.push(it);
+
 				_tabBarAppData = new ArrayList(arData);
 			}
 			return _tabBarAppData;
@@ -212,6 +220,79 @@ package com.proj.example.models
 				};
 			}
 			return _ECC_PIE002;
+		}
+
+		private var _ECCT_CUSTOM1:ChartDefExampleVO;
+		public function get ECCT_CUSTOM1():ChartDefExampleVO
+		{
+			if(!_ECCT_CUSTOM1){
+				_ECCT_CUSTOM1 = new ChartDefExampleVO();
+				_ECCT_CUSTOM1.title = "Dataset link";
+				_ECCT_CUSTOM1.subtitle = "(To interact)";
+				_ECCT_CUSTOM1.themeName = 'azul';
+				_ECCT_CUSTOM1.autoLoad = true;
+				_ECCT_CUSTOM1.optionChartInit = {
+					toolbox: getToolBoxStd(false),
+					legend: {},
+					tooltip: {
+						trigger: 'axis',
+						showContent: false
+					},
+					dataset: {
+						source: [
+							['product', '2012', '2013', '2014', '2015', '2016', '2017'],
+							['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
+							['Milk Tea', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1],
+							['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5],
+							['Walnut Brownie', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1]
+						]
+					},
+					xAxis: {type: 'category'},
+					yAxis: {gridIndex: 0},
+					grid: {top: '55%'},
+					series: [
+						{type: 'line', smooth: true, seriesLayoutBy: 'row'},
+						{type: 'line', smooth: true, seriesLayoutBy: 'row'},
+						{type: 'line', smooth: true, seriesLayoutBy: 'row'},
+						{type: 'line', smooth: true, seriesLayoutBy: 'row'},
+						{
+							type: 'pie',
+							id: 'pie',
+							radius: '30%',
+							center: ['50%', '25%'],
+							label: {
+								formatter: '{b}: {@2012} ({d}%)'
+							},
+							encode: {
+								itemName: 'product',
+								value: '2012',
+								tooltip: '2012'
+							}
+						}
+					]
+				};
+			}
+			/*
+			var event:Object = {eventName:'updateAxisPointer', handler: function (event) {
+				var xAxisInfo = event.axesInfo[0];
+				if (xAxisInfo) {
+					var dimension = xAxisInfo.value + 1;
+					myChart.setOption({
+						series: {
+							id: 'pie',
+							label: {
+								formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+							},
+							encode: {
+								value: dimension,
+								tooltip: dimension
+							}
+						}
+					});
+				}}};
+			_ECCT_CUSTOM1.eventHandlers = new Array[event];*/
+
+			return _ECCT_CUSTOM1;
 		}
 
 		private var _ECC_PIE001:ChartDefExampleVO;
