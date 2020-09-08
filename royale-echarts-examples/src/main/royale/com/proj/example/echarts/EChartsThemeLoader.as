@@ -33,6 +33,7 @@ package com.proj.example.echarts
 				_themeTemplate['default'] = new EChartsThemeTemplateVO('default', 'themes/thumb/defaultmin.png',null,true,false,true);
 				_themeTemplate['light'] = new EChartsThemeTemplateVO('light', 'themes/thumb/lightmin.png',null,true,false,true);
 				_themeTemplate['dark'] = new EChartsThemeTemplateVO('dark', 'themes/thumb/darkmin.png',null,true,false,true);
+				_themeTemplate['custom'] = new EChartsThemeTemplateVO('custom', 'themes/thumb/rgb24.png',null,true,true,true);
 
 				_themeTemplate['defaultB'] = new EChartsThemeTemplateVO('defaultB', 'themes/thumb/default.png');
 				_themeTemplate['lightB'] = new EChartsThemeTemplateVO('lightB', 'themes/thumb/light.png');

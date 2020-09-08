@@ -99,6 +99,26 @@
             }
         }
 
+        public function updateChart(event:Event):void
+        {
+			var firstColor:String = '#468EFD';
+            var dataArr:int = sliderChange.value;
+            var updateData:Object = {
+					series: [
+						{
+							name: "Internal progress bar",
+							axisLine: {
+								lineStyle: {
+									color: [ [dataArr / 100, firstColor], [1, "#111F42"] ], width: 8
+								}
+							},
+							data: [{name: "title",	value: dataArr}]
+						}
+					]
+				};
+            charComp.updateOption(updateData);
+        }
+
         ]]>
     </fx:Script>
     
@@ -128,6 +148,9 @@
             <localecharts:EChartsBasicControl localId="charComp" height="100%" width="100%"
             autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
             onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)" />
-        </j:CardPrimaryContent>                
+        </j:CardPrimaryContent>   
+        <j:CardActions itemsHorizontalAlign="itemsCenter" itemsVerticalAlign="itemsCenter">
+            <j:HSlider localId="sliderChange" value="0" minimum="0" maximum="100" emphasis="secondary" percentWidth="50" valueChange="updateChart(event)"/>
+        </j:CardActions>
     </j:Card> 
 </j:ScrollableSectionContent>
