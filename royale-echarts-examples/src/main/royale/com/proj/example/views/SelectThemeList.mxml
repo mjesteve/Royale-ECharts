@@ -101,6 +101,7 @@
                         if(item.themeName == themeName){
                             selectedItem = item;
                             image.src = item[imgField];
+                            blockTheme = (themeName == "custom");
                             break;
                         }
                     }
@@ -123,14 +124,17 @@
             }
 
             public function theme_Change(event:Event):void{
-                //Visibilidad imagen/listado            
+                //Image / listing visibility
                 open = false;
                 dispatchEvent(new Event("change"));                
             }
 
+            private var blockTheme:Boolean;
             public function btnImage_Click(event:Event):void
             {
-                //Visibilidad imagen/listado
+                if(blockTheme)
+                    return;
+                //Image / listing visibility
                open = true;
                list.scrollToIndex(list.selectedIndex);
             }  

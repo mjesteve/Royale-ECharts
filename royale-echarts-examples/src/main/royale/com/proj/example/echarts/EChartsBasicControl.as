@@ -9,7 +9,6 @@ package com.proj.example.echarts
     import org.apache.royale.core.UIBase;
     import org.apache.royale.utils.sendEvent;
     import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
-    import org.apache.royale.html.elements.B;
 	
     /**
      *  Indicates that the initialization of the EChartsInstance is complete.  
@@ -135,6 +134,8 @@ package com.proj.example.echarts
                     //theme native or template
                     if(itTheme.isNative){
                         _themeName = itTheme.themeName;
+                        if(itTheme.custom)
+                            _themeName = null; //We respect the design applied with setOption
                     }else{
                         //Load template
                     }
@@ -214,12 +215,12 @@ package com.proj.example.echarts
 		/**
 		 * Update Theme Instance Echarts.
 		 */
-        public function UpdateTheme(themeName:String=null):void
+        public function UpdateTheme(themename:String=null):void
         {
             if(!_instanceECharts) 
                 return;
 
-            if(_themeName == themeName)
+            if(_themeName == themename)
                 return;
 
             if(_oldThemeName == _themeName) //Current theme applied
@@ -227,7 +228,7 @@ package com.proj.example.echarts
             else //Theme pending to apply
                 clear();
             
-            _themeName = themeName;
+            themeName = themename;
 
 			init(true);
         }
@@ -387,25 +388,6 @@ package com.proj.example.echarts
                 _instanceECharts.off(eventName, handler);
             }
         }
-                        /*
-                        mychart.on('updateAxisPointer', function (event) {
-                            var xAxisInfo = event.axesInfo[0];
-                            if (xAxisInfo) {
-                                var dimension = xAxisInfo.value + 1;
-                                mychart.setOption({
-                                    series: {
-                                        id: 'pie',
-                                        label: {
-                                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
-                                        },
-                                        encode: {
-                                            value: dimension,
-                                            tooltip: dimension
-                                        }
-                                    }
-                                });
-                            }
-                        });*/
 
 //instanceECharts.getDom
 /*

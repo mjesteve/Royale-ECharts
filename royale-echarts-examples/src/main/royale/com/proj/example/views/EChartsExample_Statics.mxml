@@ -63,6 +63,13 @@
                 if(!mychart)
                 {
                     mychart = echarts.init(charLimitsPerGen.element);
+                   mychart.on('mouseout', function (event) {
+                        this.dispatchAction({
+                            type: 'showTip',
+                            seriesIndex: 0,
+                            dataIndex: 0
+                        });
+                    });
                 }
                 
                 var defchart:IEchartDefinition;
@@ -92,7 +99,7 @@
                             var xAxisInfo = event.axesInfo[0];
                             if (xAxisInfo) {
                                 var dimension = xAxisInfo.value + 1;
-                                mychart.setOption({
+                                this.setOption({
                                     series: {
                                         id: 'pie',
                                         label: {
@@ -134,7 +141,6 @@
 		.mainPrin {
             background-color: #384E6B;
         }
-
         .wrapper {
             outline: 1px dashed navy;
         }
