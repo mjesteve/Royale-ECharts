@@ -5,9 +5,6 @@
 		},
 		{
 			"path": "royale-echarts"
-		},
-		{
-			"path": "..\\Royale-git\\royale-asjs"
 		}
 	],
 	"settings": {

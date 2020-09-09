@@ -31,12 +31,6 @@
             public function get imgField():String{ return _imgField; }
             public function set imgField(value:String):void { _imgField = value; }
             
-            public function set selectedIndex(value:int):void {
-                if(list.selectedIndex == value)
-                    return;
-                list.selectedIndex = value;                
-            }
-
             private var _onlyThemesNative:Boolean = false;
             [Bindable]
             public function get onlyThemesNative():Boolean{ return _onlyThemesNative; }
@@ -61,16 +55,17 @@
                 {
                     if(dic[key] is EChartsThemeTemplateVO)
                     {
-                        if(_onlyThemesNative && (dic[key] as EChartsThemeTemplateVO).isNative)                        
-                                ar.addItem(dic[key] as EChartsThemeTemplateVO);
+                        var it:EChartsThemeTemplateVO = dic[key] as EChartsThemeTemplateVO;
+                        if(_onlyThemesNative && it.isNative && !it.custom)
+                                ar.addItem(it);
                         
-                        else if(!_onlyThemesNative && !(dic[key] as EChartsThemeTemplateVO).isNative)
-                                ar.addItem(dic[key] as EChartsThemeTemplateVO);
+                        else if(!_onlyThemesNative && !(it).isNative)
+                                ar.addItem(it);
                     }
                 }
                 return ar;
             }
-
+            
             private var _selectedItem:EChartsThemeTemplateVO;
             [Bindable]
             public function get selectedItem():EChartsThemeTemplateVO{
@@ -94,6 +89,16 @@
                     if(list.selectedItem && list.selectedItem.themeName == themeName)
                         return;
                     
+                    if(themeName == "custom" && _onlyThemesNative){
+                        var itemc:EChartsThemeTemplateVO = EChartsThemeLoader.themeTemplate["custom"];
+                        selectedItem = itemc;
+                        image.src = itemc[imgField];
+                        blockTheme = true;
+                        return;
+                    }
+                    
+                    blockTheme = false;
+
                     var len:int = list.dataProvider.length;
                     for(var index:int = 0; index < len; index++)
                     {                     
@@ -101,7 +106,6 @@
                         if(item.themeName == themeName){
                             selectedItem = item;
                             image.src = item[imgField];
-                            blockTheme = (themeName == "custom");
                             break;
                         }
                     }
@@ -126,9 +130,10 @@
             public function theme_Change(event:Event):void{
                 //Image / listing visibility
                 open = false;
-                dispatchEvent(new Event("change"));                
+                dispatchEvent(new Event("change"));
             }
 
+            [Bindable]
             private var blockTheme:Boolean;
             public function btnImage_Click(event:Event):void
             {
@@ -189,7 +194,7 @@
         <j:beads>
             <!--<j:ResponsiveSize phoneWidth="100"/>-->
             <js:ErrorImage emptyIsError="true"/>
-            <j:ToolTip toolTip="Select Theme"/>
+            <j:ToolTip toolTip="{blockTheme ? 'Theme Custom. Fixed' : 'Select Theme'}"/>
         </j:beads>
     </j:ImageButton>    
     <j:IconButton unboxed="true" style="color: white;" visible="{!open &amp;&amp; !onlyThemesNative?true:false}">

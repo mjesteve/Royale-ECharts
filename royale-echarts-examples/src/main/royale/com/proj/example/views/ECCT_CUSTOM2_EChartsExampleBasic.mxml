@@ -101,7 +101,7 @@
 
         public function updateChart(event:Event):void
         {
-			var firstColor:String = '#468EFD';
+			var firstColor:String = 'rgba(255,238,81,1)';
             var dataArr:int = sliderChange.value;
             var updateData:Object = {
 					series: [
@@ -109,7 +109,7 @@
 							name: "Internal progress bar",
 							axisLine: {
 								lineStyle: {
-									color: [ [dataArr / 100, firstColor], [1, "#111F42"] ], width: 8
+									color: [ [dataArr / 100, firstColor], [1, "#fcfab6"] ], width: 8
 								}
 							},
 							data: [{name: "title",	value: dataArr}]
@@ -144,7 +144,7 @@
                 </j:IconButton>
             </j:BarSection>
         </j:CardHeader>
-        <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
+        <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
             <localecharts:EChartsBasicControl localId="charComp" height="100%" width="100%"
             autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
             onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)" />

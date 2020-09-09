@@ -23,7 +23,7 @@ package com.proj.example.models
 	import com.proj.example.vos.ChartDefExampleVO;
 
 	[Bindable]
-	public class ChartsModel
+	public class ChartsDataModel
 	{
 	
 		private var _tabBarAppData:ArrayList;		
@@ -76,7 +76,7 @@ package com.proj.example.models
 				_ECCT_PIE001 = new ChartDefExampleVO();
 				_ECCT_PIE001.title = "Custom Pie Rose";
 				_ECCT_PIE001.subtitle = "(Auto-Load chart)";
-				_ECCT_PIE001.themeName = 'default';
+				_ECCT_PIE001.themeName = 'custom';
 				_ECCT_PIE001.autoLoad = true;
 				_ECCT_PIE001.optionChartInit = {
 					toolbox: getToolBoxStd(false),
@@ -309,7 +309,7 @@ package com.proj.example.models
 		{
 			if(!_ECCT_CUSTOM2){
 				
-				var firstColor:String = '#468EFD';
+				var firstColor:String = 'rgba(255,238,81,1)';
 				var dataArr:int = 0;
 
 				_ECCT_CUSTOM2 = new ChartDefExampleVO();
@@ -319,17 +319,17 @@ package com.proj.example.models
 				_ECCT_CUSTOM2.autoLoad = true;
 				_ECCT_CUSTOM2.optionChartInit = {
 					toolbox: getToolBoxStd(false, false),
-    				backgroundColor: "#0E1327",
+    				backgroundColor: "#e6b600",
     				tooltip: { formatter: "{a} <br/>{b} : {c}%"},
 					series: [
 						{
 							name: "Internal progress bar",
 							type: "gauge",
-							radius: '40%',
+							radius: '60%',
 							splitNumber: 10,
 							axisLine: {
 								lineStyle: {
-									color: [ [dataArr / 100, firstColor], [1, "#111F42"] ], width: 8
+									color: [ [dataArr / 100, firstColor], [1, "#fcfab6"] ], width: 8
 								}
 							},
 							axisLabel: {show: false},
@@ -342,7 +342,7 @@ package com.proj.example.models
 										var num = Math.round(value ) ;
 										return parseInt(num).toFixed(0)+"%";
 									} else {
-										return 0;
+										return "0%";
 									}
 								},
 								offsetCenter: [0, 82],
@@ -373,7 +373,7 @@ package com.proj.example.models
 							name: 'External scale',
 							type: 'gauge',
 							//  center: ['20%', '50%'],
-							radius: '50%',min: 0, //minimum scale
+							radius: '80%',min: 0, //minimum scale
 							max: 100, //Maximum scale
 							splitNumber: 10, //Number of scales
 							startAngle: 225,
@@ -383,7 +383,7 @@ package com.proj.example.models
 								lineStyle: {width: 1,color: [[1,'rgba(0,0,0,0)']]}
 							}, //Dashboard axis
 							axisLabel: {
-								show: true,	color:'#4d5bd1',distance: 25,
+								show: true,	color:'#f2f576',distance: 25, textStyle: {fontSize: 14},
 								formatter: function(v) {
 									switch (v +'') {
 										case '0':

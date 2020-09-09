@@ -12,6 +12,14 @@
     color: #333333;
   }
 
+
+  .jewel.card .card-header{
+    border-bottom: 1px solid #d2dadf;
+  }
+
+  .jewel.card .card-actions{
+      border-top: 1px solid #d2dadf;
+  }
   .relative{
     position: relative;
     height: 100%;
@@ -63,6 +71,7 @@
 }
 
 #cardThumbnail .card-header{
+  border-bottom: 0px transparent;
   padding-left: 0px;
   padding-top: 0px;
   padding-right: 0px;

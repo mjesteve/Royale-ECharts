@@ -93,7 +93,7 @@
     </fx:Script>
 
 	<j:model>
-		<models:ChartsModel localId="appModel"/>
+		<models:ChartsDataModel localId="appModel"/>
 	</j:model>
 
     <j:beads>

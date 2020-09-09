@@ -33,7 +33,7 @@ limitations under the License.
                 _imgField = value; 
             }
 
-            private var _toolTipField:String;
+            private var _toolTipField:String = "themeName";
             [Bindable]
             public function get toolTipField():String{ 
                 if(!_toolTipField)
@@ -47,9 +47,6 @@ limitations under the License.
             [Bindable("dataChange")]
             public function get dataReg():EChartsThemeTemplateVO
             {
-                /*var ldata:EChartsThemeTemplateVO = data as EChartsThemeTemplateVO;
-                if(ldata)
-                    trace(ldata.themeName, ldata.thumb);*/
                 return data as EChartsThemeTemplateVO;
             }
             
