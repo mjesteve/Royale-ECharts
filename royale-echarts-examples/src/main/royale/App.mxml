@@ -29,6 +29,6 @@
 	</j:beads>
 
 	<j:initialView>
-		<views:MainExample id="mainContent" />
+		<views:MainEvents id="mainContent" />
 	</j:initialView>
 </j:Application>

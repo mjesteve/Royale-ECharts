@@ -64,14 +64,6 @@ package com.proj.example.models
 				it.description = descChart.title + '\n' + descChart.subtitle;
 				arData.push(it);
 
-				it = new TabBarChartVO();
-				it.hash="ecp5";
-				it.thumbnail="assets/charts/ECCT_CUSTOM3.png";
-				descChart = ECCT_CUSTOM3;
-				it.label = descChart.title;
-				it.description = descChart.title + '\n' + descChart.subtitle;
-				arData.push(it);
-
 				_tabBarAppData = new ArrayList(arData);
 			}
 			return _tabBarAppData;
@@ -448,7 +440,7 @@ package com.proj.example.models
 				var dataArr:int = 0;
 
 				_ECCT_CUSTOM3 = new ChartDefExampleVO();
-				_ECCT_CUSTOM3.themeName = 'purple-passion';
+				_ECCT_CUSTOM3.themeName = 'custom';
 				_ECCT_CUSTOM3.autoLoad = true;
 				_ECCT_CUSTOM3.optionChartInit = {
 					tooltip: {
