@@ -45,21 +45,15 @@ package com.proj.example.echarts
 		{
 			super();			
 			typeNames = "";
-            //test
-            addEventListener("beadsAdded", beadsAddedHandler);
 		}
-
-        //test
-        public function beadsAddedHandler(event:Event):void
-        {
-            removeEventListener("beadsAdded", beadsAddedHandler);            
-        }
         
 		override public function addedToParent():void
 		{
 			super.addedToParent();
             percentWidth = 100;
             percentHeight = 100;
+
+            globalECharts.withThemesSupport = false;
 		}
 		/**
 		 * Dispatches a "layoutNeeded" event
@@ -69,7 +63,7 @@ package com.proj.example.echarts
 			sendEvent(this,"layoutNeeded");
 		}
 
-        private var globalECharts:EChartsLoader = EChartsLoader.instance;
+        protected var globalECharts:EChartsLoader = EChartsLoader.instance;
 
         private var _autoLoad:Boolean = true;    
         /**
@@ -116,12 +110,10 @@ package com.proj.example.echarts
 
         }
 
-        //For now we only deal with named themes
-        private var _oldThemeName:String = '';
-		/**
-		 * @param theme Object|string
-		 */
-        private var _themeName:String = 'default';
+        //In Basic control only deal with named themes
+        protected var _oldThemeName:String = '';
+
+        protected var _themeName:String = 'default';
         [Bindable("themeNameChange")]
         public function get themeName():String{ return _themeName; }
         public function set themeName(value:String):void
@@ -131,13 +123,13 @@ package com.proj.example.echarts
                 var itTheme:EChartsThemeTemplateVO = EChartsThemeLoader.itemThemeFromName(value);
                 if(itTheme)
                 {
-                    //theme native or template
-                    if(itTheme.isNative){
-                        _themeName = itTheme.themeName;
-                        if(itTheme.custom)
+                    //theme native(autoload) || registered 
+                    if(itTheme.isNative || itTheme.isReg)
+                    {
+                        if(itTheme.custom && itTheme.isNative)
                             _themeName = null; //We respect the design applied with setOption
-                    }else{
-                        //Load template
+                        else
+                            _themeName = itTheme.themeName;
                     }
 
                 }
@@ -152,7 +144,7 @@ package com.proj.example.echarts
 		public function get optsInstance():Object{ return _optsInstance; }
 		public function set optsInstance(value:Object):void{ _optsInstance = value; }
 
-        private var _instanceECharts:Object;
+        protected var _instanceECharts:Object;
         public function get instanceECharts():Object{ return _instanceECharts; }
         public function set instanceECharts(value:Object):void
         {

@@ -25,7 +25,7 @@ package com.proj.example.echarts
 
         //static public var loaderJSON:URLLoader;
 
-		static private var _themeTemplate:ObjectMap;
+		static protected var _themeTemplate:ObjectMap;
 		static public function get themeTemplate():ObjectMap
 		{
 			if(_themeTemplate == null){
@@ -35,9 +35,10 @@ package com.proj.example.echarts
 				_themeTemplate['dark'] = new EChartsThemeTemplateVO('dark', 'themes/thumb/darkmin.png',null,true,false,true);
 				_themeTemplate['custom'] = new EChartsThemeTemplateVO('custom', 'themes/thumb/rgb24.png',null,true,true,true);
 
-				_themeTemplate['defaultB'] = new EChartsThemeTemplateVO('defaultB', 'themes/thumb/default.png');
-				_themeTemplate['lightB'] = new EChartsThemeTemplateVO('lightB', 'themes/thumb/light.png');
-				_themeTemplate['darkB'] = new EChartsThemeTemplateVO('darkB', 'themes/thumb/dark.png');
+				_themeTemplate['default-local'] = new EChartsThemeTemplateVO('default-local', 'themes/thumb/default.png');
+				_themeTemplate['light-local'] = new EChartsThemeTemplateVO('light-local', 'themes/thumb/light.png');
+				_themeTemplate['dark-local'] = new EChartsThemeTemplateVO('dark-local', 'themes/thumb/dark.png');
+
 				_themeTemplate['chalk'] = new EChartsThemeTemplateVO('chalk', 'themes/thumb/chalk.png');
 				_themeTemplate['essos'] = new EChartsThemeTemplateVO('essos', 'themes/thumb/essos.png');
 				_themeTemplate['halloween'] = new EChartsThemeTemplateVO('halloween', 'themes/thumb/halloween.png');				

@@ -10,6 +10,7 @@ package com.proj.example.echarts.vos
         public var isReg:Boolean;
         public var custom:Boolean;
         public var isNative:Boolean;
+        public var jsFormat:Boolean = true;
 
         public function EChartsThemeTemplateVO(themeName:String, thumb:String = null, jsonConfig:Object = null, isReg:Boolean = false, custom:Boolean = false, isNative:Boolean = false)
         {
