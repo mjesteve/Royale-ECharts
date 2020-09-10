@@ -463,7 +463,9 @@ package com.proj.example.models
 					},
 					dataZoom: [{
 						type: 'slider',
-						xAxisIndex: 0,
+						interval:60,
+						startValue:0,
+						endValue:60,
 						filterMode: 'weakFilter',
 						height: 20,
 						start: 35,
@@ -500,18 +502,26 @@ package com.proj.example.models
 							formatter: (function(value){
 								var m = value % 60;
 								var h = ( value-m)/60;
-								var HHMM = h.toString() + ":" + (m<10?"0":"") + m.toString();
-								return HHMM;
+								var nextDay = false;
+								if(h>=24){
+									nextDay = true;
+									h-=24;
+								}
+								if(m<0){
+									m *= -1;
+								}
+								return (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
 							})
 						},
 						min: -720,
 						max:2160
 					},
 					yAxis: {
-						axisTick: {show: false},
+        				data: ['Horarios', 'Cortesías', 'Flexibilidades', 'Pausas', 'Horario']
+						/*axisTick: {show: false},
 						splitLine: {show: false},
 						axisLine: {show: false},
-						axisLabel: {show: false}
+						axisLabel: {show: false}*/
 					},
 					series: [{
 						type: 'custom',
@@ -532,11 +542,16 @@ package com.proj.example.models
 								width: params.coordSys.width,
 								height: params.coordSys.height
 							});
-
+								var mins:int =  api.value(2) - api.value(1);
+								var m:int = mins % 60;
+								var h:int = ( mins-m)/60;
 							return rectShape && {
 								type: 'rect',
 								shape: rectShape,
-								style: api.style()
+								style: api.style({
+									text:h.toString() + ":" + (m<10?"0":"") + m.toString(),
+									textFill: '#fff'
+								})
 							};
 						},
 						itemStyle: {
