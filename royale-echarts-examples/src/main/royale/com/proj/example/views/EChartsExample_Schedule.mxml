@@ -124,10 +124,10 @@
                 </j:IconButton>
             </j:BarSection>
         </j:CardHeader>
-        <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" style="border-top: 1px solid #d2dadf;">
-            <localecharts:EChartsBasicControl localId="charComp" height="100%" width="100%"
+        <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
+            <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="100%"
             autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
             onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)" />
-        </j:CardPrimaryContent>   
+        </j:CardPrimaryContent>                
     </j:Card> 
 </j:ScrollableSectionContent>
