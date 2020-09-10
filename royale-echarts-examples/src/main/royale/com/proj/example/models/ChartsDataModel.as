@@ -64,6 +64,14 @@ package com.proj.example.models
 				it.description = descChart.title + '\n' + descChart.subtitle;
 				arData.push(it);
 
+				it = new TabBarChartVO();
+				it.hash="ecp5";
+				it.thumbnail="assets/charts/ECCT_CUSTOM3.png";
+				descChart = ECCT_CUSTOM3;
+				it.label = descChart.title;
+				it.description = descChart.title + '\n' + descChart.subtitle;
+				arData.push(it);
+
 				_tabBarAppData = new ArrayList(arData);
 			}
 			return _tabBarAppData;
