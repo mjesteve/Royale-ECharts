@@ -453,8 +453,29 @@ package com.proj.example.models
 				_ECCT_CUSTOM3.optionChartInit = {
 					tooltip: {
 						formatter: function (params) {
-							var mins:int = params.value[2] - params.value[1]
-							return params.marker + params.name + ': ' +  mins + ' minutos';
+							var m:int = params.value[1] % 60;
+							var h:int = ( params.value[1]-m)/60;
+							var nextDay:Boolean = false;
+							if(h>=24){
+								nextDay = true;
+								h-=24;
+							}
+							if(m<0){
+								m *= -1;
+							}
+							var inicio:String = (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
+							m = params.value[1] % 60;
+							h = ( params.value[2]-m)/60;
+							nextDay = false;
+							if(h>=24){
+								nextDay = true;
+								h-=24;
+							}
+							if(m<0){
+								m *= -1;
+							}
+							var final:String = (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
+							return '<p>' + params.marker + params.name + ' Inicio: ' +  inicio + 'h</p>' + '<p>' + params.marker + params.name + '  Final: ' + final + 'h</p>';
 						}
 					},
 					title: {
@@ -526,7 +547,7 @@ package com.proj.example.models
 					series: [{
 						type: 'custom',
 						renderItem: function (params, api) {
-							var categoryIndex:int = api.value(0);
+							var categoryIndex = api.value(0);
 							var start = api.coord([api.value(1), categoryIndex]);
 							var end = api.coord([api.value(2), categoryIndex]);
 							var height = api.size([0, 1])[1] * 0.6;
@@ -542,16 +563,40 @@ package com.proj.example.models
 								width: params.coordSys.width,
 								height: params.coordSys.height
 							});
-								var mins:int =  api.value(2) - api.value(1);
-								var m:int = mins % 60;
-								var h:int = ( mins-m)/60;
+							var diff = ((api.value(2) - api.value(1) - api.value(3))/2 );
+							var auxStart = api.coord([ api.value(1) + diff, categoryIndex]);
+							var auxEnd = api.coord([ api.value(2) - diff, categoryIndex]);
+							var shapeAux =  (echarts as Object).graphic.clipRectByRect({
+								x: auxStart[0],
+								y: auxStart[1] - height / 2,
+								width: auxEnd[0] - auxStart[0],
+								height: height
+							}, {
+								x: params.coordSys.x,
+								y: params.coordSys.y,
+								width: params.coordSys.width,
+								height: params.coordSys.height
+							});
+							var mins =  api.value(2) - api.value(1);
+							var m = mins % 60;
+							var h = ( mins-m)/60;
 							return rectShape && {
-								type: 'rect',
-								shape: rectShape,
-								style: api.style({
-									text:h.toString() + ":" + (m<10?"0":"") + m.toString(),
-									textFill: '#fff'
-								})
+								type: 'group',
+								children: [{
+									type: 'rect',
+									shape: rectShape,
+									style: api.style({
+									})
+								} ,
+								{
+									type: 'rect',
+									shape: shapeAux,
+									style: api.style({
+										color:'#fff',
+										text:h.toString() + ":" + (m<10?"0":"") + m.toString(),
+										textFill: '#fff'
+									})
+								}]
 							};
 						},
 						itemStyle: {
@@ -561,14 +606,14 @@ package com.proj.example.models
 							x: [1, 2],
 							y: 0
 						},
-						data: [{name:'Tiempo', value:[0,485,900],itemStyle: {normal: {color: '#0066ff'}}},
-						{name:'Tiempo', value:[0,960,1045],itemStyle: {normal: {color: '#0066ff'}}},
-						{name:'Cortesía', value:[1,990,1080],itemStyle: {normal: {color: '#993399'}}},
-						{name:'Cortesía', value:[1,420,510],itemStyle: {normal: {color: '#993399'}}},
-						{name:'Flexibilidad', value:[2,990,1080],itemStyle: {normal: {color: '#ffcc00'}}},
-						{name:'Flexibilidad', value:[2,420,510],itemStyle: {normal: {color: '#ffcc00'}}},
-						{name:'Pausa', value:[3,840,960],itemStyle: {normal: {color: '#339933'}}},
-						{name:'Horario', value:[4,480,1020],itemStyle: {normal: {color: '#cc3300'}}}]
+						data: [{name:'Tiempo', value:[0,485,900,450],itemStyle: {normal: {color: '#0066ff'}}},
+						{name:'Tiempo', value:[0,960,1045,85],itemStyle: {normal: {color: '#0066ff'}}},
+						{name:'Cortesía', value:[1,990,1080,90],itemStyle: {normal: {color: '#993399'}}},
+						{name:'Cortesía', value:[1,420,510,90],itemStyle: {normal: {color: '#993399'}}},
+						{name:'Flexibilidad', value:[2,990,1080,90],itemStyle: {normal: {color: '#ffcc00'}}},
+						{name:'Flexibilidad', value:[2,420,510,90],itemStyle: {normal: {color: '#ffcc00'}}},
+						{name:'Pausa', value:[3,840,960,80],itemStyle: {normal: {color: '#339933'}}},
+						{name:'Horario', value:[4,480,1020,540],itemStyle: {normal: {color: '#cc3300'}}}]
 					}]
 				};
 			}
