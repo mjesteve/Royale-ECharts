@@ -453,7 +453,7 @@ package com.proj.example.models
 				_ECCT_CUSTOM3.optionChartInit = {
 					tooltip: {
 						formatter: function (params) {
-							var mins = params.value[2] - params.value[1]
+							var mins:int = params.value[2] - params.value[1]
 							return params.marker + params.name + ': ' +  mins + ' minutos';
 						}
 					},
@@ -463,20 +463,22 @@ package com.proj.example.models
 					},
 					dataZoom: [{
 						type: 'slider',
-						xAxisIndex: 0,
+						interval:60,
+						startValue:0,
+						endValue:60,
 						filterMode: 'weakFilter',
 						height: 20,
 						start: 35,
 						end: 65,
 						handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
 						handleSize: '80%',
-						showDetail: true
+						showDetail: false
 					}],
 					grid: {
 						height: 300
 					},
 					xAxis: {
-						type: 'time',
+						type: 'value',
 						position: 'top',
 						splitLine: {
 							lineStyle: {
@@ -498,16 +500,24 @@ package com.proj.example.models
 							inside: false,
 							align: 'center',
 							formatter: (function(value){
-								var m = value % 60;
-								var h = ( value-m)/60;
-								var HHMM = h.toString() + ":" + (m<10?"0":"") + m.toString();
-								return HHMM;
+								var m:int = value % 60;
+								var h:int = ( value-m)/60;
+								var nextDay:Boolean = false;
+								if(h>=24){
+									nextDay = true;
+									h-=24;
+								}
+								if(m<0){
+									m *= -1;
+								}
+								return (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
 							})
 						},
 						min: -720,
 						max:2160
 					},
 					yAxis: {
+        				data: ['Horarios', 'Cortesías', 'Flexibilidades', 'Pausas', 'Horario'],
 						axisTick: {show: false},
 						splitLine: {show: false},
 						axisLine: {show: false},
@@ -516,7 +526,7 @@ package com.proj.example.models
 					series: [{
 						type: 'custom',
 						renderItem: function (params, api) {
-							var categoryIndex = api.value(0);
+							var categoryIndex:int = api.value(0);
 							var start = api.coord([api.value(1), categoryIndex]);
 							var end = api.coord([api.value(2), categoryIndex]);
 							var height = api.size([0, 1])[1] * 0.6;
@@ -532,11 +542,16 @@ package com.proj.example.models
 								width: params.coordSys.width,
 								height: params.coordSys.height
 							});
-
+								var mins:int =  api.value(2) - api.value(1);
+								var m:int = mins % 60;
+								var h:int = ( mins-m)/60;
 							return rectShape && {
 								type: 'rect',
 								shape: rectShape,
-								style: api.style()
+								style: api.style({
+									text:h.toString() + ":" + (m<10?"0":"") + m.toString(),
+									textFill: '#fff'
+								})
 							};
 						},
 						itemStyle: {
