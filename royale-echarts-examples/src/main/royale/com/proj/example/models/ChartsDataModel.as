@@ -606,7 +606,7 @@ package com.proj.example.models
 							x: [1, 2],
 							y: 0
 						},
-						data: [{name:'Tiempo', value:[0,485,900,450],itemStyle: {normal: {color: '#0066ff'}}},
+						data: [{name:'Tiempo', value:[0,485,900,415],itemStyle: {normal: {color: '#0066ff'}}},
 						{name:'Tiempo', value:[0,960,1045,85],itemStyle: {normal: {color: '#0066ff'}}},
 						{name:'Cortesía', value:[1,990,1080,90],itemStyle: {normal: {color: '#993399'}}},
 						{name:'Cortesía', value:[1,420,510,90],itemStyle: {normal: {color: '#993399'}}},
