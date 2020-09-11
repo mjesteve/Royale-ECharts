@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:beads="com.proj.example.beads.*"
+    implements="com.proj.example.charts.IEchartExampleBasic"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+    xmlns:views="com.proj.example.views.*" 
+    xmlns:localecharts="com.proj.example.echarts.*"
+    initComplete="onInitComplete()">
+
+    <fx:Script>
+        <![CDATA[
+        import com.proj.example.vos.ChartDefExampleVO;
+        import com.proj.example.echarts.events.EChartsEvent;
+        import org.apache.royale.core.BindableCSSStyles;
+
+        private function onInitComplete():void{
+            this.addEventListener("sizeChanged", autoResizeHandler,false);
+			//window.addEventListener('resize', autoResizeHandler, false);
+        }
+        public function autoResizeHandler(event:Event = null):void
+        {
+            if(charComp.isInit)            
+                charComp.resize();
+        }
+
+        private var _itemChartDef:ChartDefExampleVO;    
+        [Bindable]
+		public function get itemChartDef():ChartDefExampleVO
+        {
+            return _itemChartDef;
+        }
+        public function set itemChartDef(value:ChartDefExampleVO):void
+        {            
+            _itemChartDef = value;
+            if(_itemChartDef)            
+            {
+                listTheme.setSelectedItemFromName(_itemChartDef.themeName);
+                btnLoad.visible = !_itemChartDef.autoLoad;
+                listTheme.visible = _itemChartDef.autoLoad;
+            }else{                
+                btnLoad.visible = listTheme.visible = false;
+            }
+        }
+        
+        [Bindable]
+        private var opts:Object = {width: 'auto', height: 'auto'};
+
+        public function activate():void
+        {
+            trace("IsInit",charComp.isInit,"IsConfig",charComp.isConfigure,"autoload",charComp.autoLoad);
+            var requestInitialize:Boolean = (!charComp.isInit);
+            var requestConfig:Boolean = (!charComp.isConfigure);
+            var adjustSize:Boolean = true;
+
+            if(!charComp.isInit || !charComp.isConfigure)
+            {
+                if(charComp.autoLoad)
+                    charComp.refreshOption(requestInitialize,requestConfig,adjustSize);                
+            }else{            
+                charComp.refreshOption(requestInitialize,requestConfig,adjustSize);
+            }
+        }
+
+        private function initialize():void
+        {
+            charComp.refreshOption(true,true,true);
+        }
+
+        private function completeConfigHandler(event:EChartsEvent):void
+        {
+           trace("completeConfigHandler(event)");
+        }
+
+        private function completeInitHandler(event:EChartsEvent):void
+        {
+            trace("completeInitHandler(event)");
+            listTheme.visible = charComp.isInit;
+            btnLoad.visible = !charComp.isInit; 
+            
+            if(_itemChartDef.eventHandlers && _itemChartDef.eventHandlers.length>0)
+            {
+                var len:int = _itemChartDef.eventHandlers.length;
+                for(var index:int = 0; index < len; index++)
+                {
+                    var element:Object = _itemChartDef.eventHandlers[index];
+                    charComp.on(element.eventName,element.handler);
+                }
+            }                
+        }
+
+        public function theme_Change():void
+        {            
+            if(_itemChartDef && charComp.themeName == listTheme.selectedItem.themeName)
+                return;
+            if( listTheme.selectedItem.isReg )
+            {
+                charComp.UpdateTheme(listTheme.selectedItem.themeName);
+            }
+        }
+        public function click(param):void{
+            console.log(param.name);
+        }
+
+        ]]>
+    </fx:Script>
+    
+    <j:beads>
+        <js:ViewDataBinding/>
+		<js:BrowserResizeListener/>
+    </j:beads>
+    <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
+        <j:CardHeader>
+            <j:BarSection width="70%" gap="5">
+                <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
+                <html:H5 text="{itemChartDef.subtitle}" className="block-with-text primary-dark"/>
+            </j:BarSection>
+            <j:BarSection width="30%" itemsHorizontalAlign="itemsRight" gap="0" itemsVerticalAlign="itemsCenter">                
+                <views:SelectThemeList id="listTheme" onlyThemesNative="true" change="theme_Change()"/>
+                <j:IconButton localId="btnLoad" unboxed="true" click="initialize()">
+                    <j:icon>
+                        <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                    </j:icon>
+                    <j:beads>
+                        <j:ToolTip toolTip="Load"/>
+                    </j:beads>
+                </j:IconButton>
+            </j:BarSection>
+        </j:CardHeader>
+        <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
+            <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="100%"
+            autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+            onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)">
+                <localecharts:beads>
+                    <beads:EChartSimpleEvents CLICK="click"/>
+                </localecharts:beads>
+            </localecharts:EChartsWithThemeControl>
+        </j:CardPrimaryContent>                
+    </j:Card> 
+</j:ScrollableSectionContent>
