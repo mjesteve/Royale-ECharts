@@ -1,7 +1,5 @@
 package com.proj.example.echarts
 {
-	import org.apache.royale.core.StyledUIBase;
-    import org.apache.royale.events.Event;
     import com.proj.example.echarts.events.EChartsEvent;
     import com.proj.example.echarts.vos.EChartsInstanceVO;
     import org.apache.royale.core.WrappedHTMLElement;
@@ -14,18 +12,18 @@ package com.proj.example.echarts
      *  Indicates that the initialization of the EChartsInstance is complete.  
      */
 	[Event(name="onCompleteInicialize", type="com.proj.example.echarts.events.EChartsEvent")]
+	
+    /**
+     *  Indicates that the current EChartsInstance has been disposed.  
+     */
+	[Event(name="onDisposeInstance", type="com.proj.example.echarts.events.EChartsEvent")]
     /**
      *  Indicates that the configuration of the EChartsInstance is complete.  
      */
 	[Event(name="onCompleteConfig", type="com.proj.example.echarts.events.EChartsEvent")]
-	/**
-	 * The default property uses when additional MXML content appears within an element's
-	 * definition in an MXML file.
-	 */
-	[DefaultProperty("instanceECharts")]
 
 	COMPILE::JS
-	public class EChartsBasicControl extends UIBase
+	public class EChartsBasicControl extends UIBase implements IEChartsBasic
     {
 
 		/**
@@ -83,7 +81,6 @@ package com.proj.example.echarts
         [Bindable("onCompleteInicialize")]
         public function set isInit(value:Boolean):void{ 
             _isInit = value; 
-            dispatchEvent(new EChartsEvent(EChartsEvent.ON_COMPLETE_INICIALIZE));
         }
 
         private var _isConfigure:Boolean;
@@ -93,7 +90,6 @@ package com.proj.example.echarts
         }
         public function set isConfigure(value:Boolean):void{
             _isConfigure = value; 
-            dispatchEvent(new EChartsEvent(EChartsEvent.ON_COMPLETE_CONFIG));
         }
 
         private var _configOption:Object;
@@ -152,26 +148,33 @@ package com.proj.example.echarts
                 return;
 
             var objInstance:EChartsInstanceVO;  
+            var oldInstance:Object = _instanceECharts;
+            
+            _instanceECharts = value;
+            isInit = (_instanceECharts ? true : false);
 
-            if(!value && _instanceECharts)            
+            if(!value && oldInstance)            
             {
                 //Deleted
-                objInstance = new EChartsInstanceVO(_instanceECharts);
-                echarts.dispose(_instanceECharts);
+                objInstance = new EChartsInstanceVO(oldInstance);
+                echarts.dispose(oldInstance);
                 if(globalECharts.echartsInstances[objInstance.id])
+                {
                     delete globalECharts.echartsInstances[objInstance.id];
+                    dispatchEvent(new EChartsEvent(EChartsEvent.ON_DISPOSE_INSTANCE,objInstance));
+                }
             }
             else if(value)
             {
-                objInstance = new EChartsInstanceVO(value);
+                objInstance = new EChartsInstanceVO(_instanceECharts);
                 
                 var idinstance:String = objInstance.id;
                 if(!globalECharts.echartsInstances[idinstance])
+                {
                     globalECharts.echartsInstances[idinstance] = objInstance.jsInstance;
+                    dispatchEvent(new EChartsEvent(EChartsEvent.ON_COMPLETE_INICIALIZE,objInstance));
+                }
             }
-
-            _instanceECharts = value;
-            isInit = (_instanceECharts ? true : false);
         }
     
         private var _initiationInProcess:Boolean = false;
@@ -245,6 +248,7 @@ package com.proj.example.echarts
                 
             _instanceECharts.setOption(_configOption,{notMerge: true, lazyUpdate: lazyUpdate, silent: silent});
             isConfigure = true;
+            dispatchEvent(new EChartsEvent(EChartsEvent.ON_COMPLETE_CONFIG));
         }
 		/**
          * Api Royale. Update de Option Object Merge
@@ -252,15 +256,17 @@ package com.proj.example.echarts
          * @param lazyUpdate 
          * @param silent 
          */
-        public function updateOption(config:Object, lazyUpdate:Boolean=false, silent:Boolean=false):void
+        public function updateOption(config:Object, lazyUpdate:Boolean=false, silent:Boolean=false, fixedOption:Boolean = false):void
         {
             if(!_instanceECharts)
                 return;
 
-            _configOption = config;
+            if(fixedOption)
+                _configOption = config;
 
-            _instanceECharts.setOption(_configOption,{notMerge: false, lazyUpdate: lazyUpdate, silent: silent});
+            _instanceECharts.setOption(config,{notMerge: false, lazyUpdate: lazyUpdate, silent: silent});
             isConfigure = true;
+            dispatchEvent(new EChartsEvent(EChartsEvent.ON_UPDATE_CONFIG));
         }
 		/**
          * Api Royale. Refresh de Option Object Merge

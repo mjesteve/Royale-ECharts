@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:beads="com.proj.example.beads.*"
+<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
     implements="com.proj.example.charts.IEchartExampleBasic"
     xmlns:j="library://ns.apache.org/royale/jewel"
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:views="com.proj.example.views.*" 
     xmlns:localecharts="com.proj.example.echarts.*"
+    xmlns:beads="com.proj.example.echarts.beads.*"
     initComplete="onInitComplete()">
 
     <fx:Script>
@@ -78,7 +79,7 @@
             listTheme.visible = charComp.isInit;
             btnLoad.visible = !charComp.isInit; 
             
-            if(_itemChartDef.eventHandlers && _itemChartDef.eventHandlers.length>0)
+            /*if(_itemChartDef.eventHandlers && _itemChartDef.eventHandlers.length>0)
             {
                 var len:int = _itemChartDef.eventHandlers.length;
                 for(var index:int = 0; index < len; index++)
@@ -86,7 +87,7 @@
                     var element:Object = _itemChartDef.eventHandlers[index];
                     charComp.on(element.eventName,element.handler);
                 }
-            }                
+            } */               
         }
 
         public function theme_Change():void
@@ -98,10 +99,42 @@
                 charComp.UpdateTheme(listTheme.selectedItem.themeName);
             }
         }
-        public function click(param):void{
-            console.log(param.name);
+        public function updateAxisPointer(... event):void{
+//            console.log(event);
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+            var xAxisInfo:Object = param.axesInfo[0] as Object;
+            if (xAxisInfo) {
+                var dimension:int = xAxisInfo.value + 1;
+                var option:Object = {
+                    series: { id: 'pie', 
+                        label: { formatter: '{b}: {@[' + dimension + ']} ({d}%)' }, encode: { value: dimension, tooltip: dimension}
+                    }
+                };
+                charComp.updateOption(option);
+            }
         }
 
+			
+		/*private var event:Object = {eventName:'updateAxisPointer', handler: function (event) {
+				var xAxisInfo = event.axesInfo[0];
+				if (xAxisInfo) {
+					var dimension = xAxisInfo.value + 1;
+					this.setOption({
+						series: {
+							id: 'pie',
+							label: {
+								formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+							},
+							encode: {
+								value: dimension,
+								tooltip: dimension
+							}
+						}
+					});
+				}}
+                };*/
         ]]>
     </fx:Script>
     
@@ -132,7 +165,7 @@
             autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
             onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)">
                 <localecharts:beads>
-                    <beads:EChartSimpleEvents CLICK="click"/>
+                    <beads:EChartEventsBead UPDATEAXISPOINTER="updateAxisPointer"/>
                 </localecharts:beads>
             </localecharts:EChartsWithThemeControl>
         </j:CardPrimaryContent>                

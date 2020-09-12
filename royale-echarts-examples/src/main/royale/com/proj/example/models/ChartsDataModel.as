@@ -448,6 +448,8 @@ package com.proj.example.models
 				var dataArr:int = 0;
 
 				_ECCT_CUSTOM3 = new ChartDefExampleVO();
+				_ECCT_CUSTOM3.title = "Schedule Dashboard";
+				_ECCT_CUSTOM3.subtitle = "How much has been worked?";
 				_ECCT_CUSTOM3.themeName = 'custom';
 				_ECCT_CUSTOM3.autoLoad = true;
 				_ECCT_CUSTOM3.optionChartInit = {
@@ -477,10 +479,6 @@ package com.proj.example.models
 							var final:String = (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
 							return '<p>' + params.marker + params.name + ' Inicio: ' +  inicio + 'h</p>' + '<p>' + params.marker + params.name + '  Final: ' + final + 'h</p>';
 						}
-					},
-					title: {
-						text: 'Schedule Dashboard',
-						left: 'center'
 					},
 					dataZoom: [{
 						type: 'slider',
