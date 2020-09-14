@@ -18,48 +18,23 @@ package com.proj.example.charts
         public function optionChartInit():Object
         {
             _options = {
-                title: {
-                    text:'The total population of the world',
-                    subtext:'Data comes from the network'
+                title: {   text:'The total population of the world (thousand)', subtext:'Data comes from the network'   },
+                tooltip: { trigger:'axis', axisPointer: {type:'shadow'}   },
+                legend: {  orient:'vertical', x:'right',  y:'top', itemGap: 10, itemWidth: 10, itemHeight: 10,
+                           data: ['2018', '2019']
                 },
-                tooltip: {
-                    trigger:'axis',
-                    axisPointer: {
-                        type:'shadow'
-                    }
-                },
-                legend: {
-                    orient:'vertical',
-                    x:'right',  y:'top', itemGap: 10, itemWidth: 10, itemHeight: 10,
-                    data: ['2011', '2012']
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
-                },
-                xAxis: {
-                    type:'value',
-                    boundaryGap: [0, 0.01]
-                },
-                yAxis: {
-                    type:'category',
-                    data: ['Brazil','Indonesia','United States','India','China','World population (ten thousand)']
-                },
+                grid: {   left: '5%',  right: '5%', bottom: '5%', containLabel: true    },
+                xAxis: {  type:'value', boundaryGap: [0, 0.01]    },
+                yAxis: {  type:'category', data: ['Brazil','Indonesia','United States','India','China','World population']},
                 series: [
-                    {
-                        name: '2011',
-                        type:'bar',
-                        data: [18203, 23489, 29034, 104970, 131744, 630230]
+                    {   name: '2018', type:'bar',
+                        data: [210, 268, 327, 1353, 1428, 7631]
                     },
-                    {
-                        name: '2012',
-                        type:'bar',
-                        data: [19325, 23438, 31000, 121594, 134141, 681807]
+                    {   name: '2019', type:'bar',  
+                        data: [211, 271, 330, 1366, 1434, 7713]  
                     }
                 ]
-                };
+            };
 
             return _options;
         }

@@ -64,6 +64,14 @@ package com.proj.example.models
 				it.description = descChart.title + '\n' + descChart.subtitle;
 				arData.push(it);
 
+				it = new TabBarChartVO();
+				it.hash="ecp5";
+				it.thumbnail="assets/charts/ECCT_CUSTOM3.png";
+				descChart = ECCT_CUSTOM3;
+				it.label = descChart.title;
+				it.description = descChart.title + '\n' + descChart.subtitle;
+				arData.push(it);
+
 				_tabBarAppData = new ArrayList(arData);
 			}
 			return _tabBarAppData;
@@ -429,6 +437,186 @@ package com.proj.example.models
 			}
 			
 			return _ECCT_CUSTOM2;
+		}
+
+		private var _ECCT_CUSTOM3:ChartDefExampleVO;
+		public function get ECCT_CUSTOM3():ChartDefExampleVO
+		{
+			if(!_ECCT_CUSTOM3){
+				
+				var firstColor:String = '#468EFD';
+				var dataArr:int = 0;
+
+				_ECCT_CUSTOM3 = new ChartDefExampleVO();
+				_ECCT_CUSTOM3.title = "Schedule Dashboard";
+				_ECCT_CUSTOM3.subtitle = "How much has been worked?";
+				_ECCT_CUSTOM3.themeName = 'custom';
+				_ECCT_CUSTOM3.autoLoad = true;
+				_ECCT_CUSTOM3.optionChartInit = {
+					tooltip: {
+						formatter: function (params) {
+							var m:int = params.value[1] % 60;
+							var h:int = ( params.value[1]-m)/60;
+							var nextDay:Boolean = false;
+							if(h>=24){
+								nextDay = true;
+								h-=24;
+							}
+							if(m<0){
+								m *= -1;
+							}
+							var inicio:String = (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
+							m = params.value[1] % 60;
+							h = ( params.value[2]-m)/60;
+							nextDay = false;
+							if(h>=24){
+								nextDay = true;
+								h-=24;
+							}
+							if(m<0){
+								m *= -1;
+							}
+							var final:String = (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
+							return '<p>' + params.marker + params.name + ' Inicio: ' +  inicio + 'h</p>' + '<p>' + params.marker + params.name + '  Final: ' + final + 'h</p>';
+						}
+					},
+					dataZoom: [{
+						type: 'slider',
+						interval:60,
+						startValue:0,
+						endValue:60,
+						filterMode: 'weakFilter',
+						height: 20,
+						start: 35,
+						end: 65,
+						handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+						handleSize: '80%',
+						showDetail: false
+					}],
+					grid: {
+						height: 300
+					},
+					xAxis: {
+						type: 'value',
+						position: 'top',
+						splitLine: {
+							lineStyle: {
+								color: ['#E9EDFF']
+							}
+						},
+						interval:60
+						,
+						axisLine: {
+							show: false
+						},
+						axisTick: {
+							lineStyle: {
+								color: '#929ABA'
+							}
+						},
+						axisLabel: {
+							color: '#929ABA',
+							inside: false,
+							align: 'center',
+							formatter: (function(value){
+								var m:int = value % 60;
+								var h:int = ( value-m)/60;
+								var nextDay:Boolean = false;
+								if(h>=24){
+									nextDay = true;
+									h-=24;
+								}
+								if(m<0){
+									m *= -1;
+								}
+								return (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
+							})
+						},
+						min: -720,
+						max:2160
+					},
+					yAxis: {
+        				data: ['Horarios', 'Cortesías', 'Flexibilidades', 'Pausas', 'Horario'],
+						axisTick: {show: false},
+						splitLine: {show: false},
+						axisLine: {show: false},
+						axisLabel: {show: false}
+					},
+					series: [{
+						type: 'custom',
+						renderItem: function (params, api) {
+							var categoryIndex:int = api.value(0);
+							var start = api.coord([api.value(1), categoryIndex]);
+							var end = api.coord([api.value(2), categoryIndex]);
+							var height = api.size([0, 1])[1] * 0.6;
+
+							var rectShape = (echarts as Object).graphic.clipRectByRect({
+								x: start[0],
+								y: start[1] - height / 2,
+								width: end[0] - start[0],
+								height: height
+							}, {
+								x: params.coordSys.x,
+								y: params.coordSys.y,
+								width: params.coordSys.width,
+								height: params.coordSys.height
+							});
+							var diff = ((api.value(2) - api.value(1) - api.value(3))/2 );
+							var auxStart = api.coord([ api.value(1) + diff, categoryIndex]);
+							var auxEnd = api.coord([ api.value(2) - diff, categoryIndex]);
+							var shapeAux =  (echarts as Object).graphic.clipRectByRect({
+								x: auxStart[0],
+								y: auxStart[1] - height / 2,
+								width: auxEnd[0] - auxStart[0],
+								height: height
+							}, {
+								x: params.coordSys.x,
+								y: params.coordSys.y,
+								width: params.coordSys.width,
+								height: params.coordSys.height
+							});
+							var mins =  api.value(2) - api.value(1);
+							var m = mins % 60;
+							var h = ( mins-m)/60;
+							return rectShape && {
+								type: 'group',
+								children: [{
+									type: 'rect',
+									shape: rectShape,
+									style: api.style({
+									})
+								} ,
+								{
+									type: 'rect',
+									shape: shapeAux,
+									style: api.style({
+										color:'#fff',
+										text:h.toString() + ":" + (m<10?"0":"") + m.toString(),
+										textFill: '#fff'
+									})
+								}]
+							};
+						},
+						itemStyle: {
+							opacity: 0.8
+						},
+						encode: {
+							x: [1, 2],
+							y: 0
+						},
+						data: [{name:'Tiempo', value:[0,485,900,415],itemStyle: {normal: {color: '#0066ff'}}},
+						{name:'Tiempo', value:[0,960,1045,85],itemStyle: {normal: {color: '#0066ff'}}},
+						{name:'Cortesía', value:[1,990,1080,90],itemStyle: {normal: {color: '#993399'}}},
+						{name:'Cortesía', value:[1,420,510,90],itemStyle: {normal: {color: '#993399'}}},
+						{name:'Flexibilidad', value:[2,990,1080,90],itemStyle: {normal: {color: '#ffcc00'}}},
+						{name:'Flexibilidad', value:[2,420,510,90],itemStyle: {normal: {color: '#ffcc00'}}},
+						{name:'Pausa', value:[3,840,960,80],itemStyle: {normal: {color: '#339933'}}},
+						{name:'Horario', value:[4,480,1020,540],itemStyle: {normal: {color: '#cc3300'}}}]
+					}]
+				};
+			}
+
+			return _ECCT_CUSTOM3;
 		}
 
 		private var _ECC_PIE001:ChartDefExampleVO;

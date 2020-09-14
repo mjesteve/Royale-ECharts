@@ -127,9 +127,8 @@
 
         <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
 
-            <localecharts:EChartsBasicControl localId="charComp" percentHeight="100" percentWidth="100"
-            autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
-            optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+            <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="100%"
+            autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
             onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)" />
             
         </j:CardPrimaryContent>                

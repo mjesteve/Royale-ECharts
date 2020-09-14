@@ -12,7 +12,6 @@
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
         import com.proj.example.echarts.events.EChartsEvent;
-        import org.apache.royale.core.BindableCSSStyles;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);

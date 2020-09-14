@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
     implements="com.proj.example.charts.IEchartExampleBasic"
     xmlns:j="library://ns.apache.org/royale/jewel"
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:views="com.proj.example.views.*" 
     xmlns:localecharts="com.proj.example.echarts.*"
+    xmlns:beads="com.proj.example.echarts.beads.*"
     initComplete="onInitComplete()">
 
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
         import com.proj.example.echarts.events.EChartsEvent;
-        import org.apache.royale.core.BindableCSSStyles;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);
-			//window.addEventListener('resize', autoResizeHandler, false);
         }
         public function autoResizeHandler(event:Event = null):void
         {
@@ -67,26 +66,10 @@
             charComp.refreshOption(true,true,true);
         }
 
-        private function completeConfigHandler(event:EChartsEvent):void
-        {
-           trace("completeConfigHandler(event)");
-        }
-
         private function completeInitHandler(event:EChartsEvent):void
         {
-            trace("completeInitHandler(event)");
             listTheme.visible = charComp.isInit;
             btnLoad.visible = !charComp.isInit; 
-            
-            if(_itemChartDef.eventHandlers && _itemChartDef.eventHandlers.length>0)
-            {
-                var len:int = _itemChartDef.eventHandlers.length;
-                for(var index:int = 0; index < len; index++)
-                {
-                    var element:Object = _itemChartDef.eventHandlers[index];
-                    charComp.on(element.eventName,element.handler);
-                }
-            }                
         }
 
         public function theme_Change():void
@@ -99,6 +82,22 @@
             }
         }
 
+        public function updateAxisPointer(... event):void{
+
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+            var xAxisInfo:Object = param.axesInfo[0] as Object;
+            if (xAxisInfo) {
+                var dimension:int = xAxisInfo.value + 1;
+                var option:Object = {
+                    series: { id: 'pie', 
+                        label: { formatter: '{b}: {@[' + dimension + ']} ({d}%)' }, encode: { value: dimension, tooltip: dimension}
+                    }
+                };
+                charComp.updateOption(option);
+            }
+        }
         ]]>
     </fx:Script>
     
@@ -127,12 +126,16 @@
 
         <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
 
-            <localecharts:EChartsBasicControl localId="charComp" percentHeight="100" percentWidth="100"
-            autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
-            optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
-            onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)" />
-            
-        </j:CardPrimaryContent>                
+            <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="100%"
+                                                autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
+                                                optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+                                                onCompleteInicialize="completeInitHandler(event)">
+                <localecharts:beads>
+                    <beads:EChartEventsBead UPDATEAXISPOINTER="updateAxisPointer"/>
+                </localecharts:beads>
+            </localecharts:EChartsWithThemeControl>
+
+        </j:CardPrimaryContent>
 
     </j:Card> 
 </j:ScrollableSectionContent>

@@ -8,7 +8,10 @@ package com.proj.example.echarts.events
     {
 		public static const ON_COMPLETE_INICIALIZE:String = "onCompleteInicialize";
 		public static const ON_COMPLETE_CONFIG:String = "onCompleteConfig";
+		public static const ON_UPDATE_CONFIG:String = "onUpdateConfig";
 		
+		public static const ON_DISPOSE_INSTANCE:String = "onDisposeInstance";
+        
 		public static const ON_INICIALIZE:String = "onInicialize";
 		public static const ON_AFTERINICIALIZE:String = "onAfterInicialize";
 
@@ -71,6 +74,7 @@ package com.proj.example.echarts.events
         public static const MAPUNSELECTED:String = "mapunselected";
 
         public static const AXISAREASELECTED:String = "axisareaselected";
+        public static const UPDATEAXISPOINTER:String = "updateAxisPointer";
 
         public static const FOCUSNODEADJACENCY:String = "focusnodeadjacency";
         public static const UNFOCUSNODEADJACENCY:String = "unfocusnodeadjacency";
