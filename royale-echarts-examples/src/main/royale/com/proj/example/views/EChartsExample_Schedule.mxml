@@ -13,11 +13,10 @@
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
         import com.proj.example.echarts.events.EChartsEvent;
-        import org.apache.royale.core.BindableCSSStyles;
+        import org.apache.royale.jewel.Alert;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);
-			//window.addEventListener('resize', autoResizeHandler, false);
         }
         public function autoResizeHandler(event:Event = null):void
         {
@@ -68,26 +67,11 @@
             charComp.refreshOption(true,true,true);
         }
 
-        private function completeConfigHandler(event:EChartsEvent):void
-        {
-           trace("completeConfigHandler(event)");
-        }
-
         private function completeInitHandler(event:EChartsEvent):void
         {
             trace("completeInitHandler(event)");
             listTheme.visible = charComp.isInit;
             btnLoad.visible = !charComp.isInit; 
-            
-            /*if(_itemChartDef.eventHandlers && _itemChartDef.eventHandlers.length>0)
-            {
-                var len:int = _itemChartDef.eventHandlers.length;
-                for(var index:int = 0; index < len; index++)
-                {
-                    var element:Object = _itemChartDef.eventHandlers[index];
-                    charComp.on(element.eventName,element.handler);
-                }
-            } */               
         }
 
         public function theme_Change():void
@@ -99,42 +83,20 @@
                 charComp.UpdateTheme(listTheme.selectedItem.themeName);
             }
         }
-        public function updateAxisPointer(... event):void{
-//            console.log(event);
+
+        public function click(... event):void{
+
             var param:Object = event?event[0]:null;
             if(!param)
+            {
+                Alert.show("call back function click");
                 return;
-            var xAxisInfo:Object = param.axesInfo[0] as Object;
-            if (xAxisInfo) {
-                var dimension:int = xAxisInfo.value + 1;
-                var option:Object = {
-                    series: { id: 'pie', 
-                        label: { formatter: '{b}: {@[' + dimension + ']} ({d}%)' }, encode: { value: dimension, tooltip: dimension}
-                    }
-                };
-                charComp.updateOption(option);
+            }else
+            {
+                Alert.show(param.toLocaleString());
             }
-        }
 
-			
-		/*private var event:Object = {eventName:'updateAxisPointer', handler: function (event) {
-				var xAxisInfo = event.axesInfo[0];
-				if (xAxisInfo) {
-					var dimension = xAxisInfo.value + 1;
-					this.setOption({
-						series: {
-							id: 'pie',
-							label: {
-								formatter: '{b}: {@[' + dimension + ']} ({d}%)'
-							},
-							encode: {
-								value: dimension,
-								tooltip: dimension
-							}
-						}
-					});
-				}}
-                };*/
+        }
         ]]>
     </fx:Script>
     
@@ -163,9 +125,9 @@
         <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
             <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="100%"
             autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
-            onCompleteConfig="completeConfigHandler(event)" onCompleteInicialize="completeInitHandler(event)">
+            onCompleteInicialize="completeInitHandler(event)">
                 <localecharts:beads>
-                    <beads:EChartEventsBead UPDATEAXISPOINTER="updateAxisPointer"/>
+                    <beads:EChartEventsBead CLICK="click"/>
                 </localecharts:beads>
             </localecharts:EChartsWithThemeControl>
         </j:CardPrimaryContent>                

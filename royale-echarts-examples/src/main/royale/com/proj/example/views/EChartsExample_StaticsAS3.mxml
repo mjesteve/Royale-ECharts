@@ -9,7 +9,6 @@
      <fx:Script>
         <![CDATA[
         import org.apache.royale.collections.ArrayList;
-        import org.apache.royale.jewel.Alert;
         import com.proj.example.charts.IEchartDefinition;
         import com.proj.example.charts.EC_BAR001;
         import com.proj.example.charts.EC_LINE001;
@@ -18,10 +17,8 @@
         import com.proj.example.charts.EC_PIE001;
         import com.proj.example.charts.EC_PIE002;
         import com.proj.example.charts.EC_LINE002;
-        import com.proj.example.vos.ChartDefExampleVO;
+        import org.apache.royale.jewel.Group;
 
-
-        private var mychart:Object;
         private var dpCharts:ArrayList;
 
         private function onInitComplete():void{            
@@ -44,6 +41,34 @@
                 mychart.resize({width: 'auto', height: 'auto'});
         }
 
+        private var myContainerChart:Group;
+
+        private function makeContainerChart():void
+        {
+            if(!myContainerChart)
+            {
+                myContainerChart = new Group();
+                myContainerChart.percentHeight = 100;
+                myContainerChart.percentWidth = 100;
+                cardContent.addElement(myContainerChart);
+            } 
+            
+            if(!mychart)
+            {
+                mychart = echarts.init(myContainerChart.element);
+            }
+        }
+
+        private var mychart:Object;
+
+        private function makeChart():void
+        {            
+            if(!mychart)
+            {
+                mychart = echarts.init(myContainerChart.element);                
+            }
+        }
+
         private function selectChart():void
         {
             if(cbCharts.selectedIndex == -1)
@@ -51,16 +76,14 @@
                 if(mychart)
                     mychart.clear();                
             }
-            else{
+            else
+            {
+                makeContainerChart();
+                makeChart();
 
                 var notMerge:Boolean = true;
                 var option:Object;
-                var idChart:int = cbCharts.selectedItem.idChart;                
-
-                if(!mychart)
-                {
-                    mychart = echarts.init(myContainerChart.element);
-                }
+                var idChart:int = cbCharts.selectedItem.idChart;
                 
                 var defchart:IEchartDefinition;
                 switch(idChart)
@@ -115,10 +138,11 @@
                     option = defchart.optionChartInit();
                 if(notMerge)
                     mychart.clear();
-
-                mychart.setOption(option, notMerge);
+                mychart.setOption(option);
                 mychart.resize({width: 'auto', height: 'auto'});
+
             }
+
         }
 
 
@@ -204,10 +228,8 @@
                                 </j:BarSection>       
                         </j:CardHeader>
 
-                        <j:CardPrimaryContent localId="cardContent" 
-                                              itemsVerticalAlign="itemsCenter" 
-                                              itemsHorizontalAlign="itemsCenter" >
-                            <j:Group localId="myContainerChart" percentHeight="100" percentWidth="100"/>
+                        <j:CardPrimaryContent  localId="cardContent" itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter" >
+
                         </j:CardPrimaryContent>
 
                     </j:Card> 
