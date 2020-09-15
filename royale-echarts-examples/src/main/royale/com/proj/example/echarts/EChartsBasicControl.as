@@ -386,6 +386,23 @@ package com.proj.example.echarts
                 _instanceECharts.off(eventName, handler);
             }
         }
+		/**
+		 * Binds event-handling function.
+		 * @param payload Object. JSON string with the description of the action(s) to trugger.
+         * Example:
+         * {type: String     Action names are all in lower-cases (constant EChartsEvent.ACTION_...)
+         *          seriesIndex?: number|Array,  // optional; series index; could be an array of multiple series
+         *          seriesName?: string|Array,   // optional; series name; could be an array of multiple series
+         *          dataIndex?: number,          // options are index of data
+         *          name?: string                // options are data name
+         * }
+		 */
+        public function dispatchAction(payload:Object):void
+        {
+            if(_instanceECharts){                
+                _instanceECharts.dispatchAction(payload);
+            }
+        }
 
 //instanceECharts.getDom
 /*
@@ -398,7 +415,6 @@ instanceECharts.showLoading
 instanceECharts.containPixel
 instanceECharts.convertFromPixel
 instanceECharts.convertToPixel
-instanceECharts.dispatchAction
 */
 	}
 }
