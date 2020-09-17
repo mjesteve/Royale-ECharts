@@ -1,11 +1,5 @@
 /*
- * Copyright (C) 2009, Codeoscopic S.A. - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- *
- * Copyright (C) 2009, Codeoscopic S.A. - Todos Los Derechos Reservados
- * La copia no autorizada de este archivo, a través de cualquier medio está estrictamente prohibida
- * Privado y confidencial
+ * https://github.com/BowlerHatLLC/vscode-as3mxml/wiki/asconfig.json#library-path
  */
  {
     "config": "royale",

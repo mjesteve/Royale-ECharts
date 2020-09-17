@@ -26,5 +26,6 @@ package com.proj.example.echarts
         function resize(opts:Object = null):void;
         function on(eventName:String, handler:Function, query:Object = null, context:Object=null):void;
         function off(eventName:String, handler:Function = null):void;
+        function dispatchAction(payload:Object, opt:Object = null):void;
 	}
 }

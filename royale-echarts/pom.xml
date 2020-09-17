@@ -35,6 +35,7 @@
     <royale.compiler.version>0.9.8-SNAPSHOT</royale.compiler.version>
     <royale.typedefs.version>0.9.8-SNAPSHOT</royale.typedefs.version>
     <player.version>15.0</player.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <build>

@@ -13,7 +13,6 @@
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
         import com.proj.example.echarts.events.EChartsEvent;
-        import org.apache.royale.jewel.Alert;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);
@@ -60,6 +59,8 @@
             }else{            
                 charComp.refreshOption(requestInitialize,requestConfig,adjustSize);
             }
+
+            trace(charComp.instanceECharts);
         }
 
         private function initialize():void
@@ -69,7 +70,6 @@
 
         private function completeInitHandler(event:EChartsEvent):void
         {
-            trace("completeInitHandler(event)");
             listTheme.visible = charComp.isInit;
             btnLoad.visible = !charComp.isInit; 
         }
@@ -84,18 +84,53 @@
             }
         }
 
-        public function click(... event):void{
+        [Bindable]
+        private var dataHighlightIndex:int=-1;
+
+        public function hightLightHandler(... event):void{
 
             var param:Object = event?event[0]:null;
             if(!param)
-            {
-                Alert.show("call back function click");
-            }else
-            {
-                Alert.show(param.toLocaleString());
-            }
+                return;
 
         }
+
+        public function select():void
+        {
+            var id:int = nDataIndex.value;
+            trace(id, dataHighlightIndex);
+            charComp.dispatchAction({type:EChartsEvent.ACTION_SUNBURST_HIGHLIGHT, targetNodeId:'5☆'});
+
+        }
+
+        public function reset():void
+        {
+            charComp.dispatchAction({type:EChartsEvent.ACTION_SUNBURST_UNHIGHLIGHT});
+        }
+
+        public function clickChartHandler(... event):void{
+            trace('click');
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+            trace('componentType',param.componentType);
+            trace('seriesId',param.seriesId);
+            trace('seriesIndex',param.seriesIndex);
+            trace('seriesName',param.seriesName);
+            trace('seriesType',param.seriesType);
+            trace('dataIndex',param.dataIndex);
+            trace('value',param.value);
+            trace('treePathInfo',param.treePathInfo);
+        }
+
+        /*
+        public function pieSelectChangedChartHandler(... event):void{
+            trace('pieSelectChangedChartHandler');
+            return;
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+        }*/
         ]]>
     </fx:Script>
     
@@ -121,14 +156,32 @@
                 </j:IconButton>
             </j:BarSection>
         </j:CardHeader>
+
         <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
-            <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="100%"
-            autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
-            onCompleteInicialize="completeInitHandler(event)">
-                <localecharts:beads>
-                    <beads:EChartEventsBead CLICK="click"/>
-                </localecharts:beads>
-            </localecharts:EChartsWithThemeControl>
-        </j:CardPrimaryContent>                
+            <j:HGroup percentWidth="100" percentHeight="100" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">                
+                <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="100%"
+                                                    autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
+                                                    optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+                                                    onCompleteInicialize="completeInitHandler(event)">
+                    <localecharts:beads>
+                        <beads:EChartEventsBead CLICK="clickChartHandler" SUNBURSTHIGHLIGHT="hightLightHandler" />
+                    </localecharts:beads>
+                </localecharts:EChartsWithThemeControl>
+                <j:VContainer width="100" percentHeight="100">
+                    <j:NumericStepper localId="nDataIndex" minimum="-1" maximum="34" width="100%" 
+                                    value="{dataHighlightIndex}"
+                                    valueChange="select()" />
+                    <j:IconButton unboxed="true" click="reset()">
+                        <j:icon>
+                            <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                        </j:icon>
+                        <j:beads>
+                            <j:ToolTip toolTip="Load"/>
+                        </j:beads>
+                    </j:IconButton>
+                </j:VContainer>
+            </j:HGroup>
+        </j:CardPrimaryContent>
+
     </j:Card> 
 </j:ScrollableSectionContent>

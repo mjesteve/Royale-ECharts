@@ -388,19 +388,20 @@ package com.proj.example.echarts
         }
 		/**
 		 * Binds event-handling function.
-		 * @param payload Object. JSON string with the description of the action(s) to trugger.
-         * Example:
-         * {type: String     Action names are all in lower-cases (constant EChartsEvent.ACTION_...)
-         *          seriesIndex?: number|Array,  // optional; series index; could be an array of multiple series
-         *          seriesName?: string|Array,   // optional; series name; could be an array of multiple series
-         *          dataIndex?: number,          // options are index of data
-         *          name?: string                // options are data name
-         * }
+         * @param {Object} payload. JSON string with the description of the action(s) to trigger.
+         * @param {string} [payload.type] Action type
+         * @param {Object|boolean} [opt] If pass boolean, means opt.silent
+         * @param {boolean} [opt.silent=false] Whether trigger events.
+         * @param {boolean} [opt.flush=undefined]
+         *                  true: Flush immediately, and then pixel in canvas can be fetched
+         *                      immediately. Caution: it might affect performance.
+         *                  false: Not flush.
+         *                  undefined: Auto decide whether perform flush.
 		 */
-        public function dispatchAction(payload:Object):void
+        public function dispatchAction(payload:Object, opt:Object = null):void
         {
             if(_instanceECharts){                
-                _instanceECharts.dispatchAction(payload);
+                _instanceECharts.dispatchAction(payload, opt);
             }
         }
 

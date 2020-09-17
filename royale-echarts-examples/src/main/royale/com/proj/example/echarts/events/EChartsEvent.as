@@ -88,9 +88,15 @@ package com.proj.example.echarts.events
         public static const RENDERED:String = "rendered";
         public static const FINISHED:String = "finished";
 
+        public static const SUNBURSTHIGHLIGHT:String = "sunbursthighlight";
+        public static const SUNBURSTUNHIGHLIGHT:String = "sunbursunthighlight";
+
         /* Chart Actions */
         /** Highlights the given graphic element.*/
         public static const ACTION_HIGHLIGHT:String = "highlight"; 
+        public static const ACTION_SUNBURST_HIGHLIGHT:String = "sunburstHighlight"; 
+        public static const ACTION_SUNBURST_UNHIGHLIGHT:String = "sunburstUnhighlight";
+
         /** Cancels highlighting graphic element.*/
         public static const ACTION_DOWNPLAY:String = "downplay";
         /** Actions related to legend component, which should include legend component before use.*/
@@ -105,8 +111,20 @@ package com.proj.example.echarts.events
         public static const ACTION_TIMELINE:String = "timeline";
         /** Actions related to toolbox component, which should include toolbox component before use. */
         public static const ACTION_TOOLBOX:String = "toolbox";
-        /** Actions related to pie chart, which should include pie chart before use.*/
-        public static const ACTION_PIE:String = "pie";
+        
+        /** Selects the specified pie chart.
+         * EVENT: pieselected
+        */
+        public static const ACTION_PIE_PIESELECT:String = "pieSelect";
+        /** Cancels selecting specified pie chart.
+         * EVENT: pieunselected
+        */
+        public static const ACTION_PIE_UNPIESELECT:String = "pieUnSelect";
+        /** Toggles selecting status of specified pie chart.
+         * EVENT: pieselectchanged
+        */
+        public static const ACTION_PIE_PIETOGGLESELECT:String = "pieToggleSelect";
+
         /** Actions related to map, which should include map before use.*/
         public static const ACTION_MAP:String = "map";
         /** Actions related to graph, which should include graph before use.*/

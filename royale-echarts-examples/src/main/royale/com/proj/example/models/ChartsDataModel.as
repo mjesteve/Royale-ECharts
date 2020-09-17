@@ -1,26 +1,9 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Licensed to the Apache Software Foundation (ASF) under one or more
-//  contributor license agreements.  See the NOTICE file distributed with
-//  this work for additional information regarding copyright ownership.
-//  The ASF licenses this file to You under the Apache License, Version 2.0
-//  (the "License"); you may not use this file except in compliance with
-//  the License.  You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-//  Unless required by applicable law or agreed to in writing, software
-//  distributed under the License is distributed on an "AS IS" BASIS,
-//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//  See the License for the specific language governing permissions and
-//  limitations under the License.
-//
-////////////////////////////////////////////////////////////////////////////////
 package com.proj.example.models
 {
 	import org.apache.royale.collections.ArrayList;
 	import com.proj.example.vos.TabBarChartVO;
 	import com.proj.example.vos.ChartDefExampleVO;
+	import com.proj.example.charts.EC_SUNBURST6;
 
 	[Bindable]
 	public class ChartsDataModel
@@ -31,11 +14,21 @@ package com.proj.example.models
 		{
 			if(!_tabBarAppData){
 				var arData:Array = new Array();
+				var it:TabBarChartVO;
+				var descChart:ChartDefExampleVO;
 
-				var it:TabBarChartVO = new TabBarChartVO();
+				it = new TabBarChartVO();
+				it.hash="ecp0";
+				it.thumbnail="assets/charts/EC_SUNBURST6.png";			
+				descChart = ECCT_SUNBURST6;
+				it.label = descChart.title;
+				it.description = descChart.title + '\n' + descChart.subtitle;
+				arData.push(it);
+
+				it = new TabBarChartVO();
 				it.hash="ecp1";
 				it.thumbnail="assets/charts/ECCT_PIE001.png";				
-				var descChart:ChartDefExampleVO = ECCT_PIE001;
+				descChart = ECCT_PIE001;
 				it.label = descChart.title;
 				it.description = descChart.title + '\n' + descChart.subtitle;
 				arData.push(it);
@@ -739,6 +732,22 @@ package com.proj.example.models
 				};
 			}
 			return _ECC_PIE001;
+		}
+
+		private var _ECCT_SUNBURST6:ChartDefExampleVO;
+		public function get ECCT_SUNBURST6():ChartDefExampleVO
+		{
+			if(!_ECCT_SUNBURST6){
+				_ECCT_SUNBURST6 = new ChartDefExampleVO();
+				_ECCT_SUNBURST6.title = "Sunburst";
+				_ECCT_SUNBURST6.subtitle = "(dispatch Action)";
+				_ECCT_SUNBURST6.themeName = 'custom';
+				_ECCT_SUNBURST6.autoLoad = true;
+				var defchar:EC_SUNBURST6 = new EC_SUNBURST6();				
+				defchar.optionChartInit();
+				_ECCT_SUNBURST6.optionChartInit = defchar.options;
+			}
+			return _ECCT_SUNBURST6;
 		}
 		
 	}

@@ -80,7 +80,9 @@ package com.proj.example.echarts.beads
         private var idInstance:String;
         private function completInitHandler(event:EChartsEvent):void
         { 
-            //Pendiente comprobar que si el id de la instancia no cambia, callbackfunctions se mantienen
+            //Pending to find out ... echarts respects callBack mappings when re-initializing an instance? 
+            //(when re-initializing the id of EChartsInstance changes, I think it's another object)
+
             var idInstanceInit:String = echartHostComponent.instanceECharts['id'] as String;
             if(idInstance == idInstanceInit)            
                 return;
@@ -89,11 +91,11 @@ package com.proj.example.echarts.beads
 
             if(_callBacksEventPending && _callBacksEventPending.length>0)
             { 
-                var len:int = _callBacksEventPending.length;
-                for(var index:int = 0; index < len; index++)
+                for(var index:int = 0; index < _callBacksEventPending.length; index++)
                 {
                     var element:EChartsCallBackFunctionVO = _callBacksEventPending[index] as EChartsCallBackFunctionVO;
                     addCallBack(element.eventName, element.handler, index);
+                    index--;
                 }
             }
 
@@ -106,12 +108,12 @@ package com.proj.example.echarts.beads
                 //We leave the events pending to be remapped
                 if(_callBacksEvents && _callBacksEvents.length>0)
                 { 
-                    var len:int = _callBacksEvents.length;
-                    for(var index:int = 0; index < len; index++)
+                    for(var index:int = 0; index < _callBacksEvents.length; index++)
                     {
                         var element:EChartsCallBackFunctionVO = _callBacksEvents[index] as EChartsCallBackFunctionVO;
                         //Is it necessary? echart carries over the mappings from one instance to the next?
                         removeCallBack(element.eventName, element.handler, index);
+                        index--;
                     }
                 }
                 idInstance = null;
@@ -122,18 +124,19 @@ package com.proj.example.echarts.beads
         {
             echartHostComponent.on(eventName, handler);
 
-            if(indexPending != -1){
+            if(indexPending != -1)
+            {
                 _callBacksEventPending.removeAt(indexPending);
             }
             else if(_callBacksEventPending.length>0)
             {       
-                var len:int = _callBacksEventPending.length;
-                for(var index:int = 0; index < len; index++)
+                for(var index:int = 0; index < _callBacksEventPending.length; index++)
                 {
                     var element:EChartsCallBackFunctionVO = _callBacksEventPending[index] as EChartsCallBackFunctionVO;
                     if(element.eventName == eventName)
                     {
                         _callBacksEventPending.removeAt(index);
+                        index--;
                         break;
                     }
                 }                
@@ -147,18 +150,19 @@ package com.proj.example.echarts.beads
         {
             echartHostComponent.off(eventName, handler);
             
-            if(indexRemoved != -1){
+            if(indexRemoved != -1)
+            {
                 _callBacksEvents.removeAt(indexRemoved);
             }
             else if(_callBacksEvents.length>0)
             { 
-                var len:int = _callBacksEvents.length;
-                for(var index:int = 0; index < len; index++)
+                for(var index:int = 0; index < _callBacksEvents.length; index++)
                 {
                     var element:EChartsCallBackFunctionVO = _callBacksEvents[index] as EChartsCallBackFunctionVO;
                     if(element.eventName == eventName)
                     {
                         _callBacksEvents.removeAt(index);
+                        index--;
                         break;
                     }
                 }
@@ -432,6 +436,20 @@ package com.proj.example.echarts.beads
         public function set UNFOCUSNODEADJACENCY(value:Function):void
         {
             setEventHandler(EChartsEvent.UNFOCUSNODEADJACENCY, _UNFOCUSNODEADJACENCY, value);
+        }
+        
+        private var _SUNBURSTHIGHLIGHT:Function
+        public function get SUNBURSTHIGHLIGHT():Function { return _SUNBURSTHIGHLIGHT; }
+        public function set SUNBURSTHIGHLIGHT(value:Function):void
+        {
+            setEventHandler(EChartsEvent.SUNBURSTHIGHLIGHT, _BRUSH, value);
+        }
+        
+        private var _SUNBURSTUNHIGHLIGHT:Function
+        public function get SUNBURSTUNHIGHLIGHT():Function { return _SUNBURSTUNHIGHLIGHT; }
+        public function set SUNBURSTUNHIGHLIGHT(value:Function):void
+        {
+            setEventHandler(EChartsEvent.SUNBURSTHIGHLIGHT, _BRUSH, value);
         }
 
         private var _BRUSH:Function
