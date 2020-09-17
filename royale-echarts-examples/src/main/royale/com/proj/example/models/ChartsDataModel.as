@@ -619,6 +619,40 @@ package com.proj.example.models
 			return _ECCT_CUSTOM3;
 		}
 
+		private var _ECCT_COVMAP_0:ChartDefExampleVO;
+		public function get ECCT_COVMAP_0():ChartDefExampleVO
+		{
+			if(!_ECCT_COVMAP_0){
+				
+				var firstColor:String = '#468EFD';
+				var dataArr:int = 0;
+
+				_ECCT_COVMAP_0 = new ChartDefExampleVO();
+				_ECCT_COVMAP_0.title = "Schedule Dashboard";
+				_ECCT_COVMAP_0.subtitle = "How much has been worked?";
+				_ECCT_COVMAP_0.themeName = 'custom';
+				_ECCT_COVMAP_0.autoLoad = true;
+				_ECCT_COVMAP_0.optionChartInit  = {
+					title: {
+						text: '全国主要城市空气质量 - 百度地图',
+						subtext: 'data from PM25.in',
+						sublink: 'http://www.pm25.in',
+						left: 'center'
+					},
+					tooltip : {
+						trigger: 'item'
+					},
+					bmap: {
+						center: [104.114129, 37.550339],
+						zoom: 5,
+						roam: true
+					}
+				};
+			}
+
+			return _ECCT_COVMAP_0;
+		}
+
 		private var _ECC_PIE001:ChartDefExampleVO;
 		public function get ECC_PIE001():ChartDefExampleVO
 		{

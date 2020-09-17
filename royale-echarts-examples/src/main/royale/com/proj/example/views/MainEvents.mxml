@@ -134,7 +134,7 @@
         <views:EChartsExampleBasic localId="ecp2" name="ecp2" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECC_PIE002}"/>
         <views:EChartsExampleBasic localId="ecp3" name="ecp3" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_CUSTOM1}"/>
         <views:ECCT_CUSTOM2_EChartsExampleBasic localId="ecp4" name="ecp4" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_CUSTOM2}"/>
-        <views:EChartsExample_Schedule localId="ecp5" name="ecp5" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_CUSTOM3}"/>
+        <views:EChartsExample_Schedule localId="ecp5" name="ecp5" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_COVMAP_0}"/>
     </j:ApplicationMainContent>
     
 
