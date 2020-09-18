@@ -13,6 +13,7 @@
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
         import com.proj.example.echarts.events.EChartsEvent;
+        import org.apache.royale.collections.ArrayList;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);
@@ -41,7 +42,11 @@
                 btnLoad.visible = listTheme.visible = false;
             }
         }
-        
+
+        //private var dpScore:ArrayList = new ArrayList(['','2☆','3☆','4☆','5☆']);
+        [Bindable]
+        private var dpScore:ArrayList = new ArrayList(['','Imaginary','Non-fiction','Fiction','Social Science','Picture book']);
+
         [Bindable]
         private var opts:Object = {width: 'auto', height: 'auto'};
 
@@ -97,10 +102,47 @@
 
         public function select():void
         {
-            var id:int = nDataIndex.value;
-            trace(id, dataHighlightIndex);
-            charComp.dispatchAction({type:EChartsEvent.ACTION_SUNBURST_HIGHLIGHT, targetNodeId:'5☆'});
+            var block:String = cbSelect.selectedItem as String;
 
+            var op:Object = this.charComp.getOption();
+            op = op.series[0].data;
+            
+            charComp.dispatchAction({
+                type: 'sunburstHighlight',
+                targetNodeId: block
+            });
+/*
+            var dataLen:int = op.length;
+            // Cancel the previously highlighted graphics
+            charComp.dispatchAction({
+                type:'downplay',
+                seriesIndex: 0,
+                dataIndex: dataHighlightIndex
+            });
+            
+            dataHighlightIndex = (dataHighlightIndex + 1)% dataLen;
+            trace(dataHighlightIndex);
+
+            charComp.dispatchAction({
+                type:'highlight',
+                seriesIndex: 0,
+                dataIndex: dataHighlightIndex
+            });
+            // Show tooltip
+            charComp.dispatchAction({
+                type:'showTip',
+                seriesIndex: 0,
+                dataIndex: dataHighlightIndex
+            });*/
+            
+            /*charComp.dispatchAction({
+                type:EChartsEvent.ACTION_SUNBURST_HIGHLIGHT, 
+                targetNodeId:block});*/
+
+            /*charComp.dispatchAction({
+                type: 'sunburstRootToNode',
+                targetNode: block
+            });*/
         }
 
         public function reset():void
@@ -158,8 +200,8 @@
         </j:CardHeader>
 
         <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
-            <j:HGroup percentWidth="100" percentHeight="100" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">                
-                <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="100%"
+            <j:HGroup percentWidth="100" percentHeight="100" gap="10" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">                
+                <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="75%"
                                                     autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
                                                     optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
                                                     onCompleteInicialize="completeInitHandler(event)">
@@ -167,10 +209,9 @@
                         <beads:EChartEventsBead CLICK="clickChartHandler" SUNBURSTHIGHLIGHT="hightLightHandler" />
                     </localecharts:beads>
                 </localecharts:EChartsWithThemeControl>
-                <j:VContainer width="100" percentHeight="100">
-                    <j:NumericStepper localId="nDataIndex" minimum="-1" maximum="34" width="100%" 
-                                    value="{dataHighlightIndex}"
-                                    valueChange="select()" />
+                <j:VContainer width="25%" percentHeight="100">
+                    <j:DropDownList localId="cbSelect" percentWidth="100" dataProvider="{dpScore}" selectedIndex="0"
+                        change="select()"/>
                     <j:IconButton unboxed="true" click="reset()">
                         <j:icon>
                             <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>

@@ -25,16 +25,16 @@ package com.proj.example.charts
 
             var data:Array = new Array();
             data.push({
-                name: 'imaginary',
+                name: 'imaginary', id: 'level1',
                 itemStyle: {
                     normal: {
                         color: colors[1]
                     }
                 },
                 children: [{
-                    name: 'Fiction',
+                    name: 'Fiction', id: 'level2',
                     children: [{
-                        name: '5☆',
+                        name: '5☆', id: 'level3',
                         children: [{
                             name: 'pain'
                         }, {
@@ -43,7 +43,7 @@ package com.proj.example.charts
                             name: 'Tenant downstairs'
                         }]
                     }, {
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'The cross of nothingness'
                         }, {
@@ -52,27 +52,27 @@ package com.proj.example.charts
                             name: 'The end of childhood'
                         }]
                     }, {
-                        name: '3☆',
+                        name: '3☆', id: 'level3',
                         children: [{
                             name: 'Diary of a Crazy Old Man'
                         }]
                     }]
                 }, {
-                    name: 'other',
+                    name: 'other', id: 'level2',
                     children: [{
-                        name: '5☆',
+                        name: '5☆', id: 'level3',
                         children: [{
                             name: 'Nabokov´s short stories'
                         }]
                     }, {
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'Requiem'
                         }, {
                             name: 'Life Jigsaw Edition'
                         }]
                     }, {
-                        name: '3☆',
+                        name: '3☆', id: 'level3',
                         children: [{
                             name: 'I need you more than I love you'
                         }]
@@ -81,39 +81,39 @@ package com.proj.example.charts
             });
 
             data.push({
-                name: 'Non-fiction',
+                name: 'Non-fiction', id: 'level1',
                 itemStyle: {
                     color: colors[2]
                 },
                 children: [{
-                    name: 'design',
+                    name: 'design', id: 'level2',
                     children: [{
-                        name: '5☆',
+                        name: '5☆', id: 'level3',
                         children: [{
                             name: 'Interfaceless interaction'
                         }]
                     }, {
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'Lighting and Rendering Technology of Digital Drawing'
                         }, {
                             name: 'Japanese Architecture Anatomy Book'
                         }]
                     }, {
-                        name: '3☆',
+                        name: '3☆', id: 'level3',
                         children: [{
                             name: 'Fantasy world art\n&RPG mapping lecture'
                         }]
                     }]
                 }, {
-                    name: 'Social Science',
+                    name: 'Social Science', id: 'level2',
                     children: [{
-                        name: '5☆',
+                        name: '5☆', id: 'level3',
                         children: [{
                             name: 'Pain points'
                         }]
                     }, {
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'Effective managers'
                         }, {
@@ -122,34 +122,34 @@ package com.proj.example.charts
                             name: 'The coming of the post-materialistic era'
                         }]
                     }, {
-                        name: '3☆',
+                        name: '3☆', id: 'level3',
                         children: [{
                             name: 'Madness and civilization'
                         }]
                     }]
                 }, {
-                    name: 'psychological',
+                    name: 'Psychological', id: 'level2',
                     children: [{
-                        name: '5☆',
+                        name: '5☆', id: 'level3',
                         children: [{
                             name: 'Neurotic personality of our time'
                         }]
                     }, {
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'Pygmalion effect'
                         }, {
                             name: 'Injured person'
                         }]
                     }, {
-                        name: '3☆'
+                        name: '3☆', id: 'level3'
                     }, {
-                        name: '2☆',
+                        name: '2☆', id: 'level3',
                         children: [{ name: 'Obsessed with' }] }]
                 }, {
-                    name: 'Home',
+                    name: 'Home', id: 'level2',
                     children: [{
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'Make the house a home'
                         }, {
@@ -159,49 +159,48 @@ package com.proj.example.charts
                         }]
                     }]
                 }, {
-                    name: 'Picture book',
+                    name: 'Picture book', id: 'level2',
                     children: [{
-                        name: '5☆',
+                        name: '5☆', id: 'level3',
                         children: [{
                             name: 'Design poem'
                         }]
                     }, {
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'If life fools you'
                         }, {
                             name: 'Naturalist´s Illustrated Mysterious Animals'
                         }]
                     }, {
-                        name: '3☆',
+                        name: '3☆', id: 'level3',
                         children: [{
                             name: 'direction'
                         }]
                     }]
                 }, {
-                    name: 'philosophy',
+                    name: 'philosophy', id: 'level2',
                     children: [{
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'The wisdom of life'
                         }]
                     }]
                 }, {
-                    name: 'technology',
+                    name: 'technology', id: 'level2',
                     children: [{
-                        name: '5☆',
+                        name: '5☆', id: 'level3',
                         children: [{
                             name: 'Clean code'
                         }]
                     }, {
-                        name: '4☆',
+                        name: '4☆', id: 'level3',
                         children: [{
                             name: 'Three.js Development Guide'
                         }]
                     }]
                 }]
             });
-
 
             for (var j = 0; j < data.length; ++j) {
                 var level1 = data[j].children;
@@ -270,6 +269,79 @@ package com.proj.example.charts
                     };
                 }
             }
+            
+            /*
+            for (var j:int = 0; j < data.length; ++j) 
+            {
+                var level1:Array = data[j].children;
+                for (var i:int = 0; i < level1.length; ++i) 
+                {
+                    var block:Array = level1[i].children;
+                    var bookScore:Array = [];
+                    var bookScoreId:int;
+                    for (var star:int = 0; star < block.length; ++star) 
+                    {
+                        var style:Object = (function (name:String):String {
+                            switch (name) {
+                                case '5☆':
+                                    bookScoreId = 0;
+                                    return itemStyle.star5;
+                                case '4☆':
+                                    bookScoreId = 1;
+                                    return itemStyle.star4;
+                                case '3☆':
+                                    bookScoreId = 2;
+                                    return itemStyle.star3;
+                                case '2☆':
+                                    bookScoreId = 3;
+                                    return itemStyle.star2;
+                            }
+                        })(block[star].name);
+
+                        block[star].label = {
+                            color: style.color,
+                            downplay: {
+                                opacity: 0.5
+                            }
+                        };
+
+                        if (block[star].children) {
+                            style = {
+                                opacity: 1,
+                                color: style.color
+                            };
+                            block[star].children.forEach(function (book:Object):void {
+                                book.value = 1;
+                                book.itemStyle = style;
+
+                                book.label = {
+                                    color: style.color
+                                };
+
+                                var value:int = 1;
+                                if (bookScoreId === 0 || bookScoreId === 3) {
+                                    value = 5;
+                                }
+
+                                if (bookScore[bookScoreId]) {
+                                    bookScore[bookScoreId].value += value;
+                                }
+                                else {
+                                    bookScore[bookScoreId] = {
+                                        color: colors[bookScoreId],
+                                        value: value
+                                    };
+                                }
+                            });
+                        }
+                    }
+
+                    level1[i].itemStyle = {
+                        color: data[j].itemStyle.color
+                    };
+                }
+            }
+            */
 
             _options = {
                 toolbox: {
