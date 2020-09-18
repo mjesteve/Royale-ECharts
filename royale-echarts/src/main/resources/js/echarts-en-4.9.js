@@ -29028,8 +29028,6 @@ function doDispatchAction(payload, silent) {
     var escapeConnect = payload.escapeConnect;
     var actionWrap = actions[payloadType];
     var actionInfo = actionWrap.actionInfo;
-    
-    console.log(payloadType);
 
     var cptType = (actionInfo.update || 'update').split(':');
     var updateMethod = cptType.pop();
