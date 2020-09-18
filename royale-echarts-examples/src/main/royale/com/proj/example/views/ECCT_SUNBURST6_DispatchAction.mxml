@@ -66,6 +66,34 @@
             }
 
             trace(charComp.instanceECharts);
+
+            //Direct access: 
+            //this.charComp.instanceECharts._model.option
+            var data:Object = charComp.getOption().series[0].data;
+            
+            var ar:Array = new Array;
+            var len0:int = data.length;
+            for(var ilevel0:int = 0; ilevel0 < len0; ilevel0++)
+            {
+                var ele0:Object = data[ilevel0];
+                if(ele0.hasOwnProperty("name"))
+                {
+                    var name0:String = ele0.name as String;
+                    var lbl0:String = name0.replace('\n','');
+                    ar.push({label:lbl0, name:name0});
+
+                    for(var ilevel1:int = 0; ilevel1 < ele0.children.length; ilevel1++)
+                    {
+                        var ele1:Object = ele0.children[ilevel1];
+                        var name1:String = ele1.name as String;
+                        var lbl1:String = name1.replace('\n','');
+                        ar.push({label:lbl0+' - '+lbl1, name:name1});
+                    }
+
+                }
+
+            }
+            dpScore = new ArrayList(ar);
         }
 
         private function initialize():void
@@ -102,51 +130,19 @@
 
         public function select():void
         {
-            var block:String = cbSelect.selectedItem as String;
-
-            var op:Object = this.charComp.getOption();
-            op = op.series[0].data;
-            
-            charComp.dispatchAction({
-                type: 'sunburstHighlight',
-                targetNodeId: block
-            });
-/*
-            var dataLen:int = op.length;
-            // Cancel the previously highlighted graphics
-            charComp.dispatchAction({
-                type:'downplay',
-                seriesIndex: 0,
-                dataIndex: dataHighlightIndex
-            });
-            
-            dataHighlightIndex = (dataHighlightIndex + 1)% dataLen;
-            trace(dataHighlightIndex);
-
-            charComp.dispatchAction({
-                type:'highlight',
-                seriesIndex: 0,
-                dataIndex: dataHighlightIndex
-            });
-            // Show tooltip
-            charComp.dispatchAction({
-                type:'showTip',
-                seriesIndex: 0,
-                dataIndex: dataHighlightIndex
-            });*/
-            
-            /*charComp.dispatchAction({
-                type:EChartsEvent.ACTION_SUNBURST_HIGHLIGHT, 
-                targetNodeId:block});*/
-
-            /*charComp.dispatchAction({
-                type: 'sunburstRootToNode',
-                targetNode: block
-            });*/
+            var block:Object = cbSelect.selectedItem;
+            if(block)
+            {                
+                charComp.dispatchAction({
+                    type: EChartsEvent.ACTION_SUNBURST_HIGHLIGHT,
+                    targetNodeId: block.name
+                });
+            }
         }
 
         public function reset():void
         {
+            cbSelect.selectedIndex=-1;
             charComp.dispatchAction({type:EChartsEvent.ACTION_SUNBURST_UNHIGHLIGHT});
         }
 
@@ -199,7 +195,7 @@
             </j:BarSection>
         </j:CardHeader>
 
-        <j:CardPrimaryContent itemsVerticalAlign="itemsCenter" itemsHorizontalAlign="itemsCenter">
+        <j:CardPrimaryContent >
             <j:HGroup percentWidth="100" percentHeight="100" gap="10" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">                
                 <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="75%"
                                                     autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
@@ -209,18 +205,23 @@
                         <beads:EChartEventsBead CLICK="clickChartHandler" SUNBURSTHIGHLIGHT="hightLightHandler" />
                     </localecharts:beads>
                 </localecharts:EChartsWithThemeControl>
-                <j:VContainer width="25%" percentHeight="100">
-                    <j:DropDownList localId="cbSelect" percentWidth="100" dataProvider="{dpScore}" selectedIndex="0"
-                        change="select()"/>
+
+                <j:HGroup gap="5" width="25%" itemsVerticalAlign="itemsCenter">
+                    <j:DropDownList localId="cbSelect" percentWidth="100" 
+                        dataProvider="{dpScore}" labelField="label" change="select()">
+                        <j:beads>
+                            <j:DropDownListTextPrompt prompt="Highlight piece..."/>
+                        </j:beads>
+                    </j:DropDownList>
                     <j:IconButton unboxed="true" click="reset()">
                         <j:icon>
                             <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
                         </j:icon>
                         <j:beads>
-                            <j:ToolTip toolTip="Load"/>
+                            <j:ToolTip toolTip="Reset"/>
                         </j:beads>
                     </j:IconButton>
-                </j:VContainer>
+                </j:HGroup>
             </j:HGroup>
         </j:CardPrimaryContent>
 

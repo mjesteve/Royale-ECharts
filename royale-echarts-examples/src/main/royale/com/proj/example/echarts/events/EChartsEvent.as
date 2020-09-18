@@ -79,9 +79,16 @@ package com.proj.example.echarts.events
         public static const FOCUSNODEADJACENCY:String = "focusnodeadjacency";
         public static const UNFOCUSNODEADJACENCY:String = "unfocusnodeadjacency";
 
+        /** Event triggered after action brush dispatched.*/
         public static const BRUSH:String = "brush";
+        /** Event triggered after action brushEnd dispatched.*/
         public static const BRUSHEND:String = "brushEnd";
+        /** Notice what are selected.
+         * This event will be triggered when dispatchAction called, or use do brush behavior.
+         * But this event will not be triggered in setOption.
+        */
         public static const BRUSHSELECTED:String = "brushselected";
+        public static const BRUSHSELECT:String = "brushselect";
 
         public static const GLOBALCURSORTAKEN:String = "globalcursortaken";
 
