@@ -386,6 +386,24 @@ package com.proj.example.echarts
                 _instanceECharts.off(eventName, handler);
             }
         }
+		/**
+		 * Binds event-handling function.
+         * @param {Object} payload. JSON string with the description of the action(s) to trigger.
+         * @param {string} [payload.type] Action type
+         * @param {Object|boolean} [opt] If pass boolean, means opt.silent
+         * @param {boolean} [opt.silent=false] Whether trigger events.
+         * @param {boolean} [opt.flush=undefined]
+         *                  true: Flush immediately, and then pixel in canvas can be fetched
+         *                      immediately. Caution: it might affect performance.
+         *                  false: Not flush.
+         *                  undefined: Auto decide whether perform flush.
+		 */
+        public function dispatchAction(payload:Object, opt:Object = null):void
+        {
+            if(_instanceECharts){                
+                _instanceECharts.dispatchAction(payload, opt);
+            }
+        }
 
 //instanceECharts.getDom
 /*
@@ -398,7 +416,6 @@ instanceECharts.showLoading
 instanceECharts.containPixel
 instanceECharts.convertFromPixel
 instanceECharts.convertToPixel
-instanceECharts.dispatchAction
 */
 	}
 }

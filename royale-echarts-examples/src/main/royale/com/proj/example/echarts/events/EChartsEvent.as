@@ -79,13 +79,65 @@ package com.proj.example.echarts.events
         public static const FOCUSNODEADJACENCY:String = "focusnodeadjacency";
         public static const UNFOCUSNODEADJACENCY:String = "unfocusnodeadjacency";
 
+        /** Event triggered after action brush dispatched.*/
         public static const BRUSH:String = "brush";
+        /** Event triggered after action brushEnd dispatched.*/
         public static const BRUSHEND:String = "brushEnd";
+        /** Notice what are selected.
+         * This event will be triggered when dispatchAction called, or use do brush behavior.
+         * But this event will not be triggered in setOption.
+        */
         public static const BRUSHSELECTED:String = "brushselected";
+        public static const BRUSHSELECT:String = "brushselect";
 
         public static const GLOBALCURSORTAKEN:String = "globalcursortaken";
 
         public static const RENDERED:String = "rendered";
         public static const FINISHED:String = "finished";
+
+        public static const SUNBURSTHIGHLIGHT:String = "sunbursthighlight";
+        public static const SUNBURSTUNHIGHLIGHT:String = "sunbursunthighlight";
+
+        /* Chart Actions */
+        /** Highlights the given graphic element.*/
+        public static const ACTION_HIGHLIGHT:String = "highlight"; 
+        public static const ACTION_SUNBURST_HIGHLIGHT:String = "sunburstHighlight"; 
+        public static const ACTION_SUNBURST_UNHIGHLIGHT:String = "sunburstUnhighlight";
+
+        /** Cancels highlighting graphic element.*/
+        public static const ACTION_DOWNPLAY:String = "downplay";
+        /** Actions related to legend component, which should include legend component before use.*/
+        public static const ACTION_LEGEND:String = "legend";
+        /** Actions related to tooltip component, which should include tooltip component before use.*/
+        public static const ACTION_TOOLTIP:String = "tooltip";
+        /** Actions related to data region zoom component, which should include data region zoom component before use.*/
+        public static const ACTION_DATAZOOM:String = "dataZoom";
+        /** Actions related to visual mapping component, which should include visual mapping component before use.*/
+        public static const ACTION_VISUALMAP:String = "visualMap";
+        /** Actions related to timeline component, which should include timeline component before use.*/
+        public static const ACTION_TIMELINE:String = "timeline";
+        /** Actions related to toolbox component, which should include toolbox component before use. */
+        public static const ACTION_TOOLBOX:String = "toolbox";
+        
+        /** Selects the specified pie chart.
+         * EVENT: pieselected
+        */
+        public static const ACTION_PIE_PIESELECT:String = "pieSelect";
+        /** Cancels selecting specified pie chart.
+         * EVENT: pieunselected
+        */
+        public static const ACTION_PIE_UNPIESELECT:String = "pieUnSelect";
+        /** Toggles selecting status of specified pie chart.
+         * EVENT: pieselectchanged
+        */
+        public static const ACTION_PIE_PIETOGGLESELECT:String = "pieToggleSelect";
+
+        /** Actions related to map, which should include map before use.*/
+        public static const ACTION_MAP:String = "map";
+        /** Actions related to graph, which should include graph before use.*/
+        public static const ACTION_GRAPH:String = "graph";
+        /** brush related actions.*/
+        public static const ACTION_BRUSH:String = "brush";
+
     }
 }

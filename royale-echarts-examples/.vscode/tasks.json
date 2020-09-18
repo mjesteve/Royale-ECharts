@@ -10,6 +10,7 @@
               "args": [
                   "clean",
                   "install",
+                  "-P option-with-swf",
                   "-DskipTests"
               ],
               "problemMatcher": []

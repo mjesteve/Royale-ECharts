@@ -90,7 +90,6 @@
             if(!param)
             {
                 Alert.show("call back function click");
-                return;
             }else
             {
                 Alert.show(param.toLocaleString());
