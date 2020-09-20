@@ -301,6 +301,7 @@ package com.proj.example.charts
                             return a.dataIndex - b.dataIndex;
                         }
                     },
+                    nodeClick: 'rootToNode',
                     label: {
                         rotate: 'radial',
                         color: bgColor
