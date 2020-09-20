@@ -21,6 +21,10 @@ package com.proj.example.echarts
      *  Indicates that the configuration of the EChartsInstance is complete.  
      */
 	[Event(name="onCompleteConfig", type="com.proj.example.echarts.events.EChartsEvent")]
+    /**
+     *  indicates that the update of the configuration of the EChartsInstance is complete
+     */
+	[Event(name="onUpdateConfig", type="com.proj.example.echarts.events.EChartsEvent")]
 
 	COMPILE::JS
 	public class EChartsBasicControl extends UIBase implements IEChartsBasic
@@ -285,12 +289,12 @@ package com.proj.example.echarts
                 return;                    
             }
 
-            if(!isConfigure){
-                if(requestConfig)
-                    setOption(true);
+            if(requestConfig){
+                if(!isConfigure)
+                    setOption();
+                else
+                    updateOption(_configOption);
             }
-            else if(requestConfig)
-                updateOption(_configOption);
 
             if(adjustSize)
                 resize();
@@ -326,6 +330,7 @@ package com.proj.example.echarts
         public function resize(opts:Object = null):void
         {
             if(_instanceECharts){
+                //setTimeout(_instanceECharts.resize,300,opts);
                 _instanceECharts.resize(opts);
             }
         }
