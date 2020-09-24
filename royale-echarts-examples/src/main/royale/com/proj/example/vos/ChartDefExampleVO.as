@@ -8,6 +8,8 @@ package com.proj.example.vos
         public var subtitle:String;
         
 		public var optionChartInit:Object;
+		public var registerMap:Object;
+        
 		public var autoLoad:Boolean;
         public var themeName:String;
         public var eventHandlers:Array;
