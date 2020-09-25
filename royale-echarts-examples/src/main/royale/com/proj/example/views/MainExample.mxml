@@ -53,17 +53,13 @@
 					if(content.isSelected){                        
                         if(content is IEchartExampleBasic){
                             var cchart:IEchartExampleBasic = content as IEchartExampleBasic;
-                            var uiele:UIBase = content as UIBase;
+                            /*var uiele:UIBase = content as UIBase;
                             if(cchart.allDesktop && topappbar.visible){
-                                    uiele.positioner.style.paddingTop = "20px !important";
-                                    main.hasTopAppBar = false;
                                     topappbar.visible = false;
-                
-                            }else if(!topappbar.visible){
-                                uiele.positioner.style.paddingTop = offsetTopBar.toString() + 'px !important';
-                                main.hasTopAppBar = true;
-                                topappbar.visible = true;                            
-                            }
+                                    topappbar.fixed = false;
+                                    main.hasTopAppBar = false;
+                                    uiele.positioner.style.paddingTop = "20px !important";
+                            }*/
                             cchart.activate();
                         }
                         return;
@@ -75,9 +71,13 @@
 
         private function restoreBar():void
         {
+            var content:ISelectableContent = main.selectedContent as ISelectableContent;
+            main.positioner.style.paddingTop = offsetTopBar.toString() + 'px !important';
+            topappbar.visible = true;
+            topappbar.fixed = true;
             main.hasTopAppBar = true;
             main.selectedContent = "welcome";
-            topappbar.visible = true;
+            tabbarApp.selectedIndex = -1;
         }
 
         private var _currentTheme:EChartsThemeTemplateVO;
