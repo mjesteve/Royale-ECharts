@@ -31,6 +31,9 @@ package com.proj.example.charts
 
             return options;
         }
+        
+        //var uploadedDataURL:String = "assets/charts/data-1585799654003-46R-3f-c3.json";
+        public var uploadedDataURL:String = "https://winpluscloud.com/WPNetSuitePlus/assets/data-1585799654003-46R-3f-c3.json";
 
         private var geoGpsMap:Object = {
             '1': [116.415, 39.915],
@@ -333,14 +336,13 @@ package com.proj.example.charts
             loadDataJSON();
         }
         
-        public var geoJson:Object;
+        public var geoMap:Object;
+        public var nameMap:String = "home";  
 
         private function loadDataJSON():void
         {
-            geoJson = null;
+            geoMap = null;
 
-            //var uploadedDataURL:String = "assets/charts/data-1585799654003-46R-3f-c3.json";
-            var uploadedDataURL:String = "https://winpluscloud.com/WPNetSuitePlus/assets/data-1585799654003-46R-3f-c3.json";
             var loaderJSON:URLLoader = new URLLoader();
             //IOErrorEvent.IO_ERROR | SecurityErrorEvent.SECURITY_ERROR
             loaderJSON.addEventListener(HTTPConstants.IO_ERROR, loadJsonDataError);
@@ -359,7 +361,7 @@ package com.proj.example.charts
             loaderDispatcher.removeEventListener(HTTPConstants.SECURITY_ERROR, loadJsonDataError);
             
 			var objData:Object = (loaderDispatcher as URLLoader).data;
-			geoJson = JSON.parse(objData as String);
+			geoMap = JSON.parse(objData as String);
             
             _options = makeData();
             dispatchEvent(new Event("onCompleteInit"));

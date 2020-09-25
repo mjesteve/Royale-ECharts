@@ -6,6 +6,7 @@ package com.proj.example.models
 	import com.proj.example.charts.EC_SUNBURST6;
 	import com.proj.example.charts.ECT_CUSTOM4;
 	import org.apache.royale.events.IEventDispatcher;
+	import com.proj.example.charts.ECT_COVIDMAP_0;
 
 	[Bindable]
 	public class ChartsDataModel
@@ -18,6 +19,14 @@ package com.proj.example.models
 				var arData:Array = new Array();
 				var it:TabBarChartVO;
 				var descChart:ChartDefExampleVO;
+
+				it = new TabBarChartVO();
+				it.hash="ecp7";
+				it.thumbnail="assets/charts/ECT_COVIDMAP_0.png";
+				descChart = ECCT_COVIDMAP;
+				it.label = descChart.title;
+				it.description = descChart.title + '\n' + descChart.subtitle;
+				arData.push(it);
 
 				it = new TabBarChartVO();
 				it.hash="ecp6";
@@ -770,6 +779,7 @@ package com.proj.example.models
 				_ECCT_CUSTOM4.themeName = 'custom';
 				_ECCT_CUSTOM4.autoLoad = true;
 				var defchar:ECT_CUSTOM4 = new ECT_CUSTOM4();
+				_ECCT_CUSTOM4.nameMap = defchar.nameMap;
 				defchar.addEventListener("onCompleteInit", loadCUSTOM4);
 				defchar.addEventListener("onErrorInit", loadErrorCUSTOM4);
 				defchar.optionChartInit();
@@ -784,7 +794,7 @@ package com.proj.example.models
             loaderDispatcher.removeEventListener("onCompleteInit", loadCUSTOM4);
             loaderDispatcher.removeEventListener("onErrorInit", loadErrorCUSTOM4);
             
-			_ECCT_CUSTOM4.registerMap = (loaderDispatcher as ECT_CUSTOM4).geoJson;
+			_ECCT_CUSTOM4.registerMap = (loaderDispatcher as ECT_CUSTOM4).geoMap;
 			_ECCT_CUSTOM4.optionChartInit = (loaderDispatcher as ECT_CUSTOM4).options;
 
 		}
@@ -795,6 +805,43 @@ package com.proj.example.models
             loaderDispatcher.removeEventListener("onCompleteInit", loadCUSTOM4);
             loaderDispatcher.removeEventListener("onErrorInit", loadErrorCUSTOM4);
 			_ECCT_CUSTOM4.optionChartInit = {};
+		}
+
+		private var _ECCT_COVIDMAP:ChartDefExampleVO;
+		public function get ECCT_COVIDMAP():ChartDefExampleVO
+		{
+			if(!_ECCT_COVIDMAP){
+				_ECCT_COVIDMAP = new ChartDefExampleVO();
+				_ECCT_COVIDMAP.title = "COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE)";
+				_ECCT_COVIDMAP.subtitle = "at Johns Hopkins University (JHU)";
+				_ECCT_COVIDMAP.themeName = 'custom';
+				_ECCT_COVIDMAP.autoLoad = true;
+				var defchar:ECT_COVIDMAP_0 = new ECT_COVIDMAP_0();
+				_ECCT_COVIDMAP.nameMap = defchar.nameMap;
+				defchar.addEventListener("onCompleteInit", loadCOVIDMAP);
+				defchar.addEventListener("onErrorInit", loadErrorCOVIDMAP);
+				defchar.optionChartInit();
+			}
+			return _ECCT_COVIDMAP;
+		}
+
+		private function loadCOVIDMAP(event:Event):void
+		{
+            var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.currentTarget);
+            loaderDispatcher.removeEventListener("onCompleteInit", loadCOVIDMAP);
+            loaderDispatcher.removeEventListener("onErrorInit", loadErrorCOVIDMAP);
+            
+			_ECCT_COVIDMAP.registerMap = (loaderDispatcher as ECT_COVIDMAP_0).geoMap;
+			_ECCT_COVIDMAP.optionChartInit = (loaderDispatcher as ECT_COVIDMAP_0).options;
+
+		}
+
+		private function loadErrorCOVIDMAP(event:Event):void
+		{
+            var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.target);
+            loaderDispatcher.removeEventListener("onCompleteInit", loadCOVIDMAP);
+            loaderDispatcher.removeEventListener("onErrorInit", loadErrorCOVIDMAP);
+			_ECCT_COVIDMAP.optionChartInit = {};
 		}
 		
 	}

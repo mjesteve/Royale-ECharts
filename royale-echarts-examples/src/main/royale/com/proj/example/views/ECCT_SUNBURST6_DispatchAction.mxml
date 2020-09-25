@@ -7,7 +7,7 @@
     xmlns:views="com.proj.example.views.*" 
     xmlns:localecharts="com.proj.example.echarts.*"
     xmlns:beads="com.proj.example.echarts.beads.*"
-    initComplete="onInitComplete()">
+    initComplete="onInitComplete()" style="padding-top: 20px" >
 
     <fx:Script>
         <![CDATA[

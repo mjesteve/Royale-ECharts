@@ -7,7 +7,7 @@
     xmlns:views="com.proj.example.views.*" 
     xmlns:localecharts="com.proj.example.echarts.*"
     xmlns:beads="com.proj.example.echarts.beads.*"
-    initComplete="onInitComplete()">
+    initComplete="onInitComplete()" style="padding-top: 20px" >
 
     <fx:Metadata>
         [Event(name="close", type="org.apache.royale.events.Event")]
@@ -60,7 +60,7 @@
             var requestInitialize:Boolean = (!charComp.isInit);
             if(requestInitialize){
                 //First initialization                
-                echarts.registerMap('home', _itemChartDef.registerMap);
+                echarts.registerMap(_itemChartDef.nameMap, _itemChartDef.registerMap);
                 charComp.refreshOption(requestInitialize, true, true);
                 
             }else
@@ -93,7 +93,7 @@
             <j:BarSection width="30%" itemsHorizontalAlign="itemsRight" gap="0" itemsVerticalAlign="itemsCenter">     
                 <j:IconButton localId="btnLoad" unboxed="true" click="{dispatchEvent(new Event('close'));}" >
                     <j:icon>
-                        <js:FontAwesomeIcon text="{FontAwesome5IconType.WINDOW_CLOSE}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                        <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_CIRCLE_LEFT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
                     </j:icon>
                     <j:beads>
                         <j:ToolTip toolTip="Back"/>
@@ -109,7 +109,7 @@
                                                     optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
                                                     onCompleteConfig="completConfigHandler(event)"
                                                     onUpdateConfig="completConfigHandler(event)"/>
-
+<!--
                 <j:VContainer gap="5" width="15%" height="100%">
                     
                     <j:HGroup gap="5" width="100%" itemsVerticalAlign="itemsCenter">
@@ -132,6 +132,7 @@
                     </j:HGroup>
 
                 </j:VContainer>
+-->
             </j:HGroup>
         </j:CardPrimaryContent>
 
