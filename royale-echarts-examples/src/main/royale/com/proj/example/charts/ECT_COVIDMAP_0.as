@@ -29,10 +29,8 @@ package com.proj.example.charts
             return options;
         }
         
-        //var uploadedDataURL:String = "assets/charts/data-COVIDMAP_0.json";
-        public var uploadedDataURL:String = "https://winpluscloud.com/WPNetSuitePlus/assets/data-COVIDMAP_0.json";
-
-        private var firstColor:String = '#468EFD';
+            //url = "https://winpluscloud.com/WPNetSuitePlus/assets/data-COVITMAP_0.json";
+        public var uploadedDataURL:String = "assets/charts/data-COVIDMAP_0.json";
 
         //2013年数据
         private var d1:Object = {
@@ -1577,8 +1575,6 @@ package com.proj.example.charts
             'Zambia': 13928,
             'Zimbabwe': 7633
         };
-
-        private var colorIndex:int = 0;
         
         private var year:Array = ["2020-01", "2020-02", "2020-03", "2020-04", "2020-05", "2020-06", "2020-07", "2020-08", "2020-09"];
         private var mapData:Array = [
@@ -1848,28 +1844,14 @@ package com.proj.example.charts
             'Zambia': [27.849332, -13.133897],
             'Zimbabwe': [29.154857, -19.015438]
         };
-               
-        public var idxfileLoad:int = 0;
 
         private function loadDataJSON():void
         {
-
             var loaderJSON:URLLoader = new URLLoader();
-            //IOErrorEvent.IO_ERROR | SecurityErrorEvent.SECURITY_ERROR
             loaderJSON.addEventListener(HTTPConstants.IO_ERROR, loadJsonDataError);
             loaderJSON.addEventListener(HTTPConstants.SECURITY_ERROR, loadJsonDataError);
-            //Event.COMPLETE
             loaderJSON.addEventListener(HTTPConstants.COMPLETE, loadJsonDataComplete);         
-            var url:String;
-            if (idxfileLoad == 0){
-                //url = "https://winpluscloud.com/WPNetSuitePlus/assets/data-COVITMAP_0.json";
-                url = "assets/charts/data-COVIDMAP_0.json";
-            }else 
-            if (idxfileLoad == 1){
-                url = "https://winpluscloud.com/WPNetSuitePlus/assets/data-COVIDMAP_1.json";
-            }
-            loaderJSON.load(new URLRequest(url));
-
+            loaderJSON.load(new URLRequest(uploadedDataURL));
         }
 
         private function loadJsonDataComplete(event:Event):void
@@ -1880,19 +1862,9 @@ package com.proj.example.charts
             loaderDispatcher.removeEventListener(HTTPConstants.SECURITY_ERROR, loadJsonDataError);
             
 			var objData:Object = (loaderDispatcher as URLLoader).data;
-            if(idxfileLoad == 0)
-            {
-			    geoMap = JSON.parse(objData as String);
-                idxfileLoad ++;
-            //    setTimeout(loadDataJSON,300);
-            //}else
-            //if(idxfileLoad == 1)
-            //{
-			    //geoCoordMap = objData as Object;
-                _options = makeData();
-                dispatchEvent(new Event("onCompleteInit"));
-            }
-
+            geoMap = JSON.parse(objData as String);
+            _options = makeData();
+            dispatchEvent(new Event("onCompleteInit"));
         } 
 
         private function loadJsonDataError(event:Event):void{
@@ -2067,6 +2039,16 @@ package com.proj.example.charts
 							}
 						}
 					},
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {        show: false },
+                            dataView: {    show: false, readOnly: false },
+                            magicType: {   show: false, type: ['bar', 'line'] },
+                            restore: {     show: true },
+                            saveAsImage: { show: true }
+                        }
+                    },
 					geo: {
 						show: true,
 						map: 'world',

@@ -32,8 +32,8 @@ package com.proj.example.charts
             return options;
         }
         
-        //var uploadedDataURL:String = "assets/charts/data-1585799654003-46R-3f-c3.json";
-        public var uploadedDataURL:String = "https://winpluscloud.com/WPNetSuitePlus/assets/data-1585799654003-46R-3f-c3.json";
+        //var uploadedDataURL:String = "https://winpluscloud.com/WPNetSuitePlus/assets/data-1585799654003-46R-3f-c3.json";
+        public var uploadedDataURL:String = "assets/charts/data-1585799654003-46R-3f-c3.json";
 
         private var geoGpsMap:Object = {
             '1': [116.415, 39.915],
