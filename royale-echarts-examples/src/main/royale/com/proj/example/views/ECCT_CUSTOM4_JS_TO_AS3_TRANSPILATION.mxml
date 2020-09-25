@@ -9,6 +9,10 @@
     xmlns:beads="com.proj.example.echarts.beads.*"
     initComplete="onInitComplete()">
 
+    <fx:Metadata>
+        [Event(name="close", type="org.apache.royale.events.Event")]
+    </fx:Metadata>
+
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
@@ -35,6 +39,11 @@
         public function set itemChartDef(value:ChartDefExampleVO):void
         {            
             _itemChartDef = value;
+        }
+
+        public function get allDesktop():Boolean
+        {
+            return true;
         }
 
         [Bindable]
@@ -80,6 +89,16 @@
             <j:BarSection width="100%" gap="5">
                 <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
                 <html:H5 text="{itemChartDef.subtitle}" className="block-with-text primary-dark"/>
+            </j:BarSection>
+            <j:BarSection width="30%" itemsHorizontalAlign="itemsRight" gap="0" itemsVerticalAlign="itemsCenter">     
+                <j:IconButton localId="btnLoad" unboxed="true" click="{dispatchEvent(new Event('close'));}" >
+                    <j:icon>
+                        <js:FontAwesomeIcon text="{FontAwesome5IconType.WINDOW_CLOSE}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                    </j:icon>
+                    <j:beads>
+                        <j:ToolTip toolTip="Back"/>
+                    </j:beads>
+                </j:IconButton>
             </j:BarSection>
         </j:CardHeader>
 

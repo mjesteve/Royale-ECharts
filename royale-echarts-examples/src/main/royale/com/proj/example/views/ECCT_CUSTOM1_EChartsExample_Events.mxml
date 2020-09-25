@@ -41,6 +41,11 @@
                 btnLoad.visible = listTheme.visible = false;
             }
         }
+
+        public function get allDesktop():Boolean
+        {
+            return false;
+        }
         
         [Bindable]
         private var opts:Object = {width: 'auto', height: 'auto'};

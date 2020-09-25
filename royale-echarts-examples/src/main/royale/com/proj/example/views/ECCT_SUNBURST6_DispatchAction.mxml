@@ -43,6 +43,11 @@
             _itemChartDef = value;
         }
 
+        public function get allDesktop():Boolean
+        {
+            return false;
+        }
+
         [Bindable]
         private var dpNodes:ArrayList;
 

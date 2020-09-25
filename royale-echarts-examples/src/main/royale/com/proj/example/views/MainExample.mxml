@@ -16,6 +16,8 @@
         import org.apache.royale.jewel.supportClasses.ISelectableContent;
         import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
         import com.proj.example.charts.IEchartExampleBasic;
+        import com.proj.example.views.ECCT_CUSTOM4_JS_TO_AS3_TRANSPILATION;
+	    import org.apache.royale.core.UIBase;
 
         private function onInitComplete():void{            
 			//window.addEventListener('resize', autoResizeHandler, false);
@@ -51,6 +53,17 @@
 					if(content.isSelected){                        
                         if(content is IEchartExampleBasic){
                             var cchart:IEchartExampleBasic = content as IEchartExampleBasic;
+                            var uiele:UIBase = content as UIBase;
+                            if(cchart.allDesktop && topappbar.visible){
+                                    uiele.positioner.style.paddingTop = "20px !important";
+                                    main.hasTopAppBar = false;
+                                    topappbar.visible = false;
+                
+                            }else if(!topappbar.visible){
+                                uiele.positioner.style.paddingTop = offsetTopBar.toString() + 'px !important';
+                                main.hasTopAppBar = true;
+                                topappbar.visible = true;                            
+                            }
                             cchart.activate();
                         }
                         return;
@@ -58,6 +71,13 @@
 				}
             }
 
+        }
+
+        private function restoreBar():void
+        {
+            main.hasTopAppBar = true;
+            main.selectedContent = "welcome";
+            topappbar.visible = true;
         }
 
         private var _currentTheme:EChartsThemeTemplateVO;
@@ -130,7 +150,8 @@
             <j:Paddings paddingBottom="20" paddingLeft="20" paddingRight="20"/>
         </j:beads>
         <views:WelcomeSection name="welcome"/>
-        <views:ECCT_CUSTOM4_JS_TO_AS3_TRANSPILATION localId="ecp6" name="ecp6" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_CUSTOM4}"/>
+        <views:ECCT_CUSTOM4_JS_TO_AS3_TRANSPILATION localId="ecp6" name="ecp6" style="padding-top:{offsetTopBar}px;" 
+            itemChartDef="{appModel.ECCT_CUSTOM4}" close="restoreBar()"/>
         <views:ECCT_SUNBURST6_DispatchAction localId="ecp0" name="ecp0" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_SUNBURST6}"/>
         <views:EChartsExampleBasic localId="ecp1" name="ecp1" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECCT_PIE001}"/>
         <views:EChartsExampleBasic localId="ecp2" name="ecp2" style="padding-top:{offsetTopBar}px;" itemChartDef="{appModel.ECC_PIE002}"/>
