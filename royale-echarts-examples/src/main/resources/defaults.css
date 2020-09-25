@@ -12,6 +12,9 @@
     color: #333333;
   }
 
+  .has-topappbar {
+    padding-top: 250px !important;
+  }
 
   .jewel.card .card-header{
     border-bottom: 1px solid #d2dadf;

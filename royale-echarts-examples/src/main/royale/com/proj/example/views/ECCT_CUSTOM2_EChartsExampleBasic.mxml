@@ -6,7 +6,7 @@
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:views="com.proj.example.views.*" 
     xmlns:localecharts="com.proj.example.echarts.*"
-    initComplete="onInitComplete()">
+    initComplete="onInitComplete()" style="padding-top: 20px" >
 
     <fx:Script>
         <![CDATA[
@@ -40,6 +40,11 @@
             }else{                
                 btnLoad.visible = listTheme.visible = false;
             }
+        }
+
+        public function get allDesktop():Boolean
+        {
+            return false;
         }
         
         [Bindable]

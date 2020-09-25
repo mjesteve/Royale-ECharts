@@ -4,6 +4,9 @@ package com.proj.example.models
 	import com.proj.example.vos.TabBarChartVO;
 	import com.proj.example.vos.ChartDefExampleVO;
 	import com.proj.example.charts.EC_SUNBURST6;
+	import com.proj.example.charts.ECT_CUSTOM4;
+	import org.apache.royale.events.IEventDispatcher;
+	import com.proj.example.charts.ECT_COVIDMAP_0;
 
 	[Bindable]
 	public class ChartsDataModel
@@ -16,6 +19,22 @@ package com.proj.example.models
 				var arData:Array = new Array();
 				var it:TabBarChartVO;
 				var descChart:ChartDefExampleVO;
+
+				it = new TabBarChartVO();
+				it.hash="ecp7";
+				it.thumbnail="assets/charts/ECT_COVIDMAP_0.png";
+				descChart = ECCT_COVIDMAP;
+				it.label = descChart.title;
+				it.description = descChart.title + '\n' + descChart.subtitle;
+				arData.push(it);
+
+				it = new TabBarChartVO();
+				it.hash="ecp6";
+				it.thumbnail="assets/charts/ECCT_CUSTOM4.png";
+				descChart = ECCT_CUSTOM4;
+				it.label = descChart.title;
+				it.description = descChart.title + '\n' + descChart.subtitle;
+				arData.push(it);
 
 				it = new TabBarChartVO();
 				it.hash="ecp0";
@@ -129,7 +148,7 @@ package com.proj.example.models
 						},
 						tooltip: { // same as option.tooltip
 							show: withtooltip,
-							formatter: function (param) {
+							formatter: function (param:*):void {
 								return param.title; 
 							},
 							backgroundColor: '#eee',
@@ -282,10 +301,10 @@ package com.proj.example.models
 				};
 			}
 			
-			var event:Object = {eventName:'updateAxisPointer', handler: function (event) {
-				var xAxisInfo = event.axesInfo[0];
+			var event:Object = {eventName:'updateAxisPointer', handler: function (event:*):void {
+				var xAxisInfo:Object = event.axesInfo[0];
 				if (xAxisInfo) {
-					var dimension = xAxisInfo.value + 1;
+					var dimension:int = xAxisInfo.value + 1;
 					this.setOption({
 						series: {
 							id: 'pie',
@@ -338,9 +357,9 @@ package com.proj.example.models
 							splitLine: {show: false},
 							itemStyle: {show: false},
 							detail: {
-								formatter: function(value) {
+								formatter: function(value:Number):String {
 									if (value !== 0) {
-										var num = Math.round(value ) ;
+										var num:Number = Math.round(value ) ;
 										return parseInt(num).toFixed(0)+"%";
 									} else {
 										return "0%";
@@ -385,7 +404,7 @@ package com.proj.example.models
 							}, //Dashboard axis
 							axisLabel: {
 								show: true,	color:'#f2f576',distance: 25, textStyle: {fontSize: 14},
-								formatter: function(v) {
+								formatter: function(v:Number):String {
 									switch (v +'') {
 										case '0':
 											return '0';
@@ -447,7 +466,7 @@ package com.proj.example.models
 				_ECCT_CUSTOM3.autoLoad = true;
 				_ECCT_CUSTOM3.optionChartInit = {
 					tooltip: {
-						formatter: function (params) {
+						formatter: function (params:*):String {
 							var m:int = params.value[1] % 60;
 							var h:int = ( params.value[1]-m)/60;
 							var nextDay:Boolean = false;
@@ -470,7 +489,7 @@ package com.proj.example.models
 								m *= -1;
 							}
 							var final:String = (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
-							return '<p>' + params.marker + params.name + ' Inicio: ' +  inicio + 'h</p>' + '<p>' + params.marker + params.name + '  Final: ' + final + 'h</p>';
+							return '<p>' + params.marker + params.name + ' Start: ' +  inicio + 'h</p>' + '<p>' + params.marker + params.name + '  End: ' + final + 'h</p>';
 						}
 					},
 					dataZoom: [{
@@ -511,7 +530,7 @@ package com.proj.example.models
 							color: '#929ABA',
 							inside: false,
 							align: 'center',
-							formatter: (function(value){
+							formatter: (function(value:Number):String{
 								var m:int = value % 60;
 								var h:int = ( value-m)/60;
 								var nextDay:Boolean = false;
@@ -529,7 +548,7 @@ package com.proj.example.models
 						max:2160
 					},
 					yAxis: {
-        				data: ['Horarios', 'Cortesías', 'Flexibilidades', 'Pausas', 'Horario'],
+        				data: ['Schedules Slots', 'Courtesies', 'Flexibilities', 'Breaks', 'Schedule'],
 						axisTick: {show: false},
 						splitLine: {show: false},
 						axisLine: {show: false},
@@ -537,13 +556,13 @@ package com.proj.example.models
 					},
 					series: [{
 						type: 'custom',
-						renderItem: function (params, api) {
+						renderItem: function (params:Object, api:Object):Object {
 							var categoryIndex:int = api.value(0);
-							var start = api.coord([api.value(1), categoryIndex]);
-							var end = api.coord([api.value(2), categoryIndex]);
-							var height = api.size([0, 1])[1] * 0.6;
+							var start:Object = api.coord([api.value(1), categoryIndex]);
+							var end:Object = api.coord([api.value(2), categoryIndex]);
+							var height:Number = api.size([0, 1])[1] * 0.6;
 
-							var rectShape = (echarts as Object).graphic.clipRectByRect({
+							var rectShape:Object = (echarts as Object).graphic.clipRectByRect({
 								x: start[0],
 								y: start[1] - height / 2,
 								width: end[0] - start[0],
@@ -554,10 +573,10 @@ package com.proj.example.models
 								width: params.coordSys.width,
 								height: params.coordSys.height
 							});
-							var diff = ((api.value(2) - api.value(1) - api.value(3))/2 );
-							var auxStart = api.coord([ api.value(1) + diff, categoryIndex]);
-							var auxEnd = api.coord([ api.value(2) - diff, categoryIndex]);
-							var shapeAux =  (echarts as Object).graphic.clipRectByRect({
+							var diff:Number = ((api.value(2) - api.value(1) - api.value(3))/2 );
+							var auxStart:Object = api.coord([ api.value(1) + diff, categoryIndex]);
+							var auxEnd:Object = api.coord([ api.value(2) - diff, categoryIndex]);
+							var shapeAux:Object =  (echarts as Object).graphic.clipRectByRect({
 								x: auxStart[0],
 								y: auxStart[1] - height / 2,
 								width: auxEnd[0] - auxStart[0],
@@ -568,9 +587,9 @@ package com.proj.example.models
 								width: params.coordSys.width,
 								height: params.coordSys.height
 							});
-							var mins =  api.value(2) - api.value(1);
-							var m = mins % 60;
-							var h = ( mins-m)/60;
+							var mins:Number =  api.value(2) - api.value(1);
+							var m:Number = mins % 60;
+							var h:Number = ( mins-m)/60;
 							return rectShape && {
 								type: 'group',
 								children: [{
@@ -597,14 +616,14 @@ package com.proj.example.models
 							x: [1, 2],
 							y: 0
 						},
-						data: [{name:'Tiempo', value:[0,485,900,415],itemStyle: {normal: {color: '#0066ff'}}},
-						{name:'Tiempo', value:[0,960,1045,85],itemStyle: {normal: {color: '#0066ff'}}},
-						{name:'Cortesía', value:[1,990,1080,90],itemStyle: {normal: {color: '#993399'}}},
-						{name:'Cortesía', value:[1,420,510,90],itemStyle: {normal: {color: '#993399'}}},
-						{name:'Flexibilidad', value:[2,990,1080,90],itemStyle: {normal: {color: '#ffcc00'}}},
-						{name:'Flexibilidad', value:[2,420,510,90],itemStyle: {normal: {color: '#ffcc00'}}},
-						{name:'Pausa', value:[3,840,960,80],itemStyle: {normal: {color: '#339933'}}},
-						{name:'Horario', value:[4,480,1020,540],itemStyle: {normal: {color: '#cc3300'}}}]
+						data: [{name:'Time', value:[0,485,900,415],itemStyle: {normal: {color: '#0066ff'}}},
+						{name:'Time', value:[0,960,1045,85],itemStyle: {normal: {color: '#0066ff'}}},
+						{name:'Courtesy', value:[1,990,1080,90],itemStyle: {normal: {color: '#993399'}}},
+						{name:'Courtesy', value:[1,420,510,90],itemStyle: {normal: {color: '#993399'}}},
+						{name:'Flexibility', value:[2,990,1080,90],itemStyle: {normal: {color: '#ffcc00'}}},
+						{name:'Flexibility', value:[2,420,510,90],itemStyle: {normal: {color: '#ffcc00'}}},
+						{name:'Break', value:[3,840,960,80],itemStyle: {normal: {color: '#339933'}}},
+						{name:'Schedule', value:[4,480,1020,540],itemStyle: {normal: {color: '#cc3300'}}}]
 					}]
 				};
 			}
@@ -748,6 +767,81 @@ package com.proj.example.models
 				_ECCT_SUNBURST6.optionChartInit = defchar.options;
 			}
 			return _ECCT_SUNBURST6;
+		}
+
+		private var _ECCT_CUSTOM4:ChartDefExampleVO;
+		public function get ECCT_CUSTOM4():ChartDefExampleVO
+		{
+			if(!_ECCT_CUSTOM4){
+				_ECCT_CUSTOM4 = new ChartDefExampleVO();
+				_ECCT_CUSTOM4.title = "Sensor Layout Plan";
+				_ECCT_CUSTOM4.subtitle = "(JS to AS3 transpilation)";
+				_ECCT_CUSTOM4.themeName = 'custom';
+				_ECCT_CUSTOM4.autoLoad = true;
+				var defchar:ECT_CUSTOM4 = new ECT_CUSTOM4();
+				_ECCT_CUSTOM4.nameMap = defchar.nameMap;
+				defchar.addEventListener("onCompleteInit", loadCUSTOM4);
+				defchar.addEventListener("onErrorInit", loadErrorCUSTOM4);
+				defchar.optionChartInit();
+				//_ECCT_CUSTOM4.optionChartInit = defchar.options;
+			}
+			return _ECCT_CUSTOM4;
+		}
+
+		private function loadCUSTOM4(event:Event):void
+		{
+            var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.currentTarget);
+            loaderDispatcher.removeEventListener("onCompleteInit", loadCUSTOM4);
+            loaderDispatcher.removeEventListener("onErrorInit", loadErrorCUSTOM4);
+            
+			_ECCT_CUSTOM4.registerMap = (loaderDispatcher as ECT_CUSTOM4).geoMap;
+			_ECCT_CUSTOM4.optionChartInit = (loaderDispatcher as ECT_CUSTOM4).options;
+
+		}
+
+		private function loadErrorCUSTOM4(event:Event):void
+		{
+            var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.target);
+            loaderDispatcher.removeEventListener("onCompleteInit", loadCUSTOM4);
+            loaderDispatcher.removeEventListener("onErrorInit", loadErrorCUSTOM4);
+			_ECCT_CUSTOM4.optionChartInit = {};
+		}
+
+		private var _ECCT_COVIDMAP:ChartDefExampleVO;
+		public function get ECCT_COVIDMAP():ChartDefExampleVO
+		{
+			if(!_ECCT_COVIDMAP){
+				_ECCT_COVIDMAP = new ChartDefExampleVO();
+				_ECCT_COVIDMAP.title = "COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE)";
+				_ECCT_COVIDMAP.subtitle = "at Johns Hopkins University (JHU)";
+				_ECCT_COVIDMAP.themeName = 'custom';
+				_ECCT_COVIDMAP.autoLoad = true;
+				var defchar:ECT_COVIDMAP_0 = new ECT_COVIDMAP_0();
+				_ECCT_COVIDMAP.nameMap = defchar.nameMap;
+				defchar.addEventListener("onCompleteInit", loadCOVIDMAP);
+				defchar.addEventListener("onErrorInit", loadErrorCOVIDMAP);
+				defchar.optionChartInit();
+			}
+			return _ECCT_COVIDMAP;
+		}
+
+		private function loadCOVIDMAP(event:Event):void
+		{
+            var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.currentTarget);
+            loaderDispatcher.removeEventListener("onCompleteInit", loadCOVIDMAP);
+            loaderDispatcher.removeEventListener("onErrorInit", loadErrorCOVIDMAP);
+            
+			_ECCT_COVIDMAP.registerMap = (loaderDispatcher as ECT_COVIDMAP_0).geoMap;
+			_ECCT_COVIDMAP.optionChartInit = (loaderDispatcher as ECT_COVIDMAP_0).options;
+
+		}
+
+		private function loadErrorCOVIDMAP(event:Event):void
+		{
+            var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.target);
+            loaderDispatcher.removeEventListener("onCompleteInit", loadCOVIDMAP);
+            loaderDispatcher.removeEventListener("onErrorInit", loadErrorCOVIDMAP);
+			_ECCT_COVIDMAP.optionChartInit = {};
 		}
 		
 	}
