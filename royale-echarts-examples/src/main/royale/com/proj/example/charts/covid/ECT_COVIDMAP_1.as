@@ -320,7 +320,7 @@ package com.proj.example.charts.covid
 						map: 'world',
 						roam: true,
 						zoom: 1,
-						center: [113.83531246, 34.0267395887],
+						center: [10, 20],
 						label: {
 							emphasis: {
 								show: false
