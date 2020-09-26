@@ -1,4 +1,4 @@
-package com.proj.example.charts
+package com.proj.example.charts.covid
 {
 
     import org.apache.royale.net.URLLoader;
@@ -6,6 +6,7 @@ package com.proj.example.charts
     import org.apache.royale.net.URLRequest;
     import org.apache.royale.events.IEventDispatcher;
     import org.apache.royale.events.EventDispatcher;
+    import com.proj.example.charts.IEchartDefinition;
 
 	[Event(name="onCompleteInit", type="org.apache.royale.events.Event")]
 	[Event(name="onErrorInit", type="org.apache.royale.events.Event")]
