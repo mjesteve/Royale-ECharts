@@ -573,7 +573,8 @@ package com.proj.example.charts
             for (var n:int = 0; n < year.length; n++) {
 
                 optionXyMap01.options.push({//Background color
-                    backgroundColor:'#013954',
+					backgroundColor: '#182240',
+                    //backgroundColor:'#013954',
                     title: [{
                             text:'Sensor layout plan', left: '16%', top: '5%',
                             textStyle: { color:'#fff', fontSize: 24 }
