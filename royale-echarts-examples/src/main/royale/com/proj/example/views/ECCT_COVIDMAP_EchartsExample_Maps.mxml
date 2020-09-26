@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+    implements="com.proj.example.charts.IEchartExampleBasic"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+	xmlns:models="com.proj.example.models.*"
+    xmlns:views="com.proj.example.views.*" 
+    xmlns:localecharts="com.proj.example.echarts.*"
+    xmlns:beads="com.proj.example.echarts.beads.*"
+    initComplete="onInitComplete()">
+
+    <fx:Metadata>
+        [Event(name="close", type="org.apache.royale.events.Event")]
+    </fx:Metadata>
+
+    <fx:Script>
+        <![CDATA[
+        import com.proj.example.vos.ChartDefExampleVO;
+        import com.proj.example.echarts.events.EChartsEvent;
+        import org.apache.royale.collections.ArrayList;
+        import com.proj.example.charts.covid.ECT_COVIDMAP_1;
+        import com.proj.example.vos.TypeGen_NameValueVO;
+        import org.apache.royale.collections.ArrayListView;
+
+        private function onInitComplete():void{
+            this.addEventListener("sizeChanged", autoResizeHandler,false);
+        }
+        public function autoResizeHandler(event:Event = null):void
+        {
+            if(charComp.isInit)
+            {
+                charComp.resize();
+            }
+        }
+
+        private var _itemChartDef:ChartDefExampleVO;    
+        [Bindable]
+		public function get itemChartDef():ChartDefExampleVO
+        {
+            return _itemChartDef;
+        }
+        public function set itemChartDef(value:ChartDefExampleVO):void
+        {            
+            _itemChartDef = value;
+        }
+
+        public function get allDesktop():Boolean
+        {
+            return true;
+        }
+
+
+        [Bindable]
+        private var opts:Object = {width: 'auto', height: 'auto'};
+
+        public function activate():void
+        {
+            if(!charComp.isConfigure && !charComp.autoLoad)
+                return;
+
+            var requestInitialize:Boolean = (!charComp.isInit);
+            if(requestInitialize){
+                //First initialization                
+                echarts.registerMap(_itemChartDef.nameMap, _itemChartDef.registerMap);
+                charComp.refreshOption(requestInitialize, true, true);
+                
+            }else
+                autoResizeHandler();
+        }
+
+        private function completConfigHandler(event:EChartsEvent):void
+        {   
+            countrySeachInput.text = "";
+            onSearchCountry(true);
+        }
+
+        //[Bindable]
+        private var dpCountries:ArrayList = new ArrayList;
+
+        private function onSearchCountry(init:Boolean = false):void
+        {
+            if(init)
+            {
+                var classdata:ECT_COVIDMAP_1 = (_itemChartDef.classDataMap as ECT_COVIDMAP_1);
+                var len:int = classdata.legendCountryData.length;
+                var ar:Array = new Array
+                for(var index:int = 0; index < len; index++)
+                {
+                    var element:TypeGen_NameValueVO = new TypeGen_NameValueVO(classdata.legendCountryData[index]);
+                    ar.push(element);
+                }
+                dpCountries = new ArrayList(ar);
+            }
+
+            if(countrySeachInput.text == "")
+            {
+                legendCountryList.dataProvider = dpCountries;
+            }else
+            {
+                var alv:ArrayListView = new ArrayListView(dpCountries);
+                alv.filterFunction = inFilterCountry;
+                alv.refresh();
+                legendCountryList.dataProvider = new ArrayList(alv.toArray());
+            }
+
+        }
+
+        private function inFilterCountry(item:Object):Boolean {
+            if(!item)
+                return false;
+
+            var reg:TypeGen_NameValueVO = item as TypeGen_NameValueVO;
+            var searchTxt:String = countrySeachInput.text.toUpperCase();
+
+            return (reg.name.toUpperCase().indexOf(searchTxt) != -1);
+        }
+
+        ]]>
+    </fx:Script>
+    
+    <j:beads>
+        <js:ViewDataBinding/>
+		<js:BrowserResizeListener/>
+    </j:beads>
+    <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
+        <j:CardHeader>
+            <j:BarSection width="100%" gap="10">
+                <html:H3 text="{itemChartDef.title}" className="primary-dark block-with-text "/>
+                <html:H5 text="{itemChartDef.subtitle}" className="primary-dark block-with-text"/>
+            </j:BarSection>
+            <j:BarSection width="30%" itemsHorizontalAlign="itemsRight" gap="0" itemsVerticalAlign="itemsCenter">     
+                <j:IconButton localId="btnLoad" unboxed="true" click="{dispatchEvent(new Event('close'));}" >
+                    <j:icon>
+                        <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_CIRCLE_LEFT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                    </j:icon>
+                    <j:beads>
+                        <j:ToolTip toolTip="Back"/>
+                    </j:beads>
+                </j:IconButton>
+            </j:BarSection>
+        </j:CardHeader>
+
+        <j:CardPrimaryContent >
+            <j:HGroup percentWidth="100" percentHeight="100" gap="5" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">
+
+                <j:VGroup gap="3" width="20%" height="100%">
+                
+                    <j:IconTextInput localId="countrySeachInput" rightPosition="false" width="100%" text="" change="onSearchCountry()" >
+                        <j:beads>
+                            <j:TextPrompt prompt="Search country..."/>
+                        </j:beads>
+                        <j:icon>
+                            <js:FontAwesomeIcon text="{FontAwesome5IconType.SEARCH}" emphasis="primary" className="primary-dark"
+                            faStyle="{FontAwesomeIcon.DUOTONE}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                        </j:icon>
+                    </j:IconTextInput>
+                    
+                    <j:HGroup percentWidth="100" gap="3" height="35" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsCenter"
+                        style="background-color: #19416b; color: #ffffff;font-weight: bold;">
+                        <j:Label text="Country" width="60%" >
+                            <j:beads>
+                                <j:TruncateText/>
+                                <j:Paddings paddingLeft="5"/>
+                            </j:beads>
+                        </j:Label>                    
+                        <j:Label text="Total Cases" width="40%" >
+                            <j:beads>
+                                <j:TruncateText/>
+                                <j:TextAlign align="right"/>
+                                <j:Paddings paddingRight="15"/>
+                            </j:beads>
+                        </j:Label>
+                    </j:HGroup>
+                
+                    <j:List id="legendCountryList" localId="legendCountryList" percentWidth="100" percentHeight="100"
+                        itemRenderer="com.proj.example.itemRenderers.ListGenNameValueItemRenderer">
+                        <j:beads>
+                            <j:ListPresentationModel rowHeight="35"/>
+                        </j:beads>
+                    </j:List>
+                        
+                </j:VGroup>
+
+                <localecharts:EChartsBasicControl localId="charComp" height="100%" width="80%"
+                                                    autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
+                                                    optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+                                                    onCompleteConfig="completConfigHandler(event)"
+                                                    onUpdateConfig="completConfigHandler(event)"/>
+            </j:HGroup>
+        </j:CardPrimaryContent>
+
+    </j:Card> 
+</j:ScrollableSectionContent>

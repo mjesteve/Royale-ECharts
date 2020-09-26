@@ -854,10 +854,13 @@ package com.proj.example.models
 				_ECCT_COVIDMAP_1.subtitle = "at Johns Hopkins University (JHU)";
 				_ECCT_COVIDMAP_1.themeName = 'custom';
 				_ECCT_COVIDMAP_1.autoLoad = true;
+				
 				var defchar:ECT_COVIDMAP_1 = new ECT_COVIDMAP_1();
 				_ECCT_COVIDMAP_1.nameMap = defchar.nameMap;
+
 				defchar.addEventListener("onCompleteInit", loadCOVIDMAP_1);
 				defchar.addEventListener("onErrorInit", loadErrorCOVIDMAP_1);
+
 				defchar.optionChartInit();
 			}
 			return _ECCT_COVIDMAP_1;
@@ -869,6 +872,7 @@ package com.proj.example.models
             loaderDispatcher.removeEventListener("onCompleteInit", loadCOVIDMAP_1);
             loaderDispatcher.removeEventListener("onErrorInit", loadErrorCOVIDMAP_1);
             
+			_ECCT_COVIDMAP_1.classDataMap = (loaderDispatcher as ECT_COVIDMAP_1);
 			_ECCT_COVIDMAP_1.registerMap = (loaderDispatcher as ECT_COVIDMAP_1).geoMap;
 			_ECCT_COVIDMAP_1.optionChartInit = (loaderDispatcher as ECT_COVIDMAP_1).options;
 
