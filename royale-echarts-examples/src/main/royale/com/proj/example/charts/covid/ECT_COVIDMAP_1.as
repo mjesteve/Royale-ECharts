@@ -8,6 +8,7 @@ package com.proj.example.charts.covid
     import org.apache.royale.events.EventDispatcher;
     import com.proj.example.charts.IEchartDefinition;
     import org.apache.royale.collections.ArrayList;
+    import org.apache.royale.html.accessories.DateAndTimeFormatter;
 
 	[Event(name="onCompleteInit", type="org.apache.royale.events.Event")]
 	[Event(name="onErrorInit", type="org.apache.royale.events.Event")]
@@ -33,6 +34,7 @@ package com.proj.example.charts.covid
         
             //url = "https://winpluscloud.com/WPNetSuitePlus/assets/data-COVITMAP_0.json";
         public var uploadedDataURL:String = "assets/charts/data-COVIDMAP_0.json";
+		public var owidCovidData:String = "https://covid.ourworldindata.org/data/owid-covid-data.json";
 
         private var d1:Object = ECT_COVIDMAP_1_data.d1;
         private var d2:Object = ECT_COVIDMAP_1_data.d2;        
@@ -45,17 +47,7 @@ package com.proj.example.charts.covid
         private var d9:Object = ECT_COVIDMAP_1_data.d9;
         
         private var year:Array = ECT_COVIDMAP_1_data.year;
-        private var mapData:Array = [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            []
-        ];
+        private var mapData:Array = [];
         private var categoryData:Array = [];
         private var barData:Array = [];
 
@@ -65,18 +57,54 @@ package com.proj.example.charts.covid
         }
         
         public var geoMap:Object;
+        public var covidData:Object;
         public var nameMap:String = "world";              
         private var geoCoordMap:Object = ECT_COVIDMAP_1_data.geoCoordMap;
 
         private function loadDataJSON():void
         {
             var loaderJSON:URLLoader = new URLLoader();
+            loaderJSON.addEventListener(HTTPConstants.IO_ERROR, loadJsonDataMapComplete);
+            loaderJSON.addEventListener(HTTPConstants.SECURITY_ERROR, loadJsonDataMapError);
+            loaderJSON.addEventListener(HTTPConstants.COMPLETE, loadJsonDataMapComplete);         
+            loaderJSON.load(new URLRequest(uploadedDataURL));
+
+			loaderJSON = new URLLoader();
             loaderJSON.addEventListener(HTTPConstants.IO_ERROR, loadJsonDataError);
             loaderJSON.addEventListener(HTTPConstants.SECURITY_ERROR, loadJsonDataError);
             loaderJSON.addEventListener(HTTPConstants.COMPLETE, loadJsonDataComplete);         
-            loaderJSON.load(new URLRequest(uploadedDataURL));
+            loaderJSON.load(new URLRequest(owidCovidData));
         }
 
+		private var isMapInitialized:Boolean = false;
+		private var isDataInitialized:Boolean = false;
+        private function loadJsonDataMapComplete(event:Event):void
+        {   
+            var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.target);
+            loaderDispatcher.removeEventListener(HTTPConstants.COMPLETE, loadJsonDataMapComplete);
+            loaderDispatcher.removeEventListener(HTTPConstants.IO_ERROR, loadJsonDataMapError);
+            loaderDispatcher.removeEventListener(HTTPConstants.SECURITY_ERROR, loadJsonDataMapError);
+            
+			var objData:Object = (loaderDispatcher as URLLoader).data;
+            geoMap = JSON.parse(objData as String);
+			if (isDataInitialized){
+				_options = makeData();
+            	dispatchEvent(new Event("onCompleteInit"));
+			}
+			isMapInitialized = true;
+        } 
+
+        private function loadJsonDataMapError(event:Event):void{
+            
+            var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.target);
+            loaderDispatcher.removeEventListener(HTTPConstants.COMPLETE, loadJsonDataMapComplete);
+            loaderDispatcher.removeEventListener(HTTPConstants.IO_ERROR, loadJsonDataMapError);
+            loaderDispatcher.removeEventListener(HTTPConstants.SECURITY_ERROR, loadJsonDataMapError);            
+            
+            trace('Error in load json data...');
+            dispatchEvent(new Event("onErrorInit"));
+        } 
+		
         private function loadJsonDataComplete(event:Event):void
         {   
             var loaderDispatcher:IEventDispatcher = IEventDispatcher(event.target);
@@ -85,9 +113,13 @@ package com.proj.example.charts.covid
             loaderDispatcher.removeEventListener(HTTPConstants.SECURITY_ERROR, loadJsonDataError);
             
 			var objData:Object = (loaderDispatcher as URLLoader).data;
-            geoMap = JSON.parse(objData as String);
-            _options = makeData();
-            dispatchEvent(new Event("onCompleteInit"));
+            covidData = JSON.parse(objData as String);
+            parseData();
+			if(isMapInitialized){
+				_options = makeData();
+            	dispatchEvent(new Event("onCompleteInit"));
+				}
+			isDataInitialized = true;
         } 
 
         private function loadJsonDataError(event:Event):void{
@@ -128,7 +160,7 @@ package com.proj.example.charts.covid
 					acumkey = 0;
 					keyold = key;
 				}
-                if (key in d1) {
+                /*if (key in d1) {
                     trace('key in d1: ',key)
 					acumkey = acumkey + d1[key];
                     mapData[0].push({ "year": '2020-01',
@@ -213,7 +245,7 @@ package com.proj.example.charts.covid
                         "name": key,
                         "value": d9[key]
                     });
-                }
+                }*/
             }
 			legendCountryData.push({name:key as String, value: acumkey});
 			legendCountryData.sort(function sortNumber(a:Object, b:Object):int {
@@ -539,6 +571,48 @@ package com.proj.example.charts.covid
             return optionXyMap01;
         }
 
+		public function parseData():void
+		{
+			var days:Array = [];
+			var nItems:int;
+			var startDate:Date = new Date('2019/12/31');
+			var todayDate:Date = new  Date();
+			var cnt:int = 0;
+			var nDate:Date = startDate;
+
+			for each(var country:Object in covidData)
+			{
+			 	nItems = country.data.length;
+				break;
+			}
+			while(nDate<= todayDate)
+			{
+				days.push([])
+				for each(country in covidData)
+				{
+					for each(var data:Object in country.data){
+						var dateStr:String = ""
+						dateStr +=nDate.getFullYear() + '-'
+						if(nDate.getMonth()+1<10){dateStr+= '0'}
+						dateStr += nDate.getMonth()+1 + '-'
+						if(nDate.getDate()<10){dateStr+= '0'}
+						dateStr += nDate.getDate() 
+						if(data.date == dateStr){
+							days[cnt].push({
+								"year": country.data[cnt].date.split('-')[0]+ '-'+country.data[cnt].date.split('-')[1] + '-' + country.data[cnt].date.split('-')[2],
+								"name": country.location,
+								"value": country.data[cnt].total_cases
+							});	
+							break;
+						}
+					}				
+				}
+				cnt += 1;
+				nDate += 1;
+			}
+			mapData = days;
+			
+		}
 
 		private function convertData(data:Array):Array {
             var res:Array = [];
