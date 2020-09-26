@@ -141,7 +141,7 @@
             </j:BarSection>
         </j:CardHeader>
 
-        <j:CardPrimaryContent >
+        <j:CardPrimaryContent height="100%" >
             <j:HGroup percentWidth="100" percentHeight="100" gap="5" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">
 
                 <j:VGroup gap="3" width="20%" height="100%">
