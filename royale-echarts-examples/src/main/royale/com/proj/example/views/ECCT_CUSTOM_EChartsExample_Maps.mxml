@@ -86,7 +86,7 @@
     </j:beads>
     <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
         <j:CardHeader>
-            <j:BarSection width="100%" gap="5">
+            <j:BarSection width="100%" gap="10">
                 <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
                 <html:H5 text="{itemChartDef.subtitle}" className="block-with-text primary-dark"/>
             </j:BarSection>
@@ -104,7 +104,7 @@
 
         <j:CardPrimaryContent >
             <j:HGroup percentWidth="100" percentHeight="100" gap="10" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">                
-                <localecharts:EChartsBasicControl localId="charComp" height="100%" width="85%"
+                <localecharts:EChartsBasicControl localId="charComp" height="100%" width="100%"
                                                     autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
                                                     optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
                                                     onCompleteConfig="completConfigHandler(event)"

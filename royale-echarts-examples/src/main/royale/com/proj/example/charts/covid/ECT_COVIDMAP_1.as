@@ -7,6 +7,7 @@ package com.proj.example.charts.covid
     import org.apache.royale.events.IEventDispatcher;
     import org.apache.royale.events.EventDispatcher;
     import com.proj.example.charts.IEchartDefinition;
+    import org.apache.royale.collections.ArrayList;
 
 	[Event(name="onCompleteInit", type="org.apache.royale.events.Event")]
 	[Event(name="onErrorInit", type="org.apache.royale.events.Event")]
@@ -100,6 +101,8 @@ package com.proj.example.charts.covid
             dispatchEvent(new Event("onErrorInit"));
         } 
 
+        public var legendCountryData:Array;
+
         public function makeData():Object
         {
             var key:Object;
@@ -108,10 +111,26 @@ package com.proj.example.charts.covid
              * geoCoordMap  {nameCountry:String, geoCoord:Array}
              *  'Andorra': [1.601554, 42.546245],
              */
+			var keyold:Object;
+			var acumkey:Number = 0;
+			legendCountryData = new Array();
+
             for (key in geoCoordMap) {
+				// itera. countries
                 trace('key: ',key)
+
+				if( key && !keyold)
+					keyold = key;
+
+				if(key !== keyold)
+				{
+					legendCountryData.push({name:keyold as String, value: acumkey});
+					acumkey = 0;
+					keyold = key;
+				}
                 if (key in d1) {
                     trace('key in d1: ',key)
+					acumkey = acumkey + d1[key];
                     mapData[0].push({ "year": '2020-01',
                         "name": key,
                         "value": d1[key]
@@ -120,6 +139,7 @@ package com.proj.example.charts.covid
 
                 if (key in d2) {
                     trace('key in d2: ',key)
+					acumkey = acumkey + d2[key];
                     mapData[1].push({
                         "year": '2020-02',
                         "name": key,
@@ -129,6 +149,7 @@ package com.proj.example.charts.covid
 
                 if (key in d3) {
                     trace('key in d3: ',key)
+					acumkey = acumkey + d3[key];
                     mapData[2].push({
                         "year": '2020-03',
                         "name": key,
@@ -138,6 +159,7 @@ package com.proj.example.charts.covid
 
                 if (key in d4) {
                     trace('key in d4: ',key)
+					acumkey = acumkey + d4[key];
                     mapData[3].push({
                         "year": '2020-04',
                         "name": key,
@@ -147,6 +169,7 @@ package com.proj.example.charts.covid
 
                 if (key in d5) {
                     trace('key in d5: ',key)
+					acumkey = acumkey + d5[key];
                     mapData[4].push({
                         "year": '2020-05',
                         "name": key,
@@ -156,6 +179,7 @@ package com.proj.example.charts.covid
 
                 if (key in d6) {
                     trace('key in d6: ',key)
+					acumkey = acumkey + d6[key];
                     mapData[5].push({
                         "year": '2020-06',
                         "name": key,
@@ -165,6 +189,7 @@ package com.proj.example.charts.covid
 
                 if (key in d7) {
                     trace('key in d7: ',key)
+					acumkey = acumkey + d7[key];
                     mapData[6].push({
                         "year": '2020-07',
                         "name": key,
@@ -173,6 +198,7 @@ package com.proj.example.charts.covid
                 }
                 if (key in d8) {
                     trace('key in d8: ',key)
+					acumkey = acumkey + d8[key];
                     mapData[7].push({
                         "year": '2020-08',
                         "name": key,
@@ -181,6 +207,7 @@ package com.proj.example.charts.covid
                 }
                 if (key in d9) {
                     trace('key in d9: ',key)
+					acumkey = acumkey + d9[key];
                     mapData[8].push({
                         "year": '2020-09',
                         "name": key,
@@ -188,7 +215,11 @@ package com.proj.example.charts.covid
                     });
                 }
             }
-
+			legendCountryData.push({name:key as String, value: acumkey});
+			legendCountryData.sort(function sortNumber(a:Object, b:Object):int {
+                return b.value - a.value;
+            });
+			
             for (var i:int = 0; i < mapData.length; i++) {
 
                 mapData[i].sort(function sortNumber(a:Object, b:Object):int {

@@ -112,7 +112,7 @@
     </j:beads>
     <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
         <j:CardHeader>
-            <j:BarSection width="70%" gap="5">
+            <j:BarSection width="70%" gap="10">
                 <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
                 <html:H5 text="{itemChartDef.subtitle}" className="block-with-text primary-dark"/>
             </j:BarSection>

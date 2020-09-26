@@ -160,8 +160,8 @@
         </j:beads>
         <!--<views:WelcomeSection name="welcome"/>-->
         <views:EChartsExample_StaticsView name="welcome" localId="welcome"/>
-        <views:ECCT_CUSTOM_EChartsExample_Maps localId="ecp7" name="ecp7"
-            itemChartDef="{appModel.ECCT_COVIDMAP}" close="restoreBar()"/>
+        <views:ECCT_COVIDMAP_EchartsExample_Maps localId="ecp7" name="ecp7"
+            itemChartDef="{appModel.ECCT_COVIDMAP_1}" close="restoreBar()"/>
         <views:ECCT_CUSTOM_EChartsExample_Maps localId="ecp6" name="ecp6"
             itemChartDef="{appModel.ECCT_CUSTOM4}" close="restoreBar()"/>
         <views:ECCT_SUNBURST6_DispatchAction localId="ecp0" name="ecp0" itemChartDef="{appModel.ECCT_SUNBURST6}"/>
