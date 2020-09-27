@@ -65,7 +65,8 @@ package com.proj.example.charts.covid
         }
         
         public var geoMap:Object;
-        public var nameMap:String = "world";              
+        public var nameMap:String = "world";
+		public static var nameCountryDefaultNoDataGeo:String = '<Rest of the countries>';
         private var geoCoordMap:Object = ECT_COVIDMAP_1_data.geoCoordMap;
 
         private function loadDataJSON():void
@@ -101,7 +102,7 @@ package com.proj.example.charts.covid
             dispatchEvent(new Event("onErrorInit"));
         } 
 
-        public var legendCountryData:Array;
+        public var legendCountriesData:Array;
 
         public function makeData():Object
         {
@@ -113,8 +114,7 @@ package com.proj.example.charts.covid
              */
 			var keyold:Object;
 			var acumkey:Number = 0;
-			legendCountryData = new Array();
-			
+			legendCountriesData = new Array({name:nameCountryDefaultNoDataGeo, value: 0});
 
             for (key in geoCoordMap) {
 				// itera. countries
@@ -125,7 +125,7 @@ package com.proj.example.charts.covid
 
 				if(key !== keyold)
 				{
-					legendCountryData.push({name:keyold as String, value: acumkey});
+					legendCountriesData.push({name:keyold as String, value: acumkey});
 					acumkey = 0;
 					keyold = key;
 				}
@@ -207,8 +207,10 @@ package com.proj.example.charts.covid
                     });
                 }
             }
-			legendCountryData.push({name:key as String, value: acumkey});
-			legendCountryData.sort(function sortNumber(a:Object, b:Object):int {
+			legendCountriesData.push({name:key as String, value: acumkey});
+			legendCountriesData.sort(function sortNumber(a:Object, b:Object):int {
+				if(b.name == nameCountryDefaultNoDataGeo)
+					return 1;
                 return b.value - a.value;
             });
 			
@@ -315,6 +317,7 @@ package com.proj.example.charts.covid
 						roam: true,
 						zoom: 1,
 						left:'30', top:'center',
+						selectedMode: 'single',
 						//center: [10, 20],
 						label: {
 							emphasis: {
@@ -386,7 +389,10 @@ package com.proj.example.charts.covid
 						min: 0,
 						boundaryGap: false,
 						splitLine: {
-							show: false
+							show: false,
+							lineStyle: {
+								color: '#fff'
+							}
 						},
 						axisLine: {
 							show: false
@@ -395,9 +401,9 @@ package com.proj.example.charts.covid
 							show: false
 						},
 						axisLabel: {
-							margin: 2,
+							margin: 2, rotate: 45,
 							textStyle: {
-								color: '#aaa'
+								color: '#fff'
 							}
 						}
 					},

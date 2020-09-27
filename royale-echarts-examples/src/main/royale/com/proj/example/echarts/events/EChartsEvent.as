@@ -98,6 +98,11 @@ package com.proj.example.echarts.events
         public static const SUNBURSTHIGHLIGHT:String = "sunbursthighlight";
         public static const SUNBURSTUNHIGHLIGHT:String = "sunbursunthighlight";
 
+        public static const GEOSELECTCHANGE:String = "geoselectchanged"; //Action link geoToggleSelect
+        public static const GEOSELECTED:String = "geoselected"; //Action link geoSelect
+        public static const GEOUNSELECTED:String = "geounselected"; //Action link geoUnSelect
+        
+
         /* Chart Actions */
         /** Highlights the given graphic element.*/
         public static const ACTION_HIGHLIGHT:String = "highlight"; 
@@ -139,5 +144,8 @@ package com.proj.example.echarts.events
         /** brush related actions.*/
         public static const ACTION_BRUSH:String = "brush";
 
+        public static const ACTION_GEOSELECTCHANGE:String = "geoToggleSelect"; //Action link geoselectchanged
+        public static const ACTION_GEOSELECTED:String = "geoSelect"; //Action link geoselected
+        public static const ACTION_GEOUNSELECTED:String = "geoUnSelect"; //Action link geounselected
     }
 }

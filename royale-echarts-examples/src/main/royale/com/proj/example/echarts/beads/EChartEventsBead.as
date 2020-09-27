@@ -494,5 +494,25 @@ package com.proj.example.echarts.beads
             setEventHandler(EChartsEvent.FINISHED, _FINISHED, value);
         }
 
+        private var _GEOSELECTCHANGE:Function
+        public function get GEOSELECTCHANGE():Function { return _GEOSELECTCHANGE; }
+        public function set GEOSELECTCHANGE(value:Function):void
+        {
+            setEventHandler(EChartsEvent.GEOSELECTCHANGE, _GEOSELECTCHANGE, value);
+        }
+
+        private var _GEOSELECTED:Function
+        public function get GEOSELECTED():Function { return _GEOSELECTED; }
+        public function set GEOSELECTED(value:Function):void
+        {
+            setEventHandler(EChartsEvent.GEOSELECTED, _GEOSELECTED, value);
+        }
+
+        private var _GEOUNSELECTED:Function
+        public function get GEOUNSELECTED():Function { return _GEOUNSELECTED; }
+        public function set GEOUNSELECTED(value:Function):void
+        {
+            setEventHandler(EChartsEvent.GEOUNSELECTED, _GEOUNSELECTED, value);
+        }
 	}
 }
