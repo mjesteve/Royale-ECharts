@@ -114,6 +114,7 @@ package com.proj.example.charts.covid
 			var keyold:Object;
 			var acumkey:Number = 0;
 			legendCountryData = new Array();
+			
 
             for (key in geoCoordMap) {
 				// itera. countries
@@ -129,7 +130,6 @@ package com.proj.example.charts.covid
 					keyold = key;
 				}
                 if (key in d1) {
-                    trace('key in d1: ',key)
 					acumkey = acumkey + d1[key];
                     mapData[0].push({ "year": '2020-01',
                         "name": key,
@@ -138,7 +138,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d2) {
-                    trace('key in d2: ',key)
 					acumkey = acumkey + d2[key];
                     mapData[1].push({
                         "year": '2020-02',
@@ -148,7 +147,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d3) {
-                    trace('key in d3: ',key)
 					acumkey = acumkey + d3[key];
                     mapData[2].push({
                         "year": '2020-03',
@@ -158,7 +156,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d4) {
-                    trace('key in d4: ',key)
 					acumkey = acumkey + d4[key];
                     mapData[3].push({
                         "year": '2020-04',
@@ -168,7 +165,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d5) {
-                    trace('key in d5: ',key)
 					acumkey = acumkey + d5[key];
                     mapData[4].push({
                         "year": '2020-05',
@@ -178,7 +174,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d6) {
-                    trace('key in d6: ',key)
 					acumkey = acumkey + d6[key];
                     mapData[5].push({
                         "year": '2020-06',
@@ -188,7 +183,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d7) {
-                    trace('key in d7: ',key)
 					acumkey = acumkey + d7[key];
                     mapData[6].push({
                         "year": '2020-07',
@@ -197,7 +191,6 @@ package com.proj.example.charts.covid
                     });
                 }
                 if (key in d8) {
-                    trace('key in d8: ',key)
 					acumkey = acumkey + d8[key];
                     mapData[7].push({
                         "year": '2020-08',
@@ -206,7 +199,6 @@ package com.proj.example.charts.covid
                     });
                 }
                 if (key in d9) {
-                    trace('key in d9: ',key)
 					acumkey = acumkey + d9[key];
                     mapData[8].push({
                         "year": '2020-09',
@@ -247,14 +239,13 @@ package com.proj.example.charts.covid
 					axisType: 'category',
 					autoPlay: true,
 					playInterval: 3000,
-					left: '10%',
-					right: '10%',
-					bottom: '3%',
+					left: '30',
+					bottom: '30',
 					width: '80%',
 					label: {
 						normal: {
 							textStyle: {
-								color: '#ddd'
+								color: 'rgba(147, 235, 248, 1)'
 							}
 						},
 						emphasis: {
@@ -265,22 +256,25 @@ package com.proj.example.charts.covid
 					},
 					symbolSize: 10,
 					lineStyle: {
-						color: '#555'
+						color: 'rgba(147, 235, 248, 1)'
 					},
 					checkpointStyle: {
-						borderColor: '#777',
-						borderWidth: 2
+						borderColor: 'rgba(147, 235, 248, 1)',
+						borderWidth: 2,
+						color: '#182240',
+						shadowBlur: 15,
+						shadowColor: '#3a8dd6'
 					},
 					controlStyle: {
 						showNextBtn: true,
 						showPrevBtn: true,
 						normal: {
-							color: '#666',
-							borderColor: '#666'
+							color: 'rgba(147, 235, 248, 1)',
+							borderColor: 'rgba(147, 235, 248, 1)'
 						},
 						emphasis: {
-							color: '#aaa',
-							borderColor: '#aaa'
+							color: '#fff',
+							borderColor: '#fff'
 						}
 					}
 				},
@@ -317,10 +311,11 @@ package com.proj.example.charts.covid
                     },
 					geo: {
 						show: true,
-						map: 'world',
+						map: nameMap,
 						roam: true,
 						zoom: 1,
-						center: [10, 20],
+						left:'30', top:'center',
+						//center: [10, 20],
 						label: {
 							emphasis: {
 								show: false
@@ -367,7 +362,7 @@ package com.proj.example.charts.covid
 					title: [{
 							text: 'COVID-19 Apache Royale - Echarts',
 							left: '25%',
-							top: '7%',
+							top: '30',
 							textStyle: {
 								color: '#fff',
 								fontSize: 25
@@ -377,7 +372,7 @@ package com.proj.example.charts.covid
 							id: 'statistic',
 							text: " Top 20 Cases " + year[n],
 							left: '75%',
-							top: '8%',
+							top: '30',
 							textStyle: {
 								color: '#fff',
 								fontSize: 25
@@ -433,7 +428,7 @@ package com.proj.example.charts.covid
 					series: [
 						{
 							type: 'map',
-							map: 'world',
+							map: nameMap,
 							geoIndex: 0,
 							aspectScale: 0.75, 
 							showLegendSymbol: false,
@@ -466,7 +461,7 @@ package com.proj.example.charts.covid
 							type: 'effectScatter',
 							coordinateSystem: 'geo',
 							data: convertData(mapData[n]),
-							symbolSize: function(val:Number):Number {
+							symbolSize: function(val:Array):Number {
 								var n:int = 0;
 								if (val[2] <= 1000) {
 									n = 1;
@@ -501,7 +496,7 @@ package com.proj.example.charts.covid
 							},
 							itemStyle: {
 								normal: {
-									color: '#3a8dd6',
+									color: 'rgba(147, 235, 248, 1)',
 									shadowBlur: 10,
 									shadowColor: '#3a8dd6'
 								}

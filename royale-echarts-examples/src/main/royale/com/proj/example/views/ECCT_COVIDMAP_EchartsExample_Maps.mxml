@@ -77,6 +77,7 @@
 
         //[Bindable]
         private var dpCountries:ArrayList = new ArrayList;
+        private var totalCases:Number = 0;
 
         private function onSearchCountry(init:Boolean = false):void
         {
@@ -89,6 +90,8 @@
                 {
                     var element:TypeGen_NameValueVO = new TypeGen_NameValueVO(classdata.legendCountryData[index]);
                     ar.push(element);
+                    if(element.value > totalCases)
+                        totalCases = element.value;
                 }
                 dpCountries = new ArrayList(ar);
             }
@@ -144,7 +147,7 @@
         <j:CardPrimaryContent height="100%" >
             <j:HGroup percentWidth="100" percentHeight="100" gap="5" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">
 
-                <j:VGroup gap="3" width="20%" height="100%">
+                <j:VGroup gap="3" percentWidth="20" minWidth="20" height="100%">
                 
                     <j:IconTextInput localId="countrySeachInput" rightPosition="false" width="100%" text="" change="onSearchCountry()" >
                         <j:beads>

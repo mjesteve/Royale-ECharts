@@ -850,8 +850,8 @@ package com.proj.example.models
 		{
 			if(!_ECCT_COVIDMAP_1){
 				_ECCT_COVIDMAP_1 = new ChartDefExampleVO();
-				_ECCT_COVIDMAP_1.title = "COVID-19 Dashboard by the Center for Systems Science and Engineering (CSSE)";
-				_ECCT_COVIDMAP_1.subtitle = "at Johns Hopkins University (JHU)";
+				_ECCT_COVIDMAP_1.title = "COVID-19 Dashboard";
+				_ECCT_COVIDMAP_1.subtitle = "(Confirmed Cases)";
 				_ECCT_COVIDMAP_1.themeName = 'custom';
 				_ECCT_COVIDMAP_1.autoLoad = true;
 				
