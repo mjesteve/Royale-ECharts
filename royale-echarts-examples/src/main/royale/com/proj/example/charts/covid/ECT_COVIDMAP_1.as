@@ -7,7 +7,7 @@ package com.proj.example.charts.covid
     import org.apache.royale.events.IEventDispatcher;
     import org.apache.royale.events.EventDispatcher;
     import com.proj.example.charts.IEchartDefinition;
-    import org.apache.royale.collections.ArrayList;
+    import org.apache.royale.html.accessories.NumberFormatter;
 
 	[Event(name="onCompleteInit", type="org.apache.royale.events.Event")]
 	[Event(name="onErrorInit", type="org.apache.royale.events.Event")]
@@ -114,7 +114,7 @@ package com.proj.example.charts.covid
              */
 			var keyold:Object;
 			var acumkey:Number = 0;
-			legendCountriesData = new Array({name:nameCountryDefaultNoDataGeo, value: 0});
+			legendCountriesData = new Array();
 
             for (key in geoCoordMap) {
 				// itera. countries
@@ -209,11 +209,10 @@ package com.proj.example.charts.covid
             }
 			legendCountriesData.push({name:key as String, value: acumkey});
 			legendCountriesData.sort(function sortNumber(a:Object, b:Object):int {
-				if(b.name == nameCountryDefaultNoDataGeo)
-					return 1;
                 return b.value - a.value;
-            });
-			
+            });			
+			legendCountriesData.insertAt(0,{name:nameCountryDefaultNoDataGeo, value: 0});
+
             for (var i:int = 0; i < mapData.length; i++) {
 
                 mapData[i].sort(function sortNumber(a:Object, b:Object):int {
@@ -322,6 +321,21 @@ package com.proj.example.charts.covid
 						label: {
 							emphasis: {
 								show: false
+							}
+						},
+						tooltip: {
+							show: true,
+							trigger: 'item',
+							formatter: function(params) {
+								if(params.seriesIndex == 0)
+								{
+									return params.name;
+								}else if(params.seriesIndex == 1){
+									var v = params.value[2];
+									v = internationalFormat(v);
+									return params.name + '：' + v;
+								}
+								return '{b}';
 							}
 						},
 						itemStyle: {
@@ -556,6 +570,14 @@ package com.proj.example.charts.covid
             }
             return res;
         }
+
+		private function internationalFormat(value:Number):String {
+			var res:String="";
+			var frt:NumberFormatter = new NumberFormatter;
+			frt.thousandsSeparator = "."
+			res = frt.format(value);
+			return res;
+		}
 
     }
 }

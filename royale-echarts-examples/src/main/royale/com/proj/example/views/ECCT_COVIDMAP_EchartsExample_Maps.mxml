@@ -122,7 +122,8 @@
         private function onResetCountries():void
         {
             countriesSeachInput.text = "";
-            unSelectCountries();
+            onSearchCountries();
+            putUnSelectCountry();
         }
         /* - The Chart dispatch by default
         makeAction('toggleSelected', {
@@ -156,12 +157,18 @@
                         break;
                     }
                 }
-                if(!sel && countriesSeachInput.text != "")
-                {
-                    countriesSeachInput.text = "";
+                if(!sel){
+                    if(countriesSeachInput.text != "")
+                    {
+                        //search without filter
+                        onResetCountries();
 
+                    }else{
+                        //Selected "default"
+                        countriesList.selectedIndex = 0;
+                        countriesList.scrollToIndex(0);
+                    }
                 }
-
             }
             
         }
@@ -172,19 +179,30 @@
         });
         */
         
-        private function selectCountries():void
+        private function putSelectCountry():void
         {
             var citem:TypeGen_NameValueVO = (countriesList.selectedItem as TypeGen_NameValueVO);
             if(!citem)
                 return;
+            if(citem.name == ECT_COVIDMAP_1.nameCountryDefaultNoDataGeo)            
+            {
+                charComp.dispatchAction({
+                    type: EChartsEvent.ACTION_GEOUNSELECTED
+                });
 
-            charComp.dispatchAction({
-                type: EChartsEvent.ACTION_GEOSELECTED,
-                name: citem.name
-            });
+            }else{
+
+                charComp.dispatchAction({
+                    type: EChartsEvent.ACTION_GEOSELECTED,
+                    name: citem.name
+                });
+
+                //Change color country Selected ... todo
+
+            }
         }
-        public function geoSelect(... event):void{
-
+        public function geoSelectCountryHandler(... event):void{
+            //listed when dispatchAction geoSelected. [name, selected{namecountry:true/false},type: 'gepselected']
             var param:Object = event?event[0]:null;
             if(!param)
                 return;
@@ -194,13 +212,13 @@
             type: 'geoUnSelect',
             event: 'geounselected'
         });*/
-        private function unSelectCountries():void{
-            /*charComp.dispatchAction({
-                type: EChartsEvent.ACTION_GEOUNSELECTED,
-                : ''
-            });*/
+        private function putUnSelectCountry():void
+        {
+            charComp.dispatchAction({
+                type: EChartsEvent.ACTION_GEOUNSELECTED
+            });
         }
-        public function geoUnSelect(... event):void
+        public function geoUnSelectCountryHandler(... event):void
         {
             var param:Object = event?event[0]:null;
             if(!param)
@@ -276,9 +294,9 @@
                     </j:HGroup>
                 
                     <j:List localId="countriesList" percentWidth="100" percentHeight="100"
-                        itemRenderer="com.proj.example.itemRenderers.ListGenNameValueItemRenderer" doubleClick="selectCountries()">
+                        itemRenderer="com.proj.example.itemRenderers.ListGenNameValueItemRenderer" doubleClick="putSelectCountry()">
                         <j:beads>
-                            <j:ListPresentationModel variableRowHeight="true" rowHeight="35"/>
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
                         </j:beads>
                     </j:List>
                         
@@ -290,7 +308,7 @@
                                                     onCompleteConfig="completConfigHandler(event)"
                                                     onUpdateConfig="completConfigHandler(event)">
                     <localecharts:beads>
-                        <beads:EChartEventsBead GEOSELECTCHANGE="geoToggleSelect" GEOSELECTED="geoSelect" GEOUNSELECTED="geoUnSelect"/>
+                        <beads:EChartEventsBead GEOSELECTCHANGE="geoToggleSelect" GEOSELECTED="geoSelectCountryHandler" GEOUNSELECTED="geoUnSelectCountryHandler"/>
                     </localecharts:beads>
                 </localecharts:EChartsBasicControl>
 
