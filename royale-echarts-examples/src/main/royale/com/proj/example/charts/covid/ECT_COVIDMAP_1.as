@@ -326,13 +326,13 @@ package com.proj.example.charts.covid
 						tooltip: {
 							show: true,
 							trigger: 'item',
-							formatter: function(params) {
+							formatter: function(params:Object):String {
 								if(params.seriesIndex == 0)
 								{
 									return params.name;
 								}else if(params.seriesIndex == 1){
-									var v = params.value[2];
-									v = internationalFormat(v);
+									var v:Object = params.value[2];
+									v = internationalFormat(v as Number);
 									return params.name + '：' + v;
 								}
 								return '{b}';

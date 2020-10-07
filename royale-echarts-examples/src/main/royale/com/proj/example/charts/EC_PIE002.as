@@ -158,7 +158,7 @@ package com.proj.example.charts
                             show: true, position: 'inside',
                             color: '#ffffff', fontSize: '1em', fontWeight: 'normal', fontFamily: 'Open Sans',
                             //formatter: '{@caption} {percen|({d}%)}',
-                            formatter: function(params){
+                            formatter: function(params:Object):String{
                                 if(params.dataIndex === 0)
                                     return '{acum|'+Number.parseFloat(params.data.value).toFixed(2)+'%}';
                                 else
@@ -172,7 +172,7 @@ package com.proj.example.charts
                         itemStyle: {
                             normal:{
                                 //backgroundColor
-                                color: function(params){
+                                color: function(params:Object):String{
                                     if(params.dataIndex === 0)
                                         return '#bbdefa';
                                     else
@@ -213,8 +213,8 @@ package com.proj.example.charts
                             show:true,
                             trigger: 'item', position:{top:'50%',left:5},
                             padding: [10,15,10,15],
-                            formatter: function (params) {
-                                var res = '<span style="display:inline-block;margin-right:5px;width:10px;height:10px;background-color:#F7941D;"></span>';
+                            formatter: function (params:Object):String {
+                                var res:String = '<span style="display:inline-block;margin-right:5px;width:10px;height:10px;background-color:#F7941D;"></span>';
                                 res += '<strong>'+params.data.name+'</strong><br/><strong>'+params.data.tope+'</strong>';
                                 return res;
                             }                            
