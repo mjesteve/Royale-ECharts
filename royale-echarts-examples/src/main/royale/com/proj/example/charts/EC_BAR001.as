@@ -56,13 +56,13 @@ package com.proj.example.charts
                     padding: [10,15,10,15],
                     //extraCssText: "width:200px; white-space:pre-wrap;",
                     //, formatter: "{a} <br/>{b} : {c}%" '{des|'+v[1]+'}'
-                    formatter: function (params) {
+                    formatter: function (params:Object):String {
                         //https://echarts.apache.org/en/option.html#tooltip.formatter
                         
-                        var v = params[0].name.split(' - ');
-                        var res='<strong>'+v[0]+'</strong> - '+v[1];
+                        var v:Array = params[0].name.split(' - ');
+                        var res:String='<strong>'+v[0]+'</strong> - '+v[1];
                         res += '<hr style="height:1px;border-width:0;background-color:white">';
-                        for(var i = 0; i < params.length; i++) {
+                        for(var i:int = 0; i < params.length; i++) {
                             //legend color
                             if (i === 0) {                            
                                 res += '<span style="display:inline-block;margin-right:5px;width:10px;height:10px;background-color:#2196f3;"></span>';
@@ -70,7 +70,7 @@ package com.proj.example.charts
                                 res += '<span style="display:inline-block;margin-right:5px;width:10px;height:10px;background-color:#bbdefa;"></span>';
                             }
                             res += '<strong>'+params[i].seriesName+'</strong>: ';
-                            var item = params[i].data;
+                            var item:Object = params[i].data;
                             if (i === 0) {
                                 //res += item.tpersonaltxt+'   ('+item.tpersonalpercentage+'%)<br/>';
                                 res += '<strong>'+item.tpersonaltxt+' </strong>('+item.tpersonalpercentage+' %)<br>';
@@ -107,8 +107,8 @@ package com.proj.example.charts
                         color: '#000000', fontStyle:'normal',fontSize:10, fontFamily:'Open Sans',
                         verticalAlign: 'middle',
                         lineHeight: 20,
-                        formatter: function(value, index){ 
-                            var v = value.split(' - ');
+                        formatter: function(value:String, index:Number):String{ 
+                            var v:Array = value.split(' - ');
                             v[1] = (v[1].length >= 15 ? (v[1].slice(0,13)+"...") : v[1] );
                             //v[1] = v[1].split (" "). join ("\n");
                             //return '{cod|v[0]}' + '\n' + '{des|v[1]}'; //is does not work
@@ -136,7 +136,7 @@ package com.proj.example.charts
                         axisLabel: {
                             color: '#000000', fontStyle:'normal',fontSize:10, fontFamily:'Open Sans',
                             textStyle: {
-                                color: function(value,index){  
+                                color: function(value:Number,index:Number):String{  
                                     return value <=100 ? 'green':'red'; 
                                 },
                             verticalAlign: 'top', 

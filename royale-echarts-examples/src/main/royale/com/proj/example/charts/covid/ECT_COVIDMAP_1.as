@@ -7,7 +7,7 @@ package com.proj.example.charts.covid
     import org.apache.royale.events.IEventDispatcher;
     import org.apache.royale.events.EventDispatcher;
     import com.proj.example.charts.IEchartDefinition;
-    import org.apache.royale.collections.ArrayList;
+    import org.apache.royale.html.accessories.NumberFormatter;
 
 	[Event(name="onCompleteInit", type="org.apache.royale.events.Event")]
 	[Event(name="onErrorInit", type="org.apache.royale.events.Event")]
@@ -65,7 +65,8 @@ package com.proj.example.charts.covid
         }
         
         public var geoMap:Object;
-        public var nameMap:String = "world";              
+        public var nameMap:String = "world";
+		public static var nameCountryDefaultNoDataGeo:String = '<Rest of the countries>';
         private var geoCoordMap:Object = ECT_COVIDMAP_1_data.geoCoordMap;
 
         private function loadDataJSON():void
@@ -101,7 +102,7 @@ package com.proj.example.charts.covid
             dispatchEvent(new Event("onErrorInit"));
         } 
 
-        public var legendCountryData:Array;
+        public var legendCountriesData:Array;
 
         public function makeData():Object
         {
@@ -113,7 +114,7 @@ package com.proj.example.charts.covid
              */
 			var keyold:Object;
 			var acumkey:Number = 0;
-			legendCountryData = new Array();
+			legendCountriesData = new Array();
 
             for (key in geoCoordMap) {
 				// itera. countries
@@ -124,12 +125,11 @@ package com.proj.example.charts.covid
 
 				if(key !== keyold)
 				{
-					legendCountryData.push({name:keyold as String, value: acumkey});
+					legendCountriesData.push({name:keyold as String, value: acumkey});
 					acumkey = 0;
 					keyold = key;
 				}
                 if (key in d1) {
-                    trace('key in d1: ',key)
 					acumkey = acumkey + d1[key];
                     mapData[0].push({ "year": '2020-01',
                         "name": key,
@@ -138,7 +138,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d2) {
-                    trace('key in d2: ',key)
 					acumkey = acumkey + d2[key];
                     mapData[1].push({
                         "year": '2020-02',
@@ -148,7 +147,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d3) {
-                    trace('key in d3: ',key)
 					acumkey = acumkey + d3[key];
                     mapData[2].push({
                         "year": '2020-03',
@@ -158,7 +156,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d4) {
-                    trace('key in d4: ',key)
 					acumkey = acumkey + d4[key];
                     mapData[3].push({
                         "year": '2020-04',
@@ -168,7 +165,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d5) {
-                    trace('key in d5: ',key)
 					acumkey = acumkey + d5[key];
                     mapData[4].push({
                         "year": '2020-05',
@@ -178,7 +174,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d6) {
-                    trace('key in d6: ',key)
 					acumkey = acumkey + d6[key];
                     mapData[5].push({
                         "year": '2020-06',
@@ -188,7 +183,6 @@ package com.proj.example.charts.covid
                 }
 
                 if (key in d7) {
-                    trace('key in d7: ',key)
 					acumkey = acumkey + d7[key];
                     mapData[6].push({
                         "year": '2020-07',
@@ -197,7 +191,6 @@ package com.proj.example.charts.covid
                     });
                 }
                 if (key in d8) {
-                    trace('key in d8: ',key)
 					acumkey = acumkey + d8[key];
                     mapData[7].push({
                         "year": '2020-08',
@@ -206,7 +199,6 @@ package com.proj.example.charts.covid
                     });
                 }
                 if (key in d9) {
-                    trace('key in d9: ',key)
 					acumkey = acumkey + d9[key];
                     mapData[8].push({
                         "year": '2020-09',
@@ -215,11 +207,12 @@ package com.proj.example.charts.covid
                     });
                 }
             }
-			legendCountryData.push({name:key as String, value: acumkey});
-			legendCountryData.sort(function sortNumber(a:Object, b:Object):int {
+			legendCountriesData.push({name:key as String, value: acumkey});
+			legendCountriesData.sort(function sortNumber(a:Object, b:Object):int {
                 return b.value - a.value;
-            });
-			
+            });			
+			legendCountriesData.insertAt(0,{name:nameCountryDefaultNoDataGeo, value: 0});
+
             for (var i:int = 0; i < mapData.length; i++) {
 
                 mapData[i].sort(function sortNumber(a:Object, b:Object):int {
@@ -247,14 +240,13 @@ package com.proj.example.charts.covid
 					axisType: 'category',
 					autoPlay: true,
 					playInterval: 3000,
-					left: '10%',
-					right: '10%',
-					bottom: '3%',
+					left: '30',
+					bottom: '30',
 					width: '80%',
 					label: {
 						normal: {
 							textStyle: {
-								color: '#ddd'
+								color: 'rgba(147, 235, 248, 1)'
 							}
 						},
 						emphasis: {
@@ -265,22 +257,25 @@ package com.proj.example.charts.covid
 					},
 					symbolSize: 10,
 					lineStyle: {
-						color: '#555'
+						color: 'rgba(147, 235, 248, 1)'
 					},
 					checkpointStyle: {
-						borderColor: '#777',
-						borderWidth: 2
+						borderColor: 'rgba(147, 235, 248, 1)',
+						borderWidth: 2,
+						color: '#182240',
+						shadowBlur: 15,
+						shadowColor: '#3a8dd6'
 					},
 					controlStyle: {
 						showNextBtn: true,
 						showPrevBtn: true,
 						normal: {
-							color: '#666',
-							borderColor: '#666'
+							color: 'rgba(147, 235, 248, 1)',
+							borderColor: 'rgba(147, 235, 248, 1)'
 						},
 						emphasis: {
-							color: '#aaa',
-							borderColor: '#aaa'
+							color: '#fff',
+							borderColor: '#fff'
 						}
 					}
 				},
@@ -317,13 +312,30 @@ package com.proj.example.charts.covid
                     },
 					geo: {
 						show: true,
-						map: 'world',
+						map: nameMap,
 						roam: true,
 						zoom: 1,
-						center: [113.83531246, 34.0267395887],
+						left:'30', top:'center',
+						selectedMode: 'single',
+						//center: [10, 20],
 						label: {
 							emphasis: {
 								show: false
+							}
+						},
+						tooltip: {
+							show: true,
+							trigger: 'item',
+							formatter: function(params:Object):String {
+								if(params.seriesIndex == 0)
+								{
+									return params.name;
+								}else if(params.seriesIndex == 1){
+									var v:Object = params.value[2];
+									v = internationalFormat(v as Number);
+									return params.name + '：' + v;
+								}
+								return '{b}';
 							}
 						},
 						itemStyle: {
@@ -367,7 +379,7 @@ package com.proj.example.charts.covid
 					title: [{
 							text: 'COVID-19 Apache Royale - Echarts',
 							left: '25%',
-							top: '7%',
+							top: '30',
 							textStyle: {
 								color: '#fff',
 								fontSize: 25
@@ -377,7 +389,7 @@ package com.proj.example.charts.covid
 							id: 'statistic',
 							text: " Top 20 Cases " + year[n],
 							left: '75%',
-							top: '8%',
+							top: '30',
 							textStyle: {
 								color: '#fff',
 								fontSize: 25
@@ -391,7 +403,10 @@ package com.proj.example.charts.covid
 						min: 0,
 						boundaryGap: false,
 						splitLine: {
-							show: false
+							show: false,
+							lineStyle: {
+								color: '#fff'
+							}
 						},
 						axisLine: {
 							show: false
@@ -400,9 +415,9 @@ package com.proj.example.charts.covid
 							show: false
 						},
 						axisLabel: {
-							margin: 2,
+							margin: 2, rotate: 45,
 							textStyle: {
-								color: '#aaa'
+								color: '#fff'
 							}
 						}
 					},
@@ -433,7 +448,7 @@ package com.proj.example.charts.covid
 					series: [
 						{
 							type: 'map',
-							map: 'world',
+							map: nameMap,
 							geoIndex: 0,
 							aspectScale: 0.75, 
 							showLegendSymbol: false,
@@ -466,7 +481,7 @@ package com.proj.example.charts.covid
 							type: 'effectScatter',
 							coordinateSystem: 'geo',
 							data: convertData(mapData[n]),
-							symbolSize: function(val:Number):Number {
+							symbolSize: function(val:Array):Number {
 								var n:int = 0;
 								if (val[2] <= 1000) {
 									n = 1;
@@ -501,7 +516,7 @@ package com.proj.example.charts.covid
 							},
 							itemStyle: {
 								normal: {
-									color: '#3a8dd6',
+									color: 'rgba(147, 235, 248, 1)',
 									shadowBlur: 10,
 									shadowColor: '#3a8dd6'
 								}
@@ -555,6 +570,14 @@ package com.proj.example.charts.covid
             }
             return res;
         }
+
+		private function internationalFormat(value:Number):String {
+			var res:String="";
+			var frt:NumberFormatter = new NumberFormatter;
+			frt.thousandsSeparator = "."
+			res = frt.format(value);
+			return res;
+		}
 
     }
 }

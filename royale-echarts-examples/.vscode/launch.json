@@ -10,13 +10,22 @@
         "webRoot": "${workspaceFolder}\\target\\javascript\\bin\\js-debug"
         },
         {
-            "name": "Royal ECharts (Debug version)",
+            "name": "Launch File - Royal ECharts (Debug version)",
             "type": "chrome",
             "request": "launch",
             "sourceMaps": true,
             "url": "file:///${workspaceRoot}/target/javascript/bin/js-debug/index.html",
             "webRoot": "${workspaceRoot}/target/javascript/bin/js-debug"
+        },
+        {
+            "name": "Launch File Allow File Access - Royal ECharts (Debug version)",
+            "type": "chrome",
+            "request": "launch",
+            "sourceMaps": true,
+            //"runtimeExecutable": "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
+            "runtimeArgs": ["--allow-file-access-from-files", "--auto-ssl-client-auth"],
+            "url": "file:///${workspaceRoot}/target/javascript/bin/js-debug/index.html",
+            "webRoot": "${workspaceRoot}/target/javascript/bin/js-debug"
         }
-    
     ]
 }

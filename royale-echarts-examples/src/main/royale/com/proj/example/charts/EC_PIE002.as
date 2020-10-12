@@ -25,15 +25,16 @@ package com.proj.example.charts
             var lbldet:Object = {
                 show: true,
                 /* with markPoint:              
-                formatter: function(params){
+                formatter: function(params:Object):String{
                     return [
                     '{title|Balance}', '{saldo|'+ params.value.saldo +'}',
                     '{hr|}',
                     '  {caption|Limit}{value|'+ params.value.tope +'}',
                     '  {caption|Acummulated}{value|'+ params.value.acumulado +'}'].join('\n');
                 },
-                */position: 'center',        
-                formatter: function(params){
+                */
+                position: 'center',        
+                formatter: function(params:Object):String{
                     if(params.dataIndex === 0){
                         return [
                         '{title|Balance}', '{saldo|'+ dataproviderMarkPoint[0].saldo +'}',
@@ -96,7 +97,7 @@ package com.proj.example.charts
                         //Return value is an array standing for tooltip position, which can be absolute pixels, or relative percentage.
                         //Or can be an object, like {left: 10, top: 30}, or {right: '20%', bottom: 40}.
 
-                    position: function (pos, params, dom, rect, size) {
+                    position: function (pos:Array, params:Object, dom:Object, rect:Array, size:Object):Object {
                         // tooltip will be fixed on the right if mouse hovering on the left,
                         // and on the left if hovering on the right.
                         //ex1:
@@ -105,7 +106,7 @@ package com.proj.example.charts
                         //console.log(obj);
                         
                         //We always position ourselves "within" the limits of the chart
-                        var obj = {};
+                        var obj:Object = {};
                         if(pos[1]<size.contentSize[1])
                             obj.top = pos[1]+25;
                         else
@@ -120,7 +121,7 @@ package com.proj.example.charts
                         return obj;
                     },
                     //extraCssText: "width:200px; white-space:pre-wrap;",
-                    formatter: function (params) {
+                    formatter: function(params:Object):String {
                         //https://echarts.apache.org/en/option.html#tooltip.formatter
                         //In this case...
                         //params: $vars --> Array [seriesName, name, value, percent]
@@ -129,7 +130,7 @@ package com.proj.example.charts
                         //params.value is equal params.data
 
                         //legend color
-                        var res = '';
+                        var res:String = '';
                         if (params.dataIndex === 0) {                            
                             res = '<span style="display:inline-block;margin-right:5px;width:10px;height:10px;background-color:#bbdefa;"></span>';
                         }else{
@@ -158,7 +159,7 @@ package com.proj.example.charts
                             show: true, position: 'inside',
                             color: '#ffffff', fontSize: '1em', fontWeight: 'normal', fontFamily: 'Open Sans',
                             //formatter: '{@caption} {percen|({d}%)}',
-                            formatter: function(params){
+                            formatter: function(params:Object):String{
                                 if(params.dataIndex === 0)
                                     return '{acum|'+Number.parseFloat(params.data.value).toFixed(2)+'%}';
                                 else
@@ -172,7 +173,7 @@ package com.proj.example.charts
                         itemStyle: {
                             normal:{
                                 //backgroundColor
-                                color: function(params){
+                                color: function(params:Object):String{
                                     if(params.dataIndex === 0)
                                         return '#bbdefa';
                                     else
@@ -202,7 +203,7 @@ package com.proj.example.charts
                         itemStyle: {
                             normal:{
                                 //backgroundColor
-                                color: function(params){ return '#F7941D';}
+                                color: function(params:Object):String{ return '#F7941D';}
                             },
                             emphasis:{
                                 shadowColor: 'rgba(0, 0, 0, 0.5)',
@@ -213,8 +214,8 @@ package com.proj.example.charts
                             show:true,
                             trigger: 'item', position:{top:'50%',left:5},
                             padding: [10,15,10,15],
-                            formatter: function (params) {
-                                var res = '<span style="display:inline-block;margin-right:5px;width:10px;height:10px;background-color:#F7941D;"></span>';
+                            formatter: function (params:Object):String {
+                                var res:String = '<span style="display:inline-block;margin-right:5px;width:10px;height:10px;background-color:#F7941D;"></span>';
                                 res += '<strong>'+params.data.name+'</strong><br/><strong>'+params.data.tope+'</strong>';
                                 return res;
                             }                            
