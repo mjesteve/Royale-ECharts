@@ -10,7 +10,6 @@
      <fx:Script>
         <![CDATA[
         import org.apache.royale.collections.ArrayList;
-        import org.apache.royale.jewel.Alert;
         import com.proj.example.charts.IEchartDefinition;
         import com.proj.example.charts.EC_BAR001;
         import com.proj.example.charts.EC_LINE001;
@@ -19,7 +18,7 @@
         import com.proj.example.charts.EC_PIE001;
         import com.proj.example.charts.EC_PIE002;
         import com.proj.example.charts.EC_LINE002;
-        import com.proj.example.vos.ChartDefExampleVO;
+        import com.proj.example.charts.ECC_PIE003;
 
 
         private var mychart:Object;
@@ -28,13 +27,14 @@
         private function onInitComplete():void{            
 			window.addEventListener('resize', autoResizeHandler, false);
             var ar:Array = [
-                {idChart:1, desChart:'Bar Chart Person', typeChart:'bar', component: EC_BAR001},
+                {idChart:1, desChart:'Bar Chart Person', typeChart:'bar', component: EC_BAR001, containerSimple:true},
                 {idChart:2, desChart:'Bar Chart Example', typeChart:'bar', component: EC_BAR002},
                 {idChart:3, desChart:'Bar Chart Example - Overlapping Series', typeChart:'bar', component: EC_BAR003},
                 {idChart:4, desChart:'Pie Chart Example 1', typeChart:'pie', component: EC_PIE001},
                 {idChart:5, desChart:'Pie-Doughnut Chart Person', typeChart:'pie', component: EC_PIE002},
-                {idChart:6, desChart:'Line Chart - Temperature changes in the next week', typeChart:'line', component: EC_LINE001},
-                {idChart:7, desChart:'Line Chart & Pie Chart dataset-link', typeChart:'line', component: EC_LINE002}
+                {idChart:6, desChart:'Pie-Ring Diagram', typeChart:'pie', component: ECC_PIE003},
+                {idChart:7, desChart:'Line Chart - Temperature changes in the next week', typeChart:'line', component: EC_LINE001},
+                {idChart:8, desChart:'Line Chart & Pie Chart dataset-link', typeChart:'line', component: EC_LINE002}
             ];
             cbCharts.dataProvider = new ArrayList(ar);
         }
@@ -82,39 +82,21 @@
                         defchart = new EC_PIE002() as IEchartDefinition;                 
                         break;
                     case 6:
-                        defchart = new EC_LINE001() as IEchartDefinition;
+                        defchart = new ECC_PIE003() as IEchartDefinition;                 
                         break;
                     case 7:
+                        defchart = new EC_LINE001() as IEchartDefinition;
+                        break;
+                    case 8:
                         defchart = new EC_LINE002() as IEchartDefinition;
-                        /*
-                        mychart.on('updateAxisPointer', function (event) {
-                            var xAxisInfo = event.axesInfo[0];
-                            if (xAxisInfo) {
-                                var dimension = xAxisInfo.value + 1;
-                                this.setOption({
-                                    series: {
-                                        id: 'pie',
-                                        label: {
-                                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
-                                        },
-                                        encode: {
-                                            value: dimension,
-                                            tooltip: dimension
-                                        }
-                                    }
-                                });
-                            }
-                        });*/
-
                         mychart.on('updateAxisPointer', updateAxisPointer);
-
                         break;
                 
                     default:
                         option = mychart.getOption();
                         break;
                 }
-                if(idChart != 7)
+                if(idChart != 8)
                     mychart.off('updateAxisPointer');
                 if(defchart)
                     option = defchart.optionChartInit();
