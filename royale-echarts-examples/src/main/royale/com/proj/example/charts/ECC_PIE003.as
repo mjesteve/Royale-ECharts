@@ -15,31 +15,34 @@ package com.proj.example.charts
 
         public function optionChartInit():Object
         {
+            var backColorLimit:String = '#2196f3'; 
+            var backColorAcum:String = '#bbdefa';  
+            var backColorBalance:String = '#F7941D';
+            var backColorBalanceNeg:String = '#ff002b';
+
             var dashedPic:String = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAM8AAAAOBAMAAAB6G1V9AAAAD1BMVEX////Kysrk5OTj4+TJycoJ0iFPAAAAG0lEQVQ4y2MYBaNgGAMTQQVFOiABhlEwCugOAMqzCykGOeENAAAAAElFTkSuQmCC';
+    
+            var arColors:Array = [backColorLimit,backColorAcum,backColorBalance];
             
             var sum:Number = 0, sumBis:Number = 0;
-            var limit:Number = 0;
-            var accum:Number = 0;
             var pieSeries:Array = [], lineYAxis:Array = [], lineYAxisBis:Array = [];
 
-            var arColors:Array = ['#2196f3','#bbdefa','#FF8700'];
-            var coloNeg:String = '#ff002b';
             var chartData:Array = [
-                {name: "Limit hrs", value: 1800, valuetxt: '30:00', unit:2},
-                {name: "Accumulated hrs", value: 2400, valuetxt: '40:00',unit:2},
-                {name: "Balance hrs", value: -600, valuetxt: '-10:00', unit:2}
+                {name: "Limit hrs", value: 1800, caption: '30:00', unit:2},
+                {name: "Accumulated hrs", value: 2400, caption: '40:00',unit:2},
+                {name: "Balance hrs", value: -600, caption: '-10:00', unit:2}
             ];
             var chartDataBis:Array = [
-                {name: "Limit days", value: 29, valuetxt: '29 d.',unit:1},
-                {name: "Accumulated days",value: 22,valuetxt: '22 d.',unit:1},
-                {name: "Balance days",value: 7,valuetxt: '7 d.',unit:1}
+                {name: "Limit days", value: 29, caption: '29 d.',unit:1},
+                {name: "Accumulated days",value: 22,caption: '22 d.',unit:1},
+                {name: "Balance days",value: 7,caption: '7 d.',unit:1}
             ];
 
             var v:Object;
             var colorserie:String;
             var dataserie:Array = [];
             var valuepos:Number = 0;
-            var valuecomp:Number = 0;
+            var valueOffset:Number = 0;
 
             var x:int = 0;
             var i:int = 0;
@@ -47,38 +50,34 @@ package com.proj.example.charts
             //These chart are calculated from the total
             for(x = 0; x < len; x++)
             {
-                if(x<len-1)
-                    sum += chartData[x].value;
+                if(x<len-1 && chartData[x].value>sum)
+                    sum = chartData[x].value;
             }
+            var pieTrans:Number = sum * 0.25;
+            sum = sum * 0.75;
+
             for(i = 0; i < len; i++)
             {
                 v = chartData[i];                
                 colorserie = arColors[i];
                 dataserie = [];
-                
-                if(i == 0) limit = v.value;
-                if(i == 1) accum = v.value;
+                valuepos =  v.value * 0.75;
 
                 if(i != 2){
                     dataserie = [
-                        {value: v.value, name: v.name, itemStyle: {color: colorserie}},
-                        {value: sum-v.value, name:'', itemStyle: {color: "rgba(0,0,0,0)"}}
+                        {value: valuepos, name: v.name, itemStyle: {color: colorserie}},
+                        {value: pieTrans + (sum - valuepos), name:'', itemStyle: {color: "rgba(0,0,0,0)"}}
                     ];
                 }else{
-                    valuepos = v.value;
-                    valuecomp = 0;
                     if(v.value < 0){
-                        colorserie = coloNeg;
+                        colorserie = backColorBalanceNeg;
                         valuepos = -1 * valuepos;
-                        valuecomp = limit;
-                    }else{
-                        valuecomp = accum;
                     }
-                    //var limite:Number = chartData[i-1].value + v.value;
+                    valueOffset =  sum - valuepos;
                     dataserie = [
-                        {value: valuecomp, name:'', itemStyle: {color: "rgba(0,0,0,0)"}},
+                        {value: valueOffset, name:'', itemStyle: {color: "rgba(0,0,0,0)"}},
                         {value: valuepos, name: v.name, itemStyle: {color: colorserie}},
-                        {value: valuecomp, name:'', itemStyle: {color: "rgba(0,0,0,0)"}},
+                        {value: pieTrans, name:'', itemStyle: {color: "rgba(0,0,0,0)"}},
                     ];
                 }
                 
@@ -119,44 +118,38 @@ package com.proj.example.charts
                 });
 
             }
-
+            sum = 0;
             len = chartDataBis.length;
             for(x = 0; x < len; x++)
             {
-                if(x<len-1)
-                    sumBis += chartDataBis[x].value;
+                if(x<len-1 && chartDataBis[x].value>sum)
+                    sum = chartDataBis[x].value;
             }
+            pieTrans = sum * 0.25;
+            sum = sum * 0.75;
 
             for(i = 0; i < len; i++)
             {
-                v = chartDataBis[i];                
+                v = chartDataBis[i];      
                 colorserie = arColors[i];
                 dataserie = [];
-                
-                if(i == 0) limit = v.value;
-                if(i == 1) accum = v.value;
+                valuepos =  v.value * 0.75;
 
                 if(i != 2){
                     dataserie = [
-                        {value: v.value, name: v.name, itemStyle: {color: colorserie}},
-                        {value: sumBis-v.value, name:'', itemStyle: {color: "rgba(0,0,0,0)"}}
-                    ];                    
-                }else{
-                    valuepos = v.value;
-                    valuecomp = 0;
-                    if(v.value < 0){
-                        colorserie = coloNeg;
-                        valuepos = -1 * v.value;
-                        valuecomp = limit;
-                    }else{
-                        valuepos = v.value;
-                        valuecomp = accum;
-                    }
-                    //var limite:Number = chartData[i-1].value + v.value;
-                    dataserie = [
-                        {value: valuecomp, name:'', itemStyle: {color: "rgba(0,0,0,0)"}},
                         {value: valuepos, name: v.name, itemStyle: {color: colorserie}},
-                        {value: valuecomp, name:'', itemStyle: {color: "rgba(0,0,0,0)"}},
+                        {value: pieTrans + (sum - valuepos), name:'', itemStyle: {color: "rgba(0,0,0,0)"}}
+                    ];
+                }else{
+                    if(v.value < 0){
+                        colorserie = backColorBalanceNeg;
+                        valuepos = -1 * valuepos;
+                    }
+                    valueOffset =  sum - valuepos;
+                    dataserie = [
+                        {value: valueOffset, name:'', itemStyle: {color: "rgba(0,0,0,0)"}},
+                        {value: valuepos, name: v.name, itemStyle: {color: colorserie}},
+                        {value: pieTrans, name:'', itemStyle: {color: "rgba(0,0,0,0)"}},
                     ];
                 }
                 
@@ -309,9 +302,9 @@ package com.proj.example.charts
 
         private function labelformatter(params:Object, arData:Array):String {
             var item:Object = arData[params];
-            var valuestr:String = '{value|' + item.valuetxt +'}';
+            var valuestr:String = '{value|' + item.caption +'}';
             if(item.value<0)
-                valuestr = '{valueneg|' + item.valuetxt +'}';
+                valuestr = '{valueneg|' + item.caption +'}';
             return'{line|}{circle|●}{name|' + item.name +'}{bd||}'+valuestr;
         }
 
