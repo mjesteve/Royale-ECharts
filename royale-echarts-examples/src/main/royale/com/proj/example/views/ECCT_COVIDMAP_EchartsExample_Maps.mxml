@@ -294,7 +294,7 @@
                     </j:HGroup>
                 
                     <j:List localId="countriesList" percentWidth="100" percentHeight="100"
-                        itemRenderer="com.proj.example.itemRenderers.ListGenNameValueItemRenderer" doubleClick="putSelectCountry()">
+                        itemRenderer="com.proj.example.itemRenderers.ListGenNameValueItemRenderer" change="putSelectCountry()">
                         <j:beads>
                             <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
                         </j:beads>
