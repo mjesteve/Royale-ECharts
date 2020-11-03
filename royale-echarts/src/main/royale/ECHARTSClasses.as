@@ -12,6 +12,7 @@ package
 		COMPILE::JS
 		{
 		import echarts; echarts;
+		import IEChartsBasic; IEChartsBasic;
 		//import EChartsComponent; EChartsComponent;
 		}
 	}
