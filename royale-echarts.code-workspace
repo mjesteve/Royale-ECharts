@@ -11,6 +11,7 @@
 		}
 	],
 	"settings": {
-		"as3mxml.sdk.framework": "D:\\Apache\\apache-royale-0.9.8-iest"
+        "as3mxml.sdk.framework": "D:\\Apache\\apache-royale-0.9.8-iest",
+		"as3mxml.sdk.searchPaths": "D:\\Desarrollo_Royale\\Proyectos\\WPNetSuitePlus\\Royale-git\\royale-asjs"
 	}
 }
