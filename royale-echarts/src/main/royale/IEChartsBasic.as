@@ -1,11 +1,7 @@
 package 
 {
-    
-    
 	public interface IEChartsBasic
 	{
-		[Event(name="onCompleteInicialize", type="com.proj.example.echarts.events.EChartsEvent")];
-        [Event(name="onCompleteConfig", type="com.proj.example.echarts.events.EChartsEvent")];
         
 		function get isInit():Boolean;
         function set isInit(value:Boolean):void;

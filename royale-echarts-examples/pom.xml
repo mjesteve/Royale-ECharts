@@ -210,12 +210,12 @@
           <htmlTemplate>${basedir}/src/main/resources/royale-echarts-examples-template.html</htmlTemplate>
           <additionalCompilerOptions>
               -js-default-initializers=true;
+              -js-dynamic-access-unknown-members=true; <!-- to access JSON object graph subobjects --> 
               -source-map=true;
               -compiler.exclude-defaults-css-files=MXRoyale-${royale.framework.version}-js.swc:defaults.css;
               -keep-as3-metadata+=Inject,Dispatcher,EventHandler,PostConstruct,PreDestroy,ViewAdded,ViewRemoved,Bindable,Transient;
               -keep-code-with-metadata=Inject;
               -show-binding-warnings=false;
-              -js-dynamic-access-unknown-members=true; <!-- to access JSON object graph subobjects --> 
           </additionalCompilerOptions>
           <defines>
               <property>
