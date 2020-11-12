@@ -13,6 +13,9 @@ package
 		 * //echarts.min.formatted.js | echarts.min_5.0.js | echarts-en-4.9.js | echarts-5.0.0-alpha.2.js
 		 * script.setAttribute("src", "js/echarts-en-4.9.js");
 		 * 
+		 * //script.setAttribute("src", "https://cdn.jsdelivr.net/npm/echarts@5.0.0-rc.1/dist/echarts.min.js");
+		 * //script.setAttribute("crossorigin","anonymous");
+		 * 
 		 * //script.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.0-alpha.2/echarts.min.js");
 		 * //script.setAttribute("integrity","sha512-TRh7pogfkvYZVIuppkrYA8WHLHwaqW2wONk+r4dtG+W0CDGrUUIictWnI8D2zCN/5Qcwmci4eTHRJpQ4jReJdA==");
 		 * //script.setAttribute("crossorigin","anonymous");
