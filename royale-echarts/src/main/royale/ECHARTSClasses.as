@@ -13,7 +13,18 @@ package
 		{
 		import echarts; echarts;
 		import echarts.IEChartsBasic; IEChartsBasic;
-		//import EChartsComponent; EChartsComponent;
+		import echarts.beads.EChartEventsBead;EChartEventsBead;
+		import echarts.controllers.EChartsThemesController;EChartsThemesController;
+		import echarts.events.EChartsEvent;EChartsEvent;
+		import echarts.events.EChartsThemesEvent;EChartsThemesEvent;
+		import echarts.models.EChartsThemesModel;EChartsThemesModel;
+		import echarts.vos.EChartsCallBackFunctionVO;EChartsCallBackFunctionVO;
+		import echarts.vos.EChartsInstanceVO;EChartsInstanceVO;
+		import echarts.vos.EChartsThemeTemplateVO;EChartsThemeTemplateVO;
+		import echarts.EChartsBasicControl;EChartsBasicControl;
+		import echarts.EChartsLoader;EChartsLoader;
+		import echarts.EChartsThemeLoader;EChartsThemeLoader;
+		import echarts.EChartsWithThemeControl;EChartsWithThemeControl;
 		}
 	}
 }
