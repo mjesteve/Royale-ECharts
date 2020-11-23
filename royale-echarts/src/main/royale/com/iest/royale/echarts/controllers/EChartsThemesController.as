@@ -1,13 +1,13 @@
-package com.iest.echarts.controllers
+package com.iest.royale.echarts.controllers
 {
     import org.apache.royale.core.IBeadController;
     import org.apache.royale.core.IBeadModel;
     import org.apache.royale.core.IStrand;
     import org.apache.royale.events.EventDispatcher;
-    import com.iest.echarts.models.EChartsThemesModel;
+    import com.iest.royale.echarts.models.EChartsThemesModel;
     import org.apache.royale.events.IEventDispatcher;
-    import com.iest.echarts.events.EChartsThemesEvent;
-    import com.iest.echarts.vos.EChartsThemeTemplateVO;
+    import com.iest.royale.echarts.events.EChartsThemesEvent;
+    import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
     import org.apache.royale.net.HTTPConstants;
     import org.apache.royale.net.URLLoader;
     import org.apache.royale.net.URLRequest;
@@ -200,7 +200,7 @@ package com.iest.echarts.controllers
                 addTheme(itemSelTheme);
                 it = itemSelTheme;
             }
-			com.iest.echarts.registerTheme(it.themeName,it.jsonConfig);
+			com.iest.royale.echarts.registerTheme(it.themeName,it.jsonConfig);
             trace(">>>>> registerTheme SET OK");
             it.isReg = true;
             if(model.initComplete)

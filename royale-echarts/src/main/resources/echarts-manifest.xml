@@ -19,8 +19,8 @@
 -->
 <componentPackage>
 
-  <component id="EChartsBasicControl" class="com.iest.echarts.EChartsBasicControl"/>
-  <component id="EChartsWithThemeControl" class="com.iest.echarts.EChartsWithThemeControl"/>
-  <component id="EChartEventsBead" class="com.iest.echarts.beads.EChartEventsBead"/>
+  <component id="EChartsBasicControl" class="com.iest.royale.echarts.EChartsBasicControl"/>
+  <component id="EChartsWithThemeControl" class="com.iest.royale.echarts.EChartsWithThemeControl"/>
+  <component id="EChartEventsBead" class="com.iest.royale.echarts.beads.EChartEventsBead"/>
   
 </componentPackage>

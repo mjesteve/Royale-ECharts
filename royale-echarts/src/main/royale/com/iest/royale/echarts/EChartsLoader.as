@@ -1,4 +1,4 @@
-package com.iest.echarts
+package com.iest.royale.echarts
 {
 	import org.apache.royale.events.EventDispatcher;
 	import org.apache.royale.utils.ObjectMap;
