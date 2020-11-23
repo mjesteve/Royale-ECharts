@@ -225,6 +225,11 @@
                 return;
         }
 
+        /*private function getOptionString():void
+        {
+            lblOption.html = JSON.stringify(itemChartDef.optionChartInit);
+        }*/
+
         ]]>
     </fx:Script>
     
@@ -239,6 +244,7 @@
                 <html:H5 text="{itemChartDef.subtitle}" className="primary-dark block-with-text"/>
             </j:BarSection>
             <j:BarSection width="30%" itemsHorizontalAlign="itemsRight" gap="0" itemsVerticalAlign="itemsCenter">     
+                <!--<j:Button localId="btncfg" text="save" click="getOptionString()" />-->
                 <j:IconButton localId="btnLoad" unboxed="true" click="{dispatchEvent(new Event('close'));}" >
                     <j:icon>
                         <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_CIRCLE_LEFT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
@@ -246,12 +252,14 @@
                     <j:beads>
                         <j:ToolTip toolTip="Back"/>
                     </j:beads>
-                </j:IconButton>
+                </j:IconButton> 
             </j:BarSection>
         </j:CardHeader>
 
         <j:CardPrimaryContent height="100%" >
             <j:HGroup percentWidth="100" percentHeight="100" gap="5" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">
+
+            <!--    <j:Label localId="lblOption" multiline="true" width="200" height="100%" style="overflow-y: scroll;"/>-->
 
                 <j:VGroup gap="3" percentWidth="20" minWidth="20" height="100%">
                 

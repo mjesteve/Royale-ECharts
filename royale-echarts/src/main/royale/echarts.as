@@ -13,8 +13,11 @@ package
 		 * //echarts.min.formatted.js | echarts.min_5.0.js | echarts-en-4.9.js | echarts-5.0.0-alpha.2.js
 		 * script.setAttribute("src", "js/echarts-en-4.9.js");
 		 * 
-		 * //script.setAttribute("src", "https://cdn.jsdelivr.net/npm/echarts@5.0.0-rc.1/dist/echarts.min.js");
+		 * //script.setAttribute("src", "https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.js");
+		 * //script.setAttribute("src", "https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js");
 		 * //script.setAttribute("crossorigin","anonymous");
+		 * 
+		 * document.head.appendChild(script);
 		 * 
 		 * //script.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.0-alpha.2/echarts.min.js");
 		 * //script.setAttribute("integrity","sha512-TRh7pogfkvYZVIuppkrYA8WHLHwaqW2wONk+r4dtG+W0CDGrUUIictWnI8D2zCN/5Qcwmci4eTHRJpQ4jReJdA==");
@@ -36,7 +39,6 @@ package
 		 * //src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.8.0/echarts.min.js" integrity="sha512-OvWfXEXFlgwaMYESoKZRrPGq9Ndjcf7pMgp+NjbUNeqEA1OOOUbLgquJGOzvh7H78qinNObGwRiFIj22es61Eg==" crossorigin="anonymous">
 		 * //src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.8.0/echarts-en.min.js" integrity="sha512-bHJjukAEXqiJdnUlb1I2Oios4izlP1da7mpUIeogj26NjAmT/EEbcDn0AlnAE+eOaJyQAsPy5FIzw4dhfe8o4A==" crossorigin="anonymous">
 		 * 
-		 * document.head.appendChild(script);
 		 * </inject_script>
 		*/
         public function echarts(){
