@@ -5,13 +5,13 @@
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:views="com.proj.example.views.*" 
-    xmlns:localecharts="com.proj.example.echarts.*"
+    xmlns:localecharts="echarts.*"
     initComplete="onInitComplete()" style="padding-top: 20px" >
 
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
-        import com.proj.example.echarts.events.EChartsEvent;
+        import echarts.events.EChartsEvent;
         import org.apache.royale.core.BindableCSSStyles;
 
         private function onInitComplete():void{

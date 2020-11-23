@@ -14,7 +14,7 @@
         <![CDATA[
         import com.proj.example.vos.TabBarChartVO;
         import org.apache.royale.jewel.supportClasses.ISelectableContent;
-        import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
+        import echarts.vos.EChartsThemeTemplateVO;
         import com.proj.example.charts.IEchartExampleBasic;
 
         private function onInitComplete():void{            

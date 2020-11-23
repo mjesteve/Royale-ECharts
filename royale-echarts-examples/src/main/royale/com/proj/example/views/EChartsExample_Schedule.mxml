@@ -5,14 +5,14 @@
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:views="com.proj.example.views.*" 
-    xmlns:localecharts="com.proj.example.echarts.*"
-    xmlns:beads="com.proj.example.echarts.beads.*"
+    xmlns:localecharts="echarts.*"
+    xmlns:beads="echarts.beads.*"
     initComplete="onInitComplete()" style="padding-top: 20px" >
 
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
-        import com.proj.example.echarts.events.EChartsEvent;
+        import echarts.events.EChartsEvent;
         import org.apache.royale.jewel.Alert;
 
         private function onInitComplete():void{
