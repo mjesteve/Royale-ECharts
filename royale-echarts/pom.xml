@@ -125,6 +125,22 @@
       <scope>provided</scope>
     </dependency>-->
 
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Core</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>swf</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Core</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>js</classifier>
+    </dependency>
     <!-- For JavaScript compilation, we need some other base classes -->
     <dependency>
       <groupId>org.apache.royale.typedefs</groupId>
