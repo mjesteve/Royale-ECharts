@@ -16,6 +16,8 @@ package echarts
 	[Event(name="onWaitLoadThemeFromFile", type="echarts.events.EChartsThemesEvent")]
 	[Event(name="onCompleteRegister", type="echarts.events.EChartsThemesEvent")]
 
+	
+	COMPILE::JS
     public class EChartsThemeLoader extends EventDispatcher
     {
 		public function EChartsThemeLoader(){

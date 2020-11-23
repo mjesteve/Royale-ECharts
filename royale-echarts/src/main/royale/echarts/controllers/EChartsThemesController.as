@@ -11,7 +11,9 @@ package echarts.controllers
     import org.apache.royale.net.HTTPConstants;
     import org.apache.royale.net.URLLoader;
     import org.apache.royale.net.URLRequest;
+    import org.apache.royale.events.Event;
 
+	COMPILE::JS
     public class EChartsThemesController extends EventDispatcher implements IBeadController
 	{
 		protected var _model:IBeadModel;
