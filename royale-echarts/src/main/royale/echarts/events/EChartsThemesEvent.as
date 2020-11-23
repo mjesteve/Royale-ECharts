@@ -1,7 +1,6 @@
 package echarts.events
 {
 	import org.apache.royale.events.Event;
-	import echarts.vos.EChartsInstanceVO;
 	import echarts.vos.EChartsThemeTemplateVO;
 
 	public class EChartsThemesEvent extends Event

@@ -19,6 +19,8 @@
 -->
 <componentPackage>
 
-  <!--<component id="EChartsComponent" class="EChartsComponent"/>-->
+  <component id="EChartsBasicControl" class="echarts.EChartsBasicControl"/>
+  <component id="EChartsWithThemeControl" class="echarts.EChartsWithThemeControl"/>
+  <component id="EChartEventsBead" class="echarts.beads.EChartEventsBead"/>
   
 </componentPackage>

@@ -7,7 +7,6 @@ package echarts.controllers
     import echarts.models.EChartsThemesModel;
     import org.apache.royale.events.IEventDispatcher;
     import echarts.events.EChartsThemesEvent;
-    import echarts.vos.EChartsInstanceVO;
     import echarts.vos.EChartsThemeTemplateVO;
     import org.apache.royale.net.HTTPConstants;
     import org.apache.royale.net.URLLoader;
