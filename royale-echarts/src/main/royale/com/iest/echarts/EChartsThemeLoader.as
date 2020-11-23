@@ -1,4 +1,4 @@
-package echarts
+package com.iest.echarts
 {
 	import org.apache.royale.utils.ObjectMap;
     import org.apache.royale.events.Event;
@@ -6,15 +6,15 @@ package echarts
     import org.apache.royale.net.URLLoader;
     import org.apache.royale.net.URLRequest;
     import org.apache.royale.net.HTTPConstants;
-    import echarts.vos.EChartsThemeTemplateVO;
-    import echarts.events.EChartsThemesEvent;
+    import com.iest.echarts.vos.EChartsThemeTemplateVO;
+    import com.iest.echarts.events.EChartsThemesEvent;
     import org.apache.royale.events.IEventDispatcher;
 	
 
-	[Event(name="onCompleteLoadThemeFromFile", type="echarts.events.EChartsThemesEvent")]
-	[Event(name="onErrorLoadThemeFromFile", type="echarts.events.EChartsThemesEvent")]
-	[Event(name="onWaitLoadThemeFromFile", type="echarts.events.EChartsThemesEvent")]
-	[Event(name="onCompleteRegister", type="echarts.events.EChartsThemesEvent")]
+	[Event(name="onCompleteLoadThemeFromFile", type="com.iest.echarts.events.EChartsThemesEvent")]
+	[Event(name="onErrorLoadThemeFromFile", type="com.iest.echarts.events.EChartsThemesEvent")]
+	[Event(name="onWaitLoadThemeFromFile", type="com.iest.echarts.events.EChartsThemesEvent")]
+	[Event(name="onCompleteRegister", type="com.iest.echarts.events.EChartsThemesEvent")]
 
 	
 	COMPILE::JS

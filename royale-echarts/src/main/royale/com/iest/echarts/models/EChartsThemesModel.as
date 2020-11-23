@@ -1,10 +1,10 @@
-package echarts.models
+package com.iest.echarts.models
 {
 	import org.apache.royale.core.IBeadModel;
 	import org.apache.royale.core.IStrand;
 	import org.apache.royale.events.EventDispatcher;
 	import org.apache.royale.utils.ObjectMap;
-	import echarts.vos.EChartsThemeTemplateVO;
+	import com.iest.echarts.vos.EChartsThemeTemplateVO;
 	import org.apache.royale.collections.ArrayList;
 
     [Bindable]

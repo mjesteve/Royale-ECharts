@@ -1,4 +1,4 @@
-package echarts.beads
+package com.iest.echarts.beads
 {	
 	
 	/**
@@ -15,9 +15,9 @@ package echarts.beads
 	import org.apache.royale.core.IStrand;
 	import org.apache.royale.core.Strand;
 	import org.apache.royale.events.IEventDispatcher;
-	import echarts.events.EChartsEvent;
-	import echarts.IEChartsBasic;
-	import echarts.vos.EChartsCallBackFunctionVO;
+	import com.iest.echarts.events.EChartsEvent;
+	import com.iest.echarts.IEChartsBasic;
+	import com.iest.echarts.vos.EChartsCallBackFunctionVO;
 
 	public class EChartEventsBead  extends Strand implements IBead
 	{

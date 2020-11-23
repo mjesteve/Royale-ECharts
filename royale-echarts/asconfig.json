@@ -12,7 +12,7 @@
         ],
         "namespace": [
             {
-                "uri": "library://ns.apache.org/royale/echarts",
+                "uri": "library://ns.iest.com/royale/echarts",
                 "manifest": "src/main/resources/echarts-manifest.xml"
             }
         ],
@@ -30,17 +30,11 @@
             "src/main/royale"
         ],
         "include-classes": [
-            "ECHARTSClasses"
+            "src/main/royale/ECHARTSClasses.as"
         ],
         "include-sources": [
             "src/main/royale"
         ],
-        // "library-path": [
-        //     "${royalelib}/js/libs/MXRoyaleJS.swc"
-        // ],
-        // "js-library-path": [
-        //     "${royalelib}/js/libs/MXRoyaleJS.swc"
-        // ],
         "source-map": true,
         "output": "target/royale-echarts-1.0-SNAPSHOT-js.swc"
     }

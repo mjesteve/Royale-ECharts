@@ -1,4 +1,4 @@
-package echarts.vos
+package com.iest.echarts.vos
 {
 
     [Bindable]

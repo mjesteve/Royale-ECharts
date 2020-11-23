@@ -1,13 +1,13 @@
-package echarts.controllers
+package com.iest.echarts.controllers
 {
     import org.apache.royale.core.IBeadController;
     import org.apache.royale.core.IBeadModel;
     import org.apache.royale.core.IStrand;
     import org.apache.royale.events.EventDispatcher;
-    import echarts.models.EChartsThemesModel;
+    import com.iest.echarts.models.EChartsThemesModel;
     import org.apache.royale.events.IEventDispatcher;
-    import echarts.events.EChartsThemesEvent;
-    import echarts.vos.EChartsThemeTemplateVO;
+    import com.iest.echarts.events.EChartsThemesEvent;
+    import com.iest.echarts.vos.EChartsThemeTemplateVO;
     import org.apache.royale.net.HTTPConstants;
     import org.apache.royale.net.URLLoader;
     import org.apache.royale.net.URLRequest;
@@ -200,7 +200,7 @@ package echarts.controllers
                 addTheme(itemSelTheme);
                 it = itemSelTheme;
             }
-			echarts.registerTheme(it.themeName,it.jsonConfig);
+			com.iest.echarts.registerTheme(it.themeName,it.jsonConfig);
             trace(">>>>> registerTheme SET OK");
             it.isReg = true;
             if(model.initComplete)

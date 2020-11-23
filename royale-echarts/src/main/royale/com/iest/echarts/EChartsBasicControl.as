@@ -1,30 +1,30 @@
-package echarts
+package com.iest.echarts
 {
-    import echarts.events.EChartsEvent;
-    import echarts.vos.EChartsInstanceVO;
+    import com.iest.echarts.events.EChartsEvent;
+    import com.iest.echarts.vos.EChartsInstanceVO;
     import org.apache.royale.core.WrappedHTMLElement;
     import org.apache.royale.html.util.addElementToWrapper;
     import org.apache.royale.core.UIBase;
     import org.apache.royale.utils.sendEvent;
-    import echarts.vos.EChartsThemeTemplateVO;
+    import com.iest.echarts.vos.EChartsThemeTemplateVO;
 	
     /**
      *  Indicates that the initialization of the EChartsInstance is complete.  
      */
-	[Event(name="onCompleteInicialize", type="echarts.events.EChartsEvent")]
+	[Event(name="onCompleteInicialize", type="com.iest.echarts.events.EChartsEvent")]
 	
     /**
      *  Indicates that the current EChartsInstance has been disposed.  
      */
-	[Event(name="onDisposeInstance", type="echarts.events.EChartsEvent")]
+	[Event(name="onDisposeInstance", type="com.iest.echarts.events.EChartsEvent")]
     /**
      *  Indicates that the configuration of the EChartsInstance is complete.  
      */
-	[Event(name="onCompleteConfig", type="echarts.events.EChartsEvent")]
+	[Event(name="onCompleteConfig", type="com.iest.echarts.events.EChartsEvent")]
     /**
      *  indicates that the update of the configuration of the EChartsInstance is complete
      */
-	[Event(name="onUpdateConfig", type="echarts.events.EChartsEvent")]
+	[Event(name="onUpdateConfig", type="com.iest.echarts.events.EChartsEvent")]
 
 	COMPILE::JS
 	public class EChartsBasicControl extends UIBase implements IEChartsBasic
@@ -200,7 +200,7 @@ package echarts
                 else //Theme pending to apply
                     clear();
             }
-			// see echarts.init 
+			// see com.iest.echarts.init 
 			instanceECharts = echarts.init(element,_themeName,_optsInstance);
             
             _oldThemeName = _themeName;
@@ -336,7 +336,7 @@ package echarts
         }
 
 		/**
-		 * Group name to be used in echarts.connection
+		 * Group name to be used in com.iest.echarts.connection
 		 */
         private var _group:String;
         public function get group():String{ return _group; }

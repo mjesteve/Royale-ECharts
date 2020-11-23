@@ -12,20 +12,20 @@ package
 		COMPILE::JS
 		{
 		import echarts; echarts;
-		import echarts.EChartsBasicControl;EChartsBasicControl;
-		import echarts.EChartsWithThemeControl;EChartsWithThemeControl;
-		import echarts.EChartsThemeLoader;EChartsThemeLoader;
-		import echarts.controllers.EChartsThemesController;EChartsThemesController;
+		import com.iest.echarts.EChartsBasicControl;EChartsBasicControl;
+		import com.iest.echarts.EChartsWithThemeControl;EChartsWithThemeControl;
+		import com.iest.echarts.EChartsThemeLoader;EChartsThemeLoader;
+		import com.iest.echarts.controllers.EChartsThemesController;EChartsThemesController;
 		}
-		import echarts.IEChartsBasic; IEChartsBasic;
-		import echarts.beads.EChartEventsBead;EChartEventsBead;
-		import echarts.events.EChartsEvent;EChartsEvent;
-		import echarts.events.EChartsThemesEvent;EChartsThemesEvent;
-		import echarts.models.EChartsThemesModel;EChartsThemesModel;
-		import echarts.vos.EChartsCallBackFunctionVO;EChartsCallBackFunctionVO;
-		import echarts.vos.EChartsInstanceVO;EChartsInstanceVO;
-		import echarts.vos.EChartsThemeTemplateVO;EChartsThemeTemplateVO;
-		import echarts.EChartsLoader;EChartsLoader;
+		import com.iest.echarts.IEChartsBasic; IEChartsBasic;
+		import com.iest.echarts.beads.EChartEventsBead;EChartEventsBead;
+		import com.iest.echarts.events.EChartsEvent;EChartsEvent;
+		import com.iest.echarts.events.EChartsThemesEvent;EChartsThemesEvent;
+		import com.iest.echarts.models.EChartsThemesModel;EChartsThemesModel;
+		import com.iest.echarts.vos.EChartsCallBackFunctionVO;EChartsCallBackFunctionVO;
+		import com.iest.echarts.vos.EChartsInstanceVO;EChartsInstanceVO;
+		import com.iest.echarts.vos.EChartsThemeTemplateVO;EChartsThemeTemplateVO;
+		import com.iest.echarts.EChartsLoader;EChartsLoader;
 	}
 }
 

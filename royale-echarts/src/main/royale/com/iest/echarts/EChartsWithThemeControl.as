@@ -1,6 +1,6 @@
-package echarts
+package com.iest.echarts
 {
-    import echarts.vos.EChartsThemeTemplateVO;
+    import com.iest.echarts.vos.EChartsThemeTemplateVO;
     import org.apache.royale.utils.js.loadJavascript;
 	
 	COMPILE::JS

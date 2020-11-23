@@ -1,4 +1,4 @@
-package echarts
+package com.iest.echarts
 {
 	public interface IEChartsBasic
 	{
