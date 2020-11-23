@@ -1,4 +1,4 @@
-package 
+package echarts
 {
 	public interface IEChartsBasic
 	{
