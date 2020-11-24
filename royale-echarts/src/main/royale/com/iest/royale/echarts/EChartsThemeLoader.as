@@ -16,8 +16,6 @@ package com.iest.royale.echarts
 	[Event(name="onWaitLoadThemeFromFile", type="com.iest.royale.echarts.events.EChartsThemesEvent")]
 	[Event(name="onCompleteRegister", type="com.iest.royale.echarts.events.EChartsThemesEvent")]
 
-	
-	COMPILE::JS
     public class EChartsThemeLoader extends EventDispatcher
     {
 		public function EChartsThemeLoader(){
@@ -206,7 +204,9 @@ package com.iest.royale.echarts
                 if(addTheme(itemTheme))
 					it = itemThemeFromName(itemTheme.themeName);
             }
-			echarts.registerTheme(it.themeName,it.jsonConfig);
+			COMPILE::JS{
+				echarts.registerTheme(it.themeName,it.jsonConfig);
+			}
             trace(">>>>> registerTheme SET OK");
             it.isReg = true;
             dispatchEvent(new EChartsThemesEvent(EChartsThemesEvent.ON_COMPLETE_REGISTERTHEME, it));

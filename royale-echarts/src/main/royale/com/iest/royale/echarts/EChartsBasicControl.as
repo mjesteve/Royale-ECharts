@@ -2,8 +2,10 @@ package com.iest.royale.echarts
 {
     import com.iest.royale.echarts.events.EChartsEvent;
     import com.iest.royale.echarts.vos.EChartsInstanceVO;
-    import org.apache.royale.core.WrappedHTMLElement;
-    import org.apache.royale.html.util.addElementToWrapper;
+    COMPILE::JS{
+        import org.apache.royale.core.WrappedHTMLElement;
+        import org.apache.royale.html.util.addElementToWrapper;
+    }
     import org.apache.royale.core.UIBase;
     import org.apache.royale.utils.sendEvent;
     import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
@@ -26,7 +28,6 @@ package com.iest.royale.echarts
      */
 	[Event(name="onUpdateConfig", type="com.iest.royale.echarts.events.EChartsEvent")]
 
-	COMPILE::JS
 	public class EChartsBasicControl extends UIBase implements IEChartsBasic
     {
 
@@ -34,6 +35,7 @@ package com.iest.royale.echarts
 		 * @royaleignorecoercion org.apache.royale.core.WrappedHTMLElement
 		 * @royaleignorecoercion org.apache.royale.html.util.addElementToWrapper
          */
+        COMPILE::JS
         override protected function createElement():WrappedHTMLElement
         {
 			addElementToWrapper(this, 'div');
@@ -161,7 +163,9 @@ package com.iest.royale.echarts
             {
                 //Deleted
                 objInstance = new EChartsInstanceVO(oldInstance);
-                echarts.dispose(oldInstance);
+                COMPILE::JS{
+                    echarts.dispose(oldInstance);
+                 }
                 if(globalECharts.echartsInstances[objInstance.id])
                 {
                     delete globalECharts.echartsInstances[objInstance.id];
@@ -200,8 +204,10 @@ package com.iest.royale.echarts
                 else //Theme pending to apply
                     clear();
             }
-			// see com.iest.royale.echarts.init 
-			instanceECharts = echarts.init(element,_themeName,_optsInstance);
+			// see com.iest.royale.echarts.init
+             COMPILE::JS{ 
+			    instanceECharts = echarts.init(element,_themeName,_optsInstance);
+             }
             
             _oldThemeName = _themeName;
             

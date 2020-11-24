@@ -200,7 +200,7 @@ package com.iest.royale.echarts.controllers
                 addTheme(itemSelTheme);
                 it = itemSelTheme;
             }
-			com.iest.royale.echarts.registerTheme(it.themeName,it.jsonConfig);
+			echarts.registerTheme(it.themeName,it.jsonConfig);
             trace(">>>>> registerTheme SET OK");
             it.isReg = true;
             if(model.initComplete)
