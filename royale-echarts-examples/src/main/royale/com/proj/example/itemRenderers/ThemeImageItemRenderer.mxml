@@ -23,7 +23,7 @@ limitations under the License.
 
     <fx:Script>
         <![CDATA[
-            import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
+            import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
 
 
             private var _imgField:String = "thumb";

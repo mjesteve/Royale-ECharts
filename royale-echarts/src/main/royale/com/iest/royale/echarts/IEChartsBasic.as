@@ -1,4 +1,4 @@
-package 
+package com.iest.royale.echarts
 {
 	public interface IEChartsBasic
 	{

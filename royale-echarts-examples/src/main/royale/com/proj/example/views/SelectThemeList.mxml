@@ -14,8 +14,8 @@
             import org.apache.royale.core.IUIBase;
             import org.apache.royale.utils.callLater;
             import org.apache.royale.collections.ArrayList;
-            import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
-            import com.proj.example.echarts.EChartsThemeLoader;
+            import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
+            import com.iest.royale.echarts.EChartsThemeLoader;
             import org.apache.royale.utils.ObjectMap;
 	        
             

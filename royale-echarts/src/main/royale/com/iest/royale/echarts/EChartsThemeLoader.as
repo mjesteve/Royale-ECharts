@@ -1,4 +1,4 @@
-package com.proj.example.echarts
+package com.iest.royale.echarts
 {
 	import org.apache.royale.utils.ObjectMap;
     import org.apache.royale.events.Event;
@@ -6,16 +6,15 @@ package com.proj.example.echarts
     import org.apache.royale.net.URLLoader;
     import org.apache.royale.net.URLRequest;
     import org.apache.royale.net.HTTPConstants;
-    import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
-    import com.proj.example.echarts.events.EChartsThemesEvent;
-    import org.apache.royale.collections.ArrayList;
+    import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
+    import com.iest.royale.echarts.events.EChartsThemesEvent;
     import org.apache.royale.events.IEventDispatcher;
 	
 
-	[Event(name="onCompleteLoadThemeFromFile", type="com.proj.example.echarts.events.EChartsThemesEvent")]
-	[Event(name="onErrorLoadThemeFromFile", type="com.proj.example.echarts.events.EChartsThemesEvent")]
-	[Event(name="onWaitLoadThemeFromFile", type="com.proj.example.echarts.events.EChartsThemesEvent")]
-	[Event(name="onCompleteRegister", type="com.proj.example.echarts.events.EChartsThemesEvent")]
+	[Event(name="onCompleteLoadThemeFromFile", type="com.iest.royale.echarts.events.EChartsThemesEvent")]
+	[Event(name="onErrorLoadThemeFromFile", type="com.iest.royale.echarts.events.EChartsThemesEvent")]
+	[Event(name="onWaitLoadThemeFromFile", type="com.iest.royale.echarts.events.EChartsThemesEvent")]
+	[Event(name="onCompleteRegister", type="com.iest.royale.echarts.events.EChartsThemesEvent")]
 
     public class EChartsThemeLoader extends EventDispatcher
     {
@@ -205,7 +204,9 @@ package com.proj.example.echarts
                 if(addTheme(itemTheme))
 					it = itemThemeFromName(itemTheme.themeName);
             }
-			echarts.registerTheme(it.themeName,it.jsonConfig);
+			COMPILE::JS{
+				echarts.registerTheme(it.themeName,it.jsonConfig);
+			}
             trace(">>>>> registerTheme SET OK");
             it.isReg = true;
             dispatchEvent(new EChartsThemesEvent(EChartsThemesEvent.ON_COMPLETE_REGISTERTHEME, it));

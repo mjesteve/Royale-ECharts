@@ -1,9 +1,11 @@
-package com.proj.example.echarts
+package com.iest.royale.echarts
 {
-    import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
-    import org.apache.royale.utils.js.loadJavascript;
+    import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
+    import org.apache.royale.events.Event;
+    COMPILE::JS{
+        import org.apache.royale.utils.js.loadJavascript;
+    }
 	
-	COMPILE::JS
 	public class EChartsWithThemeControl extends EChartsBasicControl
     {
 
@@ -52,7 +54,9 @@ package com.proj.example.echarts
                         if(itTheme.jsFormat)
                         {
                             _themeNameLoading = value;
-                            loadJSTheme('themes/js/'+value+'.js');
+                            COMPILE::JS{
+                                loadJSTheme('themes/js/'+value+'.js');
+                            }
                         }else{
 
                         }
@@ -65,7 +69,8 @@ package com.proj.example.echarts
                 }
             }
         }
-
+        
+        COMPILE::JS
         protected function loadJSTheme(srcJSTheme:String):void{
             loadJavascript(srcJSTheme,completeLoadJSTheme);
         }

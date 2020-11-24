@@ -5,14 +5,14 @@
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:views="com.proj.example.views.*" 
-    xmlns:localecharts="com.proj.example.echarts.*"
-    xmlns:beads="com.proj.example.echarts.beads.*"
+    xmlns:localecharts="com.iest.royale.echarts.*"
+    xmlns:echartsbeads="com.iest.royale.echarts.beads.*"
     initComplete="onInitComplete()" style="padding-top: 20px" >
 
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
-        import com.proj.example.echarts.events.EChartsEvent;
+        import com.iest.royale.echarts.events.EChartsEvent;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);
@@ -136,7 +136,7 @@
                                                 optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
                                                 onCompleteInicialize="completeInitHandler(event)">
                 <localecharts:beads>
-                    <beads:EChartEventsBead UPDATEAXISPOINTER="updateAxisPointer"/>
+                    <echartsbeads:EChartEventsBead UPDATEAXISPOINTER="updateAxisPointer"/>
                 </localecharts:beads>
             </localecharts:EChartsWithThemeControl>
 

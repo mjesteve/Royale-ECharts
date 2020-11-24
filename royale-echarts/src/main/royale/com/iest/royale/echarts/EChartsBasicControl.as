@@ -1,32 +1,33 @@
-package com.proj.example.echarts
+package com.iest.royale.echarts
 {
-    import com.proj.example.echarts.events.EChartsEvent;
-    import com.proj.example.echarts.vos.EChartsInstanceVO;
-    import org.apache.royale.core.WrappedHTMLElement;
-    import org.apache.royale.html.util.addElementToWrapper;
+    import com.iest.royale.echarts.events.EChartsEvent;
+    import com.iest.royale.echarts.vos.EChartsInstanceVO;
+    COMPILE::JS{
+        import org.apache.royale.core.WrappedHTMLElement;
+        import org.apache.royale.html.util.addElementToWrapper;
+    }
     import org.apache.royale.core.UIBase;
     import org.apache.royale.utils.sendEvent;
-    import com.proj.example.echarts.vos.EChartsThemeTemplateVO;
+    import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
 	
     /**
      *  Indicates that the initialization of the EChartsInstance is complete.  
      */
-	[Event(name="onCompleteInicialize", type="com.proj.example.echarts.events.EChartsEvent")]
+	[Event(name="onCompleteInicialize", type="com.iest.royale.echarts.events.EChartsEvent")]
 	
     /**
      *  Indicates that the current EChartsInstance has been disposed.  
      */
-	[Event(name="onDisposeInstance", type="com.proj.example.echarts.events.EChartsEvent")]
+	[Event(name="onDisposeInstance", type="com.iest.royale.echarts.events.EChartsEvent")]
     /**
      *  Indicates that the configuration of the EChartsInstance is complete.  
      */
-	[Event(name="onCompleteConfig", type="com.proj.example.echarts.events.EChartsEvent")]
+	[Event(name="onCompleteConfig", type="com.iest.royale.echarts.events.EChartsEvent")]
     /**
      *  indicates that the update of the configuration of the EChartsInstance is complete
      */
-	[Event(name="onUpdateConfig", type="com.proj.example.echarts.events.EChartsEvent")]
+	[Event(name="onUpdateConfig", type="com.iest.royale.echarts.events.EChartsEvent")]
 
-	COMPILE::JS
 	public class EChartsBasicControl extends UIBase implements IEChartsBasic
     {
 
@@ -34,6 +35,7 @@ package com.proj.example.echarts
 		 * @royaleignorecoercion org.apache.royale.core.WrappedHTMLElement
 		 * @royaleignorecoercion org.apache.royale.html.util.addElementToWrapper
          */
+        COMPILE::JS
         override protected function createElement():WrappedHTMLElement
         {
 			addElementToWrapper(this, 'div');
@@ -161,7 +163,9 @@ package com.proj.example.echarts
             {
                 //Deleted
                 objInstance = new EChartsInstanceVO(oldInstance);
-                echarts.dispose(oldInstance);
+                COMPILE::JS{
+                    echarts.dispose(oldInstance);
+                 }
                 if(globalECharts.echartsInstances[objInstance.id])
                 {
                     delete globalECharts.echartsInstances[objInstance.id];
@@ -200,8 +204,10 @@ package com.proj.example.echarts
                 else //Theme pending to apply
                     clear();
             }
-			// see echarts.init 
-			instanceECharts = echarts.init(element,_themeName,_optsInstance);
+			// see com.iest.royale.echarts.init
+             COMPILE::JS{ 
+			    instanceECharts = echarts.init(element,_themeName,_optsInstance);
+             }
             
             _oldThemeName = _themeName;
             
@@ -336,7 +342,7 @@ package com.proj.example.echarts
         }
 
 		/**
-		 * Group name to be used in echarts.connection
+		 * Group name to be used in com.iest.royale.echarts.connection
 		 */
         private var _group:String;
         public function get group():String{ return _group; }

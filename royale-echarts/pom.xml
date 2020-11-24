@@ -22,7 +22,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.proj.example</groupId>
+  <groupId>com.iest.royale.echarts</groupId>
   <artifactId>royale-echarts</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>swc</packaging>
@@ -52,13 +52,8 @@
           <namespaces>
             <!-- Make the classes listed in the manifest be available under the given namespace -->
             <namespace>
-              <uri>library://ns.apache.org/royale/echarts</uri>
+              <uri>library://ns.iest.com/royale/echarts</uri>
               <manifest>${project.basedir}/src/main/resources/echarts-manifest.xml</manifest>
-            </namespace>
-            <namespace>
-              <type>as</type>
-              <uri>library://ns.apache.org/royale/echarts</uri>
-              <manifest>${project.basedir}/src/main/resources/echarts-as-manifest.xml</manifest>
             </namespace>
           </namespaces>
           <!-- Tell the compiler which classes to compile and include -->
@@ -81,15 +76,15 @@
             </include-file>
           </includeFiles>
         
-		      <skipExtern>false</skipExtern>
+		      <skipExtern>true</skipExtern>
           <includeLookupOnly>true</includeLookupOnly>
           <allowSubclassOverrides>true</allowSubclassOverrides>
           <additionalCompilerOptions>
             -js-default-initializers=true;            
-            -js-dynamic-access-unknown-members=true <!-- to access JSON object graph subobjects -->
-            -source-map=true
+            -js-dynamic-access-unknown-members=true; <!-- to access JSON object graph subobjects -->
+            -source-map=true;
+            -keep-code-with-metadata=Inject;            
             -keep-as3-metadata+=Inject,EventHandler,Event,Bindable;
-            -keep-code-with-metadata=Inject;
           </additionalCompilerOptions>
 
         </configuration>
@@ -108,14 +103,32 @@
 
   <dependencies>
 
-    <!-- Needed for Flash compilation -->
+    <!-- Needed for Flash compilation -->    
     <dependency>
       <groupId>com.adobe.flash.framework</groupId>
       <artifactId>playerglobal</artifactId>
       <version>${player.version}</version>
       <type>swc</type>
-      <scope>provided</scope>
+      <scope>runtime</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.royale.typedefs</groupId>
+      <artifactId>royale-typedefs-gcl</artifactId>
+      <version>${royale.typedefs.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>typedefs</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.typedefs</groupId>
+      <artifactId>royale-typedefs-js</artifactId>
+      <version>${royale.typedefs.version}</version>
+      <type>swc</type>
+      <classifier>typedefs</classifier>
+      <scope>runtime</scope>
+    </dependency>
+
     <!-- For flash compilation, we need the airglobal or playerglobal 
     <dependency>
       <groupId>com.adobe.air.framework</groupId>
@@ -125,42 +138,62 @@
       <scope>provided</scope>
     </dependency>-->
 
-    <!-- For JavaScript compilation, we need some other base classes -->
-    <dependency>
-      <groupId>org.apache.royale.typedefs</groupId>
-      <artifactId>royale-typedefs-gcl</artifactId>
-      <version>${royale.typedefs.version}</version>
-      <type>swc</type>
-      <classifier>typedefs</classifier>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
       <artifactId>Core</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
-      <classifier>js</classifier>
+      
+      <classifier>swf</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
-      <artifactId>Binding</artifactId>
+      <artifactId>Core</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
+      
       <classifier>js</classifier>
     </dependency>
+
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
-      <artifactId>Graphics</artifactId>
+      <artifactId>Collections</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
-      <classifier>js</classifier>
+      
+      <classifier>swf</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
       <artifactId>Collections</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
+      
       <classifier>js</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Network</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      
+      <classifier>swf</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Network</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>js</classifier>
+    </dependency>
+
+     <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>HTML</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <classifier>swf</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
@@ -169,27 +202,123 @@
       <type>swc</type>
       <classifier>js</classifier>
     </dependency>
-    <dependency>
-      <groupId>org.apache.royale.framework</groupId>
-      <artifactId>Language</artifactId>
-      <version>${royale.framework.version}</version>
-      <type>swc</type>
-      <classifier>js</classifier>
+
+     <dependency>
+        <groupId>org.apache.royale.framework</groupId>
+        <artifactId>Basic</artifactId>
+        <version>${royale.framework.version}</version>
+        <type>swc</type>
+        
+        <classifier>js</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
       <artifactId>Basic</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
+      <classifier>swf</classifier>
+    </dependency>
+
+    <!-- For JavaScript compilation, we need some other base classes 
+    <dependency>
+      <groupId>org.apache.royale.typedefs</groupId>
+      <artifactId>royale-typedefs-gcl</artifactId>
+      <version>${royale.typedefs.version}</version>
+      <type>swc</type>
+      <classifier>typedefs</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Binding</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
       <classifier>js</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Graphics</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>swf</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Graphics</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>js</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>HTML</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>swf</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>HTML</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>js</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Language</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>swf</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Language</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>js</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Basic</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>swf</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Basic</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>js</classifier>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.royale.framework</groupId>
+      <artifactId>Formatters</artifactId>
+      <version>${royale.framework.version}</version>
+      <type>swc</type>
+      <scope>provided</scope>
+      <classifier>swf</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
       <artifactId>Formatters</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
+      <scope>provided</scope>
       <classifier>js</classifier>
-    </dependency>
+    </dependency>-->
 
   </dependencies>
 

@@ -1,4 +1,4 @@
-package com.proj.example.echarts.vos
+package com.iest.royale.echarts.vos
 {
 
     [Bindable]
