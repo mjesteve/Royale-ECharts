@@ -5,13 +5,13 @@
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:views="com.proj.example.views.*" 
-    xmlns:localecharts="echarts.*"
+    xmlns:localecharts="com.iest.royale.echarts.*"
     initComplete="onInitComplete()" style="padding-top: 20px" >
 
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
-        import echarts.events.EChartsEvent;
+        import com.iest.royale.echarts.events.EChartsEvent;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);

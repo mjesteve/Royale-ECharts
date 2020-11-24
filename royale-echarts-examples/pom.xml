@@ -162,7 +162,7 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>com.proj.example</groupId>
+                  <groupId>com.iest.royale.echarts</groupId>
                   <artifactId>royale-echarts</artifactId>
                   <version>1.0-SNAPSHOT</version>
                   <type>swc</type>
@@ -183,7 +183,7 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>com.proj.example</groupId>
+                  <groupId>com.iest.royale.echarts</groupId>
                   <artifactId>royale-echarts</artifactId>
                   <version>1.0-SNAPSHOT</version>
                   <type>swc</type>
@@ -375,7 +375,7 @@
       <classifier>js</classifier>
     </dependency>
     <dependency>
-      <groupId>com.proj.example</groupId>
+      <groupId>com.iest.royale.echarts</groupId>
       <artifactId>royale-echarts</artifactId>
       <version>1.0-SNAPSHOT</version>
       <type>swc</type>

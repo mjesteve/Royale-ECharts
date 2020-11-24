@@ -4,16 +4,15 @@ package com.iest.royale.echarts.controllers
     import org.apache.royale.core.IBeadModel;
     import org.apache.royale.core.IStrand;
     import org.apache.royale.events.EventDispatcher;
-    import com.iest.royale.echarts.models.EChartsThemesModel;
     import org.apache.royale.events.IEventDispatcher;
-    import com.iest.royale.echarts.events.EChartsThemesEvent;
-    import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
     import org.apache.royale.net.HTTPConstants;
     import org.apache.royale.net.URLLoader;
     import org.apache.royale.net.URLRequest;
     import org.apache.royale.events.Event;
+    import com.iest.royale.echarts.events.EChartsThemesEvent;
+    import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
+    import com.iest.royale.echarts.models.EChartsThemesModel;
 
-	COMPILE::JS
     public class EChartsThemesController extends EventDispatcher implements IBeadController
 	{
 		protected var _model:IBeadModel;
@@ -200,8 +199,10 @@ package com.iest.royale.echarts.controllers
                 addTheme(itemSelTheme);
                 it = itemSelTheme;
             }
+	        COMPILE::JS{
 			echarts.registerTheme(it.themeName,it.jsonConfig);
             trace(">>>>> registerTheme SET OK");
+            }
             it.isReg = true;
             if(model.initComplete)
                 dispatcher.dispatchEvent(new EChartsThemesEvent(EChartsThemesEvent.ON_COMPLETE_REGISTERTHEME, it));

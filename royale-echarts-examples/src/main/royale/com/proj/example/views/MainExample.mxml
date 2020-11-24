@@ -14,7 +14,7 @@
         <![CDATA[
         import com.proj.example.vos.TabBarChartVO;
         import org.apache.royale.jewel.supportClasses.ISelectableContent;
-        import echarts.vos.EChartsThemeTemplateVO;
+        import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;
         import com.proj.example.charts.IEchartExampleBasic;
 	    import org.apache.royale.core.UIBase;
 

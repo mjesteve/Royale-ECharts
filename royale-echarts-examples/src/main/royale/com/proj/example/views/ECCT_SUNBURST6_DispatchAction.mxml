@@ -5,14 +5,14 @@
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
     xmlns:views="com.proj.example.views.*" 
-    xmlns:localecharts="echarts.*"
-    xmlns:beads="echarts.beads.*"
+    xmlns:localecharts="com.iest.royale.echarts.*"
+    xmlns:echartsbeads="com.iest.royale.echarts.beads.*"
     initComplete="onInitComplete()" style="padding-top: 20px" >
 
     <fx:Script>
         <![CDATA[
         import com.proj.example.vos.ChartDefExampleVO;
-        import echarts.events.EChartsEvent;
+        import com.iest.royale.echarts.events.EChartsEvent;
         import org.apache.royale.collections.ArrayList;
         import mx.utils.StringUtil;
 
@@ -269,7 +269,7 @@
                                                     onCompleteConfig="completConfigHandler(event)"
                                                     onUpdateConfig="completConfigHandler(event)">
                     <localecharts:beads>
-                        <beads:EChartEventsBead SUNBURSTHIGHLIGHT="hightLightHandler" 
+                        <echartsbeads:EChartEventsBead SUNBURSTHIGHLIGHT="hightLightHandler" 
                                                 MOUSEOVER="onMouseOverHandler" MOUSEOUT="onMouseOutHandler"/>
                     </localecharts:beads>
                 </localecharts:EChartsWithThemeControl>
