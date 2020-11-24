@@ -90,7 +90,6 @@
             -source-map=true;
             -keep-code-with-metadata=Inject;            
             -keep-as3-metadata+=Inject,EventHandler,Event,Bindable;
-            -compiler.exclude-defaults-css-files=MXRoyale-${royale.framework.version}-js.swc:defaults.css;
             -include-namespaces+=library://ns.iest.com/royale/echarts;
           </additionalCompilerOptions>
 
