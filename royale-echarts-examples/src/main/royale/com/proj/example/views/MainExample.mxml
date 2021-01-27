@@ -147,7 +147,7 @@
         <j:BarRow localId="barRowConfig" style ="height:auto;">
             <j:HGroup gap="0" itemsVerticalAlign="itemsCenter">
                 <j:beads>
-                    <j:Paddings padding="20"/>
+                    <js:Paddings padding="20"/>
                 </j:beads>
                 <views:SelectThemeList id="listTheme" change="theme_Change()"/>
             </j:HGroup>
@@ -156,7 +156,7 @@
 
     <j:ApplicationMainContent  localId="main" hasTopAppBar="true">
         <j:beads>
-            <j:Paddings padding="20"/>
+            <js:Paddings padding="20"/>
         </j:beads>
         <!--<views:WelcomeSection name="welcome"/>-->
         <views:EChartsExample_StaticsView name="welcome" localId="welcome"/>

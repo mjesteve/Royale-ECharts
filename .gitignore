@@ -1,5 +1,3 @@
 target
 js-debug
-royale-echarts.code-workspace
-workspace
-royale-echarts_sdk.code-workspace
+*.code-workspace

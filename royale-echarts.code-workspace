@@ -1,17 +1,20 @@
 {
 	"folders": [
+        {
+            "path": "."
+        },
 		{
 			"path": "royale-echarts-examples"
 		},
 		{
 			"path": "royale-echarts"
 		},
-		{
-			"path": "..\\Royale-git\\royale-asjs"
-		}
+        {
+            "path": "D:\\Develop_Royale\\Projects\\Royale-SDK\\royale-asjs-fork\\frameworks\\projects"
+        }
 	],
-	"settings": {
-        "as3mxml.sdk.framework": "D:\\Apache\\apache-royale-0.9.8-iest",
-		"as3mxml.sdk.searchPaths": "D:\\Desarrollo_Royale\\Proyectos\\WPNetSuitePlus\\Royale-git\\royale-asjs"
-	}
+    "settings": {
+        "as3mxml.sdk.framework": "D:\\Develop_Royale\\Projects\\Royale-SDK\\royale-asjs-fork",
+        "as3mxml.sdk.editor": "D:\\Develop_Royale\\Projects\\Royale-SDK\\royale-asjs-fork",
+    }
 }
