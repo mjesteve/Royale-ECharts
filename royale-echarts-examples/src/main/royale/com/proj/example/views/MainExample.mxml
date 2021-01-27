@@ -169,7 +169,7 @@
         <views:EChartsExampleBasic localId="ecp2" name="ecp2" itemChartDef="{appModel.ECC_PIE002}"/>
         <views:ECCT_CUSTOM1_EChartsExample_Events localId="ecp3" name="ecp3" itemChartDef="{appModel.ECCT_CUSTOM1}"/>
         <views:ECCT_CUSTOM2_EChartsExampleBasic localId="ecp4" name="ecp4" itemChartDef="{appModel.ECCT_CUSTOM2}"/>
-        <views:EChartsExampleThemesDefault localId="ecp5" name="ecp5" itemChartDef="{appModel.ECCT_CUSTOM3}"/>
+        <views:EChartsExampleThemesDefault localId="ecp5" name="ecp5" itemChartDef="{appModel.ECCT_CUSTOM3BIS}"/>
     </j:ApplicationMainContent>
 
 
