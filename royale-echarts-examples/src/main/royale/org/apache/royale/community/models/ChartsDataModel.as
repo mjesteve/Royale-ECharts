@@ -123,11 +123,9 @@ package org.apache.royale.community.models
 							],
 							roseType:'angle',
 							itemStyle: {
-								normal: {
-									color:'#c23531',
-									shadowBlur: 200,
-									shadowColor:'rgba(0, 0, 0, 0.5)'
-								}
+								color:'#c23531',
+								shadowBlur: 200,
+								shadowColor:'rgba(0, 0, 0, 0.5)'
 							}
 						}
 					]
@@ -452,8 +450,78 @@ package org.apache.royale.community.models
 			return _ECCT_CUSTOM2;
 		}
 
-		private function format_two_digits(n) {
-			return n < 10 ? '0' + n : n;
+		private function format_two_digits(n:Number):String {
+			return n < 10 ? '0' + n : '' + n;
+		}
+
+		private function formatterCustom3(params:*):Object{
+			var hInicio:Date = new Date(params.data.value[1]);
+			var hFinal:Date  = new Date(params.data.value[2]);
+			var minutos:Number =  params.data.value[3] as Number;
+			var m:Number = minutos % 60;
+			var h:Number = ( minutos-m)/60;
+			var str:String = '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + params.data.itemStyle.color + ';"></span>';
+			str +=  params.data.name + ' de ' + hInicio.getHours() + format_two_digits(hInicio.getMinutes()) + ' a '  + hFinal.getHours() + format_two_digits(hFinal.getMinutes());
+			str += '<br/>';
+			str += '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + params.data.itemStyle.color + ';"></span>';
+			str += 'Tiempo: ' + h.toString() + ":" + format_two_digits(m);
+			return str;
+		}
+
+		public function itemrendererCustom3(params:Object, api:Object):Object {
+			var categoryIndex:int = api.value(0);
+			var start:Object = api.coord([api.value(1), categoryIndex]);
+			var end:Object = api.coord([api.value(2), categoryIndex]);
+			var height:Number = api.size([0, 1])[1] * 0.6;
+
+			var rectShape:Object = (echarts as Object).graphic.clipRectByRect({
+				x: start[0],
+				y: start[1] - height / 2,
+				width: end[0] - start[0],
+				height: height
+			}, {
+				x: params.coordSys.x,
+				y: params.coordSys.y,
+				width: params.coordSys.width,
+				height: params.coordSys.height
+			});
+			var diff:Number = (api.value(2) - api.value(1) - api.value(3) * 60 * 1000)/2 ;
+			var auxStart:Object = api.coord([ api.value(1) + diff, categoryIndex]);
+			var auxEnd:Object = api.coord([ api.value(2) - diff, categoryIndex]);
+			var shapeAux:Object =  (echarts as Object).graphic.clipRectByRect({
+				x: auxStart[0],
+				y: auxStart[1] - height / 2,
+				width: auxEnd[0] - auxStart[0],
+				height: height
+			}, {
+				x: params.coordSys.x,
+				y: params.coordSys.y,
+				width: params.coordSys.width,
+				height: params.coordSys.height
+			});
+			var mili:Number = api.value(2) - api.value(1);
+			var secs:Number = mili / 1000;
+			var mins:Number =  secs / 60;
+			var m:Number = mins % 60;
+			var h:Number = ( mins-m)/60;
+			return rectShape && {
+				type: 'group',
+				children: [{
+					type: 'rect',
+					shape: rectShape,
+					style: api.style({
+					})
+				} ,
+				{
+					type: 'rect',
+					shape: shapeAux,
+					style: api.style({
+						color:'#fff',
+						text:h.toString() + ":" + format_two_digits(m),
+						textFill: '#fff'
+					})
+				}]
+			};
 		}
 
 		private var _ECCT_CUSTOM3:ChartDefExampleVO;
@@ -471,22 +539,7 @@ package org.apache.royale.community.models
 				_ECCT_CUSTOM3.autoLoad = true;
 				_ECCT_CUSTOM3.optionChartInit = {
 					tooltip: {
-						formatter: function (params:*):Object{
-							var hInicio:Date = new Date(params.data.value[1]);
-							var hFinal:Date  = new Date(params.data.value[2]);
-							var minutos:Number =  params.data.value[3] as Number;
-							var m:Number = minutos % 60;
-							var h:Number = ( minutos-m)/60;
-							var str:String = '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + params.data.itemStyle.color + ';"></span>';
-							str += 'Inicio: ' + hInicio.getHours() + ':' + format_two_digits(hInicio.getMinutes());
-							str += '<br/>';
-							str += '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + params.data.itemStyle.color + ';"></span>';
-							str += 'Final: ' + hFinal.getHours() + ':' + format_two_digits(hFinal.getMinutes());
-							str += '<br/>';
-							str += '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + params.data.itemStyle.color + ';"></span>';
-							str += 'Tiempo: ' + h.toString() + ":" + format_two_digits(m.toString());
-							return str;
-						}
+						formatter: formatterCustom3
 					},
 					dataZoom: [{
 						type: 'slider',
@@ -528,69 +581,15 @@ package org.apache.royale.community.models
 						}
 					},
 					yAxis: {
-						data: ['Schedules Slots', 'Courtesies', 'Flexibilities', 'Breaks', 'Schedule'],
+						data: ['Courtesies', 'Flexibilities', 'Break', 'Time', 'Schedule'],
 						axisTick: {show: false},
 						splitLine: {show: false},
 						axisLine: {show: false},
-						axisLabel: {show: false}
+						axisLabel: {show: true}
 					},
 					series: [{
 						type: 'custom',
-						renderItem: function (params:Object, api:Object):Object {
-							var categoryIndex:int = api.value(0);
-							var start:Object = api.coord([api.value(1), categoryIndex]);
-							var end:Object = api.coord([api.value(2), categoryIndex]);
-							var height:Number = api.size([0, 1])[1] * 0.6;
-
-							var rectShape:Object = (echarts as Object).graphic.clipRectByRect({
-								x: start[0],
-								y: start[1] - height / 2,
-								width: end[0] - start[0],
-								height: height
-							}, {
-								x: params.coordSys.x,
-								y: params.coordSys.y,
-								width: params.coordSys.width,
-								height: params.coordSys.height
-							});
-							var diff:Number = (api.value(2) - api.value(1) - api.value(3) * 60 * 1000)/2 ;
-							var auxStart:Object = api.coord([ api.value(1) + diff, categoryIndex]);
-							var auxEnd:Object = api.coord([ api.value(2) - diff, categoryIndex]);
-							var shapeAux:Object =  (echarts as Object).graphic.clipRectByRect({
-								x: auxStart[0],
-								y: auxStart[1] - height / 2,
-								width: auxEnd[0] - auxStart[0],
-								height: height
-							}, {
-								x: params.coordSys.x,
-								y: params.coordSys.y,
-								width: params.coordSys.width,
-								height: params.coordSys.height
-							});
-							var mili:Number = api.value(2) - api.value(1);
-							var secs:Number = mili / 1000;
-							var mins:Number =  secs / 60;
-							var m:Number = mins % 60;
-							var h:Number = ( mins-m)/60;
-							return rectShape && {
-								type: 'group',
-								children: [{
-									type: 'rect',
-									shape: rectShape,
-									style: api.style({
-									})
-								} ,
-								{
-									type: 'rect',
-									shape: shapeAux,
-									style: api.style({
-										color:'#fff',
-										text:h.toString() + ":" + format_two_digits(m.toString()),
-										textFill: '#fff'
-									})
-								}]
-							};
-						},
+						renderItem: itemrendererCustom3,
 						itemStyle: {
 							opacity: 0.8
 						},
@@ -598,14 +597,15 @@ package org.apache.royale.community.models
 							x: [1, 2],
 							y: 0
 						},
-						data: [{name:'Time', value:[0,1611734400000,1611756000000,360],itemStyle: {normal: {color: '#0066ff'}}},
-						{name:'Time', value:[0,1611759600000,1611770400000,180],itemStyle: {normal: {color: '#0066ff'}}},
-						{name:'Courtesy', value:[1,1611733500000,1611735300000,30],itemStyle: {normal: {color: '#993399'}}},
-						{name:'Courtesy', value:[1,1611769500000,1611771300000,30],itemStyle: {normal: {color: '#993399'}}},
-						{name:'Flexibility', value:[2,1611733500000,1611735300000,30],itemStyle: {normal: {color: '#ffcc00'}}},
-						{name:'Flexibility', value:[2,1611769500000,1611771300000,30],itemStyle: {normal: {color: '#ffcc00'}}},
-						{name:'Break', value:[3,1611752400000,1611763200000,60],itemStyle: {normal: {color: '#339933'}}},
-						{name:'Schedule', value:[4,1611734400000,1611770400000,480],itemStyle: {normal: {color: '#cc3300'}}}]
+						data: [
+						{name:'Schedule', value:[4,1611734400000,1611770400000,480],itemStyle: {color: '#cc3300'}},
+						{name:'Time', value:[3,1611734400000,1611756000000,360],itemStyle: {color: '#0066ff'}},
+						{name:'Time', value:[3,1611759600000,1611770400000,180],itemStyle: {color: '#0066ff'}},
+						{name:'Break', value:[2,1611752400000,1611763200000,60],itemStyle: {color: '#339933'}},
+						{name:'Flexibility', value:[1,1611733500000,1611735300000,30],itemStyle: {color: '#ffcc00'}},
+						{name:'Flexibility', value:[1,1611769500000,1611771300000,30],itemStyle: {color: '#ffcc00'}},
+						{name:'Courtesy', value:[0,1611733500000,1611735300000,30],itemStyle: {color: '#993399'}},
+						{name:'Courtesy', value:[0,1611769500000,1611771300000,30],itemStyle: {color: '#993399'}}]
 					}]
 				};
 			}
