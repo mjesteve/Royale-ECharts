@@ -452,6 +452,10 @@ package org.apache.royale.community.models
 			return _ECCT_CUSTOM2;
 		}
 
+		private function format_two_digits(n) {
+			return n < 10 ? '0' + n : n;
+		}
+
 		private var _ECCT_CUSTOM3:ChartDefExampleVO;
 		public function get ECCT_CUSTOM3():ChartDefExampleVO
 		{
@@ -467,41 +471,30 @@ package org.apache.royale.community.models
 				_ECCT_CUSTOM3.autoLoad = true;
 				_ECCT_CUSTOM3.optionChartInit = {
 					tooltip: {
-						formatter: function (params:*):String {
-							var m:int = params.value[1] % 60;
-							var h:int = ( params.value[1]-m)/60;
-							var nextDay:Boolean = false;
-							if(h>=24){
-								nextDay = true;
-								h-=24;
-							}
-							if(m<0){
-								m *= -1;
-							}
-							var inicio:String = (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
-							m = params.value[1] % 60;
-							h = ( params.value[2]-m)/60;
-							nextDay = false;
-							if(h>=24){
-								nextDay = true;
-								h-=24;
-							}
-							if(m<0){
-								m *= -1;
-							}
-							var final:String = (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
-							return '<p>' + params.marker + params.name + ' Start: ' +  inicio + 'h</p>' + '<p>' + params.marker + params.name + '  End: ' + final + 'h</p>';
+						formatter: function (params:*):Object{
+							var hInicio:Date = new Date(params.data.value[1]);
+							var hFinal:Date  = new Date(params.data.value[2]);
+							var minutos:Number =  params.data.value[3] as Number;
+							var m:Number = minutos % 60;
+							var h:Number = ( minutos-m)/60;
+							var str:String = '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + params.data.itemStyle.color + ';"></span>';
+							str += 'Inicio: ' + hInicio.getHours() + ':' + format_two_digits(hInicio.getMinutes());
+							str += '<br/>';
+							str += '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + params.data.itemStyle.color + ';"></span>';
+							str += 'Final: ' + hFinal.getHours() + ':' + format_two_digits(hFinal.getMinutes());
+							str += '<br/>';
+							str += '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + params.data.itemStyle.color + ';"></span>';
+							str += 'Tiempo: ' + h.toString() + ":" + format_two_digits(m.toString());
+							return str;
 						}
 					},
 					dataZoom: [{
 						type: 'slider',
-						interval:60,
-						startValue:0,
-						endValue:60,
+						interval:1,
 						filterMode: 'weakFilter',
 						height: 20,
-						start: 35,
-						end: 65,
+						start: 0,
+						end: 100,
 						handleIcon: 'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
 						handleSize: '80%',
 						showDetail: false
@@ -509,16 +502,17 @@ package org.apache.royale.community.models
 					grid: {
 						height: 300
 					},
+					
 					xAxis: {
-						type: 'value',
+						type: 'time',
 						position: 'top',
+						min:1611733500000,
+						max:1611771300000,
 						splitLine: {
 							lineStyle: {
 								color: ['#E9EDFF']
 							}
 						},
-						interval:60
-						,
 						axisLine: {
 							show: false
 						},
@@ -530,26 +524,11 @@ package org.apache.royale.community.models
 						axisLabel: {
 							color: '#929ABA',
 							inside: false,
-							align: 'center',
-							formatter: (function(value:Number):String{
-								var m:int = value % 60;
-								var h:int = ( value-m)/60;
-								var nextDay:Boolean = false;
-								if(h>=24){
-									nextDay = true;
-									h-=24;
-								}
-								if(m<0){
-									m *= -1;
-								}
-								return (nextDay?"+":"") + h.toString() + ":" + (m<10?"0":"") + m.toString();
-							})
-						},
-						min: -720,
-						max:2160
+							align: 'center'
+						}
 					},
 					yAxis: {
-        				data: ['Schedules Slots', 'Courtesies', 'Flexibilities', 'Breaks', 'Schedule'],
+						data: ['Schedules Slots', 'Courtesies', 'Flexibilities', 'Breaks', 'Schedule'],
 						axisTick: {show: false},
 						splitLine: {show: false},
 						axisLine: {show: false},
@@ -574,7 +553,7 @@ package org.apache.royale.community.models
 								width: params.coordSys.width,
 								height: params.coordSys.height
 							});
-							var diff:Number = ((api.value(2) - api.value(1) - api.value(3))/2 );
+							var diff:Number = (api.value(2) - api.value(1) - api.value(3) * 60 * 1000)/2 ;
 							var auxStart:Object = api.coord([ api.value(1) + diff, categoryIndex]);
 							var auxEnd:Object = api.coord([ api.value(2) - diff, categoryIndex]);
 							var shapeAux:Object =  (echarts as Object).graphic.clipRectByRect({
@@ -588,7 +567,9 @@ package org.apache.royale.community.models
 								width: params.coordSys.width,
 								height: params.coordSys.height
 							});
-							var mins:Number =  api.value(2) - api.value(1);
+							var mili:Number = api.value(2) - api.value(1);
+							var secs:Number = mili / 1000;
+							var mins:Number =  secs / 60;
 							var m:Number = mins % 60;
 							var h:Number = ( mins-m)/60;
 							return rectShape && {
@@ -604,7 +585,7 @@ package org.apache.royale.community.models
 									shape: shapeAux,
 									style: api.style({
 										color:'#fff',
-										text:h.toString() + ":" + (m<10?"0":"") + m.toString(),
+										text:h.toString() + ":" + format_two_digits(m.toString()),
 										textFill: '#fff'
 									})
 								}]
@@ -617,14 +598,14 @@ package org.apache.royale.community.models
 							x: [1, 2],
 							y: 0
 						},
-						data: [{name:'Time', value:[0,485,900,415],itemStyle: {normal: {color: '#0066ff'}}},
-						{name:'Time', value:[0,960,1045,85],itemStyle: {normal: {color: '#0066ff'}}},
-						{name:'Courtesy', value:[1,990,1080,90],itemStyle: {normal: {color: '#993399'}}},
-						{name:'Courtesy', value:[1,420,510,90],itemStyle: {normal: {color: '#993399'}}},
-						{name:'Flexibility', value:[2,990,1080,90],itemStyle: {normal: {color: '#ffcc00'}}},
-						{name:'Flexibility', value:[2,420,510,90],itemStyle: {normal: {color: '#ffcc00'}}},
-						{name:'Break', value:[3,840,960,80],itemStyle: {normal: {color: '#339933'}}},
-						{name:'Schedule', value:[4,480,1020,540],itemStyle: {normal: {color: '#cc3300'}}}]
+						data: [{name:'Time', value:[0,1611734400000,1611756000000,360],itemStyle: {normal: {color: '#0066ff'}}},
+						{name:'Time', value:[0,1611759600000,1611770400000,180],itemStyle: {normal: {color: '#0066ff'}}},
+						{name:'Courtesy', value:[1,1611733500000,1611735300000,30],itemStyle: {normal: {color: '#993399'}}},
+						{name:'Courtesy', value:[1,1611769500000,1611771300000,30],itemStyle: {normal: {color: '#993399'}}},
+						{name:'Flexibility', value:[2,1611733500000,1611735300000,30],itemStyle: {normal: {color: '#ffcc00'}}},
+						{name:'Flexibility', value:[2,1611769500000,1611771300000,30],itemStyle: {normal: {color: '#ffcc00'}}},
+						{name:'Break', value:[3,1611752400000,1611763200000,60],itemStyle: {normal: {color: '#339933'}}},
+						{name:'Schedule', value:[4,1611734400000,1611770400000,480],itemStyle: {normal: {color: '#cc3300'}}}]
 					}]
 				};
 			}
@@ -632,339 +613,6 @@ package org.apache.royale.community.models
 			return _ECCT_CUSTOM3;
 		}
 
-			var HEIGHT_RATIO = 0.6;
-			var DIM_CATEGORY_INDEX = 0;
-			var DIM_TIME_ARRIVAL = 1;
-			var DIM_TIME_DEPARTURE = 2;
-			var DATA_ZOOM_AUTO_MOVE_THROTTLE = 30;
-			var DATA_ZOOM_X_INSIDE_INDEX = 1;
-			var DATA_ZOOM_Y_INSIDE_INDEX = 3;
-			var DATA_ZOOM_AUTO_MOVE_SPEED = 0.2;
-			var DATA_ZOOM_AUTO_MOVE_DETECT_AREA_WIDTH = 30;
-
-			var _draggable;
-			var _draggingEl;
-			var _dropShadow;
-			var _draggingCursorOffset = [0, 0];
-			var _draggingTimeLength;
-			var _draggingRecord;
-			var _dropRecord;
-			var _cartesianXBounds = [];
-			var _cartesianYBounds = [];
-			var _rawData;
-			var _autoDataZoomAnimator;
-		
-		private var _ECCT_CUSTOM3BIS:ChartDefExampleVO;
-		public function get ECCT_CUSTOM3BIS():ChartDefExampleVO
-		{
-
-
-			if(!_ECCT_CUSTOM3BIS){
-				
-				var firstColor:String = '#468EFD';
-				var dataArr:int = 0;
-
-				_ECCT_CUSTOM3BIS = new ChartDefExampleVO();
-				_ECCT_CUSTOM3BIS.title = "Schedule Dashboard";
-				_ECCT_CUSTOM3BIS.subtitle = "How much has been worked?";
-				_ECCT_CUSTOM3BIS.themeName = 'custom';
-				_ECCT_CUSTOM3BIS.autoLoad = true;
-				_ECCT_CUSTOM3BIS.optionChartInit ={
-					tooltip: {
-					},
-					animation: false,
-					toolbox: {
-						left: 20,
-						top: 0,
-						itemSize: 20,
-						feature: {
-							myDrag: {
-								show: true,
-								title: 'Make bars\ndraggable',
-								icon: 'path://M990.55 380.08 q11.69 0 19.88 8.19 q7.02 7.01 7.02 18.71 l0 480.65 q-1.17 43.27 -29.83 71.93 q-28.65 28.65 -71.92 29.82 l-813.96 0 q-43.27 -1.17 -72.5 -30.41 q-28.07 -28.07 -29.24 -71.34 l0 -785.89 q1.17 -43.27 29.24 -72.5 q29.23 -29.24 72.5 -29.24 l522.76 0 q11.7 0 18.71 7.02 q8.19 8.18 8.19 18.71 q0 11.69 -7.6 19.29 q-7.6 7.61 -19.3 7.61 l-518.08 0 q-22.22 1.17 -37.42 16.37 q-15.2 15.2 -15.2 37.42 l0 775.37 q0 23.39 15.2 38.59 q15.2 15.2 37.42 15.2 l804.6 0 q22.22 0 37.43 -15.2 q15.2 -15.2 16.37 -38.59 l0 -474.81 q0 -11.7 7.02 -18.71 q8.18 -8.19 18.71 -8.19 l0 0 ZM493.52 723.91 l-170.74 -170.75 l509.89 -509.89 q23.39 -23.39 56.13 -21.05 q32.75 1.17 59.65 26.9 l47.94 47.95 q25.73 26.89 27.49 59.64 q1.75 32.75 -21.64 57.3 l-508.72 509.9 l0 0 ZM870.09 80.69 l-56.13 56.14 l94.72 95.9 l56.14 -57.31 q8.19 -9.35 8.19 -21.05 q-1.17 -12.86 -10.53 -22.22 l-47.95 -49.12 q-10.52 -9.35 -23.39 -9.35 q-11.69 -1.17 -21.05 7.01 l0 0 ZM867.75 272.49 l-93.56 -95.9 l-380.08 380.08 l94.73 94.73 l378.91 -378.91 l0 0 ZM322.78 553.16 l38.59 39.77 l-33.92 125.13 l125.14 -33.92 l38.59 38.6 l-191.79 52.62 q-5.85 1.17 -12.28 0 q-6.44 -1.17 -11.11 -5.84 q-4.68 -4.68 -5.85 -11.7 q-2.34 -5.85 0 -11.69 l52.63 -192.97 l0 0 Z'
-							}
-						}
-					},
-					title: {
-						text: 'Gantt of Airport Flight',
-						left: 'center'
-					},
-					dataZoom: [{
-						type: 'slider',
-						xAxisIndex: 0,
-						filterMode: 'weakFilter',
-						height: 20,
-						bottom: 0,
-						start: 0,
-						end: 26,
-						handleIcon: 'path://M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-						handleSize: '80%',
-						showDetail: false
-					}, {
-						type: 'inside',
-						id: 'insideX',
-						xAxisIndex: 0,
-						filterMode: 'weakFilter',
-						start: 0,
-						end: 26,
-						zoomOnMouseWheel: false,
-						moveOnMouseMove: true
-					}, {
-						type: 'slider',
-						yAxisIndex: 0,
-						zoomLock: true,
-						width: 10,
-						right: 10,
-						top: 70,
-						bottom: 20,
-						start: 95,
-						end: 100,
-						handleSize: 0,
-						showDetail: false
-					}, {
-						type: 'inside',
-						id: 'insideY',
-						yAxisIndex: 0,
-						start: 95,
-						end: 100,
-						zoomOnMouseWheel: false,
-						moveOnMouseMove: true,
-						moveOnMouseWheel: true
-					}],
-					grid: {
-						show: true,
-						top: 70,
-						bottom: 20,
-						left: 100,
-						right: 20,
-						backgroundColor: '#fff',
-						borderWidth: 0
-					},
-					xAxis: {
-						type: 'time',
-						position: 'top',
-						splitLine: {
-							lineStyle: {
-								color: ['#E9EDFF']
-							}
-						},
-						axisLine: {
-							show: false
-						},
-						axisTick: {
-							lineStyle: {
-								color: '#929ABA'
-							}
-						},
-						axisLabel: {
-							color: '#929ABA',
-							inside: false,
-							align: 'center'
-						}
-					},
-					yAxis: {
-						axisTick: {show: false},
-						splitLine: {show: false},
-						axisLine: {show: false},
-						axisLabel: {show: false},
-						min: 0,
-						max: _rawData.parkingApron.data.length
-					},
-					series: [{
-						id: 'flightData',
-						type: 'custom',
-						renderItem: function (params:Object, api:Object):Object {
-							var categoryIndex = api.value(DIM_CATEGORY_INDEX);
-							var timeArrival = api.coord([api.value(DIM_TIME_ARRIVAL), categoryIndex]);
-							var timeDeparture = api.coord([api.value(DIM_TIME_DEPARTURE), categoryIndex]);
-
-							var coordSys = params.coordSys;
-							_cartesianXBounds[0] = coordSys.x;
-							_cartesianXBounds[1] = coordSys.x + coordSys.width;
-							_cartesianYBounds[0] = coordSys.y;
-							_cartesianYBounds[1] = coordSys.y + coordSys.height;
-
-							var barLength = timeDeparture[0] - timeArrival[0];
-							// Get the heigth corresponds to length 1 on y axis.
-							var barHeight = api.size([0, 1])[1] * HEIGHT_RATIO;
-							var x = timeArrival[0];
-							var y = timeArrival[1] - barHeight;
-
-							var flightNumber = api.value(3) + '';
-							var flightNumberWidth = (echarts as Object).format.getTextRect(flightNumber).width;
-							var text = (barLength > flightNumberWidth + 40 && x + barLength >= 180)
-								? flightNumber : '';
-
-							var rectNormal = clipRectByRect(params, {
-								x: x, y: y, width: barLength, height: barHeight
-							});
-							var rectVIP = clipRectByRect(params, {
-								x: x, y: y, width: (barLength) / 2, height: barHeight
-							});
-							var rectText = clipRectByRect(params, {
-								x: x, y: y, width: barLength, height: barHeight
-							});
-
-							return {
-								type: 'group',
-								children: [{
-									type: 'rect',
-									ignore: !rectNormal,
-									shape: rectNormal,
-									style: api.style()
-								}, {
-									type: 'rect',
-									ignore: !rectVIP && !api.value(4),
-									shape: rectVIP,
-									style: api.style({fill: '#ddb30b'})
-								}, {
-									type: 'rect',
-									ignore: !rectText,
-									shape: rectText,
-									style: api.style({
-										fill: 'transparent',
-										stroke: 'transparent',
-										text: text,
-										textFill: '#fff'
-									})
-								}]
-							};
-						},
-						dimensions: _rawData.flight.dimensions,
-						encode: {
-							x: [DIM_TIME_ARRIVAL, DIM_TIME_DEPARTURE],
-							y: DIM_CATEGORY_INDEX,
-							tooltip: [DIM_CATEGORY_INDEX, DIM_TIME_ARRIVAL, DIM_TIME_DEPARTURE]
-						},
-						data: _rawData.flight.data
-					}, {
-						type: 'custom',
-						renderItem: function (params:Object, api:Object):Object {
-							var y = api.coord([0, api.value(0)])[1];
-							if (y < params.coordSys.y + 5) {
-								return null;
-							}
-							return {
-								type: 'group',
-								position: [
-									10,
-									y
-								],
-								children: [{
-									type: 'path',
-									shape: {
-										d: 'M0,0 L0,-20 L30,-20 C42,-20 38,-1 50,-1 L70,-1 L70,0 Z',
-										x: 0,
-										y: -20,
-										width: 90,
-										height: 20,
-										layout: 'cover'
-									},
-									style: {
-										fill: '#368c6c'
-									}
-								}, {
-									type: 'text',
-									style: {
-										x: 24,
-										y: -3,
-										text: api.value(1),
-										textVerticalAlign: 'bottom',
-										textAlign: 'center',
-										textFill: '#fff'
-									}
-								}, {
-									type: 'text',
-									style: {
-										x: 75,
-										y: -2,
-										textVerticalAlign: 'bottom',
-										textAlign: 'center',
-										text: api.value(2),
-										textFill: '#000'
-									}
-								}]
-							};
-						},
-						dimensions: _rawData.parkingApron.dimensions,
-						encode: {
-							x: -1, // Then this series will not controlled by x.
-							y: 0
-						},
-						data: _rawData.parkingApron.data.map(function (item, index) {
-							return [index].concat(item);
-						})
-					}]
-				};
-			}
-			return _ECCT_CUSTOM3BIS;
-		}
-		public function renderGanttItem(params, api):Object {
-			var categoryIndex = api.value(DIM_CATEGORY_INDEX);
-			var timeArrival = api.coord([api.value(DIM_TIME_ARRIVAL), categoryIndex]);
-			var timeDeparture = api.coord([api.value(DIM_TIME_DEPARTURE), categoryIndex]);
-
-			var coordSys = params.coordSys;
-			_cartesianXBounds[0] = coordSys.x;
-			_cartesianXBounds[1] = coordSys.x + coordSys.width;
-			_cartesianYBounds[0] = coordSys.y;
-			_cartesianYBounds[1] = coordSys.y + coordSys.height;
-
-			var barLength = timeDeparture[0] - timeArrival[0];
-			// Get the heigth corresponds to length 1 on y axis.
-			var barHeight = api.size([0, 1])[1] * HEIGHT_RATIO;
-			var x = timeArrival[0];
-			var y = timeArrival[1] - barHeight;
-
-			var flightNumber = api.value(3) + '';
-			var flightNumberWidth = (echarts as Object).format.getTextRect(flightNumber).width;
-			var text = (barLength > flightNumberWidth + 40 && x + barLength >= 180)
-				? flightNumber : '';
-
-			var rectNormal = clipRectByRect(params, {
-				x: x, y: y, width: barLength, height: barHeight
-			});
-			var rectVIP = clipRectByRect(params, {
-				x: x, y: y, width: (barLength) / 2, height: barHeight
-			});
-			var rectText = clipRectByRect(params, {
-				x: x, y: y, width: barLength, height: barHeight
-			});
-
-			return {
-				type: 'group',
-				children: [{
-					type: 'rect',
-					ignore: !rectNormal,
-					shape: rectNormal,
-					style: api.style()
-				}, {
-					type: 'rect',
-					ignore: !rectVIP && !api.value(4),
-					shape: rectVIP,
-					style: api.style({fill: '#ddb30b'})
-				}, {
-					type: 'rect',
-					ignore: !rectText,
-					shape: rectText,
-					style: api.style({
-						fill: 'transparent',
-						stroke: 'transparent',
-						text: text,
-						textFill: '#fff'
-					})
-				}]
-			};
-		}
-
-		private function clipRectByRect(params, rect):Object {
-			return (echarts as Object).graphic.clipRectByRect(rect, {
-				x: params.coordSys.x,
-				y: params.coordSys.y,
-				width: params.coordSys.width,
-				height: params.coordSys.height
-			});
-		}
 
 		private var _ECC_PIE001:ChartDefExampleVO;
 		public function get ECC_PIE001():ChartDefExampleVO
