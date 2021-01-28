@@ -90,7 +90,7 @@
                     var element:Object = _itemChartDef.eventHandlers[index];
                     charComp.on(element.eventName,element.handler);
                 }
-            }                
+            }
         }
 
         public function theme_Change():void
