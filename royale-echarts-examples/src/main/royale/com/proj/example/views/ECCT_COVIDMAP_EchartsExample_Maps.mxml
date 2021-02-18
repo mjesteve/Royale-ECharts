@@ -290,14 +290,14 @@
                         <j:Label text="Countries" width="60%" >
                             <j:beads>
                                 <j:TruncateText/>
-                                <j:Paddings paddingLeft="5"/>
+                                <js:Paddings paddingLeft="5"/>
                             </j:beads>
                         </j:Label>                    
                         <j:Label text="Total Cases" width="40%" >
                             <j:beads>
                                 <j:TruncateText/>
                                 <j:TextAlign align="right"/>
-                                <j:Paddings paddingRight="15"/>
+                                <js:Paddings paddingRight="15"/>
                             </j:beads>
                         </j:Label>
                     </j:HGroup>

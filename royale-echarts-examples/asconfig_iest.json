@@ -15,10 +15,10 @@
             }
         ],
         "library-path": [
-            "${royalelib}/js/libs/MXRoyaleJS.swc"
+            "${royalelib}/js/libs/MXRoyale-0.9.8-SNAPSHOT-js.swc"
         ],
         "js-library-path": [
-            "${royalelib}/js/libs/MXRoyaleJS.swc"
+            "${royalelib}/js/libs/MXRoyale-0.9.8-SNAPSHOT-js.swc"
         ],
         "define": [
             {
