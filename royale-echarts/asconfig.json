@@ -27,13 +27,15 @@
             }
         ],
         "source-path": [
-            "src/main/royale"
+            "src/main/royale",
+            "../../LibrariesJS/Echarts-Incubator/incubator-echarts/src"
         ],
         "include-classes": [
             "src/main/royale/ECHARTSClasses.as"
         ],
         "include-sources": [
-            "src/main/royale"
+            "src/main/royale",
+            "../../LibrariesJS/Echarts-Incubator/incubator-echarts/src"
         ],
         "source-map": true,
         "output": "target/royale-echarts-1.0-SNAPSHOT-js.swc"

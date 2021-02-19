@@ -1,0 +1,39 @@
+{
+    "config": "royale",
+    "compilerOptions": {
+        "debug": true,
+        "targets": ["JSRoyale"],
+        "html-template": "src/main/resources/royale-echarts-examples-template.html",
+        "source-path": [
+            "src/main/royale",
+            "../royale-echarts/src/main/royale/"
+        ],
+        "namespace": [
+            {
+                "uri": "library://ns.iest.com/royale/echarts",
+                "manifest": "../royale-echarts/src/main/resources/echarts-manifest.xml"
+            }
+        ],
+        "library-path": [
+            "${royalelib}/js/libs/MXRoyaleJS.swc"
+        ],
+        "js-library-path": [
+            "${royalelib}/js/libs/MXRoyaleJS.swc"
+        ],
+        "define": [
+            {
+                "name": "BUILD::buildNumber",
+                "value": "'buildNumber'"
+            },
+            {
+                "name": "BUILD::buildVersion",
+                "value": "'project.version'"
+            }
+        ],
+        "source-map": true
+    },
+    "files":
+    [
+        "src/main/royale/App.mxml"
+    ]
+}
