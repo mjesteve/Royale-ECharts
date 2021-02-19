@@ -3,7 +3,6 @@
     xmlns:j="library://ns.apache.org/royale/jewel"
     xmlns:js="library://ns.apache.org/royale/basic"
     xmlns:html="library://ns.apache.org/royale/html"
-    xmlns:localbeads="com.proj.example.beads.layouts.*"
     xmlns:vos="com.proj.example.vos.*"
 	xmlns:models="com.proj.example.models.*"
     xmlns:views="com.proj.example.views.*" 
