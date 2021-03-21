@@ -40,6 +40,7 @@ limitations under the License.
             
             [Bindable("dataChange")]
             private function get internationalFormat():String {
+                trace('IT ---------', lblname.width, lbltotal.width);
                 var res:String="";
                 var frt:NumberFormatter = new NumberFormatter;
                 frt.thousandsSeparator = "."
@@ -56,13 +57,13 @@ limitations under the License.
         <j:HorizontalLayout itemsHorizontalAlign="itemsCenter" itemsVerticalAlign="itemsCenter" gap="3"/>
     </j:beads>
    
-    <j:Label text="{dataReg.name}" width="60%" style="font-weight: bold; ">
+    <j:Label localId="lblname" text="{dataReg.name}" width="60%" style="font-weight: bold; ">
         <j:beads>
             <j:TruncateText/>
         </j:beads>
     </j:Label>
    
-    <j:Label text="{internationalFormat}" width="40%">
+    <j:Label localId="lbltotal" text="{internationalFormat}" width="40%">
         <j:beads>
             <j:TruncateText/>
             <j:TextAlign align="right"/>

@@ -24,6 +24,8 @@
         import com.proj.example.vos.TypeGen_NameValueVO;
         import org.apache.royale.collections.ArrayListView;
         import com.iest.royale.echarts.events.EChartsEvent;
+        import org.apache.royale.events.Event;
+        import com.proj.example.jewel.ListJwExt;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);
@@ -77,8 +79,9 @@
             onSearchCountries(true);
         }
 
-        //[Bindable]
+        [Bindable]
         private var dpCountries:ArrayList = new ArrayList;
+        private var dpCountriesSource:ArrayList = new ArrayList;
         private var totalCases:Number = 0;
 
         private function onSearchCountries(init:Boolean = false):void
@@ -95,20 +98,49 @@
                     if(element.value > totalCases)
                         totalCases = element.value;
                 }
-                dpCountries = new ArrayList(ar);
+                dpCountriesSource = new ArrayList(ar);
             }
 
             if(countriesSeachInput.text == "")
             {
-                countriesList.dataProvider = dpCountries;
+                dpCountries = dpCountriesSource;
             }else
             {
-                var alv:ArrayListView = new ArrayListView(dpCountries);
+                var alv:ArrayListView = new ArrayListView(dpCountriesSource);
                 alv.filterFunction = inFilterCountries;
                 alv.refresh();
-                countriesList.dataProvider = new ArrayList(alv.toArray());
+                dpCountries = new ArrayList(alv.toArray());
             }
 
+        }
+
+        private function get selectedIndex():int{
+            return countriesList.selectedIndex;
+        }
+        private function set selectedIndex(value:int):void
+        {
+            countriesList.selectedIndex = value;
+            countriesList_explicitWidth.selectedIndex = value;
+            countriesList_itemsExpand.selectedIndex = value;
+            countriesList_variableWidth.selectedIndex = value;
+        }
+
+        private function onPrev():void
+        {
+            if( selectedIndex > 0 )
+            {
+                selectedIndex -=1;
+                putSelectCountry(null);
+            }
+        }
+
+        private function onNext():void
+        {
+            if( selectedIndex < dpCountries.length-1 )
+            {                
+                selectedIndex +=1;
+                putSelectCountry(null);
+            }
         }
 
         private function inFilterCountries(item:Object):Boolean {
@@ -143,23 +175,24 @@
             }else
             {
                 var selname:String = param.batch[0].name as String;
-
-                var dp:ArrayList = countriesList.dataProvider as ArrayList;
-                var len:int = dp.length;
+                var len:int = dpCountries.length;
                 var sel:Boolean = false;
 
                 for(var index:int = 0; index < len; index++)
                 {
-                    var element:TypeGen_NameValueVO = new TypeGen_NameValueVO(dp[index]);
+                    var element:TypeGen_NameValueVO = new TypeGen_NameValueVO(dpCountries[index]);
                     sel = (element.name == selname);
                     if(sel)
                     {
+                        selectedIndex = index;
+
+                        //Bilbosax calc. scrollhorizontalPosition
                         var IRWidthHor:int = 300;
                         var gapH:int = 3;
-                        countriesList.selectedIndex = index;
                         if(countriesList.scrollViewport.scroll)
-                        {                            
-                            countriesList.scrollViewport.horizontalScrollPosition = (index * IRWidthHor) + (index * gapH);
+                        {
+                            //countriesList.scrollViewport.horizontalScrollPosition = (index * IRWidthHor) + (index * gapH);
+                            trace( (index * IRWidthHor) + (index * gapH));
                         }
                         break;
                     }
@@ -172,8 +205,7 @@
 
                     }else{
                         //Selected "default"
-                        countriesList.selectedIndex = 0;
-                        countriesList.scrollToIndex(0);
+                        selectedIndex = 0;                        
                     }
                 }
             }
@@ -186,9 +218,14 @@
         });
         */
         
-        private function putSelectCountry():void
-        {
-            var citem:TypeGen_NameValueVO = (countriesList.selectedItem as TypeGen_NameValueVO);
+        private function putSelectCountry(event:Event):void
+        {            
+            var citem:TypeGen_NameValueVO;
+            if(event == null)
+                citem = countriesList.selectedItem as TypeGen_NameValueVO;
+            else
+                citem = ((event.target as ListJwExt).selectedItem as TypeGen_NameValueVO);
+
             if(!citem)
                 return;
             if(citem.name == ECT_COVIDMAP_1.nameCountryDefaultNoDataGeo)            
@@ -268,8 +305,8 @@
 
             <!--    <j:Label localId="lblOption" multiline="true" width="200" height="100%" style="overflow-y: scroll;"/>-->
 
-                <j:VGroup gap="3" percentWidth="100" minWidth="20" minHeight="20" percentHeight="20">
-                
+                <j:VGroup gap="3" percentWidth="100" minWidth="20" minHeight="250">
+
                     <j:HGroup percentWidth="100" gap="5" height="35" itemsVerticalAlign="itemsCenter">
 
                         <j:IconTextInput localId="countriesSeachInput" rightPosition="false" width="100%" text="" change="onSearchCountries()" >
@@ -280,7 +317,7 @@
                                 <js:FontAwesomeIcon text="{FontAwesome5IconType.SEARCH}" emphasis="primary" className="primary-dark"
                                 faStyle="{FontAwesomeIcon.DUOTONE}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
                             </j:icon>
-                        </j:IconTextInput>                        
+                        </j:IconTextInput>
                         <j:IconButton unboxed="true" click="onResetCountries()">
                             <j:icon>
                                 <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
@@ -289,6 +326,28 @@
                                 <j:ToolTip toolTip="Reset"/>
                             </j:beads>
                         </j:IconButton>
+                                        
+                        <j:HGroup percentWidth="20" gap="5" height="35" itemsVerticalAlign="itemsCenter">
+                            
+                            <j:IconButton unboxed="true" click="onPrev()">
+                                <j:icon>
+                                    <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_LEFT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                                </j:icon>
+                                <j:beads>
+                                    <j:ToolTip toolTip="Previous"/>
+                                </j:beads>
+                            </j:IconButton>
+                            <j:Label text="{countriesList_explicitWidth.selectedIndex} / {(countriesList_explicitWidth.dataProvider as ArrayList).length}"/>
+                            <j:IconButton unboxed="true" click="onNext()">
+                                <j:icon>
+                                    <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_RIGHT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                                </j:icon>
+                                <j:beads>
+                                    <j:ToolTip toolTip="Next"/>
+                                </j:beads>
+                            </j:IconButton>
+                    
+                        </j:HGroup>
                     </j:HGroup>
                     
                     <j:HGroup percentWidth="100" gap="3" height="35" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsCenter"
@@ -308,26 +367,77 @@
                         </j:Label>
                     </j:HGroup>
                 
-                    <customcontrol:ListJwExt localId="countriesList" percentWidth="100" percentHeight="100"
-                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer" change="putSelectCountry()">
+                    <customcontrol:ListJwExt localId="countriesList_explicitWidth" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_explicitWidth" change="putSelectCountry(event)">
                         <customcontrol:beads>
                             <j:HorizontalLayout gap="3" itemsExpand="false" />
                             <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
                         </customcontrol:beads>
                     </customcontrol:ListJwExt>
+                
+                    <customcontrol:ListJwExt localId="countriesList_variableWidth" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_variableWidth" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsExpand="false" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
+                
+                    <customcontrol:ListJwExt localId="countriesList_itemsExpand" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_variableWidth" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsExpand="true" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
                         
                 </j:VGroup>
+                
+                <j:HGroup percentWidth="100" percentHeight="100" gap="5" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop" style="overflow:auto;">
+                    
+                    <j:VGroup gap="3" percentWidth="20" minWidth="20" minHeight="100" percentHeight="100">
+                        
+                        <j:HGroup percentWidth="100" gap="3" height="35" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsCenter"
+                            style="background-color: #19416b; color: #ffffff;font-weight: bold;">
+                            <j:Label text="Countries" width="60%" >
+                                <j:beads>
+                                    <j:TruncateText/>
+                                    <js:Paddings paddingLeft="5"/>
+                                </j:beads>
+                            </j:Label>                    
+                            <j:Label text="Total Cases" width="40%" >
+                                <j:beads>
+                                    <j:TruncateText/>
+                                    <j:TextAlign align="right"/>
+                                    <js:Paddings paddingRight="15"/>
+                                </j:beads>
+                            </j:Label>
+                        </j:HGroup>
+                    
+                        <customcontrol:ListJwExt localId="countriesList" percentWidth="100" percentHeight="100"
+                            dataProvider="{dpCountries}"
+                            itemRenderer="com.proj.example.itemRenderers.ListGenNameValueItemRenderer" change="putSelectCountry(event)">
+                            <customcontrol:beads>
+                                <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                            </customcontrol:beads>
+                        </customcontrol:ListJwExt>
+                            
+                    </j:VGroup>
 
-                <localecharts:EChartsBasicControl localId="charComp" percentHeight="80" percentWidth="100"
-                                                    autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
-                                                    optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
-                                                    onCompleteConfig="completConfigHandler(event)"
-                                                    onUpdateConfig="completConfigHandler(event)">
-                    <localecharts:beads>
-                        <echartsbeads:EChartEventsBead GEOSELECTCHANGE="geoToggleSelect" GEOSELECTED="geoSelectCountryHandler" GEOUNSELECTED="geoUnSelectCountryHandler"/>
-                    </localecharts:beads>
-                </localecharts:EChartsBasicControl>
-
+                    <localecharts:EChartsBasicControl localId="charComp" percentHeight="100" percentWidth="100"
+                                                        autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
+                                                        optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+                                                        onCompleteConfig="completConfigHandler(event)"
+                                                        onUpdateConfig="completConfigHandler(event)">
+                        <localecharts:beads>
+                            <echartsbeads:EChartEventsBead GEOSELECTCHANGE="geoToggleSelect" GEOSELECTED="geoSelectCountryHandler" GEOUNSELECTED="geoUnSelectCountryHandler"/>
+                        </localecharts:beads>
+                    </localecharts:EChartsBasicControl>
+                </j:HGroup>
+                
             </j:VGroup>
         </j:CardPrimaryContent>
 

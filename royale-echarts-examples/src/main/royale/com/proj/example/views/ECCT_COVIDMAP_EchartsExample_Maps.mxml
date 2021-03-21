@@ -154,7 +154,7 @@
                     if(sel)
                     {                    
                         countriesList.selectedIndex = index;
-                        countriesList.scrollToIndex(index);
+                        //countriesList.scrollToIndex(index);
                         break;
                     }
                 }

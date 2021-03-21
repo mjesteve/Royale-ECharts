@@ -16,6 +16,7 @@ package com.proj.example.jewel.beads.views
 	import org.apache.royale.core.UIBase;
 	import org.apache.royale.core.IBeadLayout;
 	import org.apache.royale.jewel.supportClasses.scrollbar.ScrollingViewport;
+	import org.apache.royale.jewel.beads.layouts.GapConstants;
 
 	/**
 	 *  The ListView class creates the visual elements of the org.apache.royale.jewel.List
@@ -59,17 +60,55 @@ package com.proj.example.jewel.beads.views
 			var scrollArea:HTMLElement = (_strand as IStyledUIBase).element;
 			var oldScroll:Number;
 			var scrollToProposed:Number = 0;
+			var scrollMaxVisible:Number = 0;
+			var offset:Number = 0;
 
 			if((_strand as IStyledUIBase).containsClass("horizontal"))
 			{
+                var layout:HorizontalLayout = (_strand as UIBase).getBeadByType(IBeadLayout) as HorizontalLayout;
+
+				//[TODO] identify variableColWidth (itemExpand, itemsSpaceBetween, itemsSpaceAround, explicitHeight...)
+				//At this point, the closest calculation is the actual sum = variableColWidht
+				var variableColWidth:Boolean = true;
+
 				oldScroll = scrollArea.scrollLeft;
 				var totalWidth:Number = 0;
 				var colWidth:Number = 0;
+				var i:int = 0;
 				
-                var layout:HorizontalLayout = (_strand as UIBase).getBeadByType(IBeadLayout) as HorizontalLayout;
-			    trace(layout.itemsExpand);
-				trace(scrollViewport.scroll);
-				return true;
+				if(variableColWidth)
+				{
+					totalWidth = scrollArea.scrollWidth - scrollArea.offsetWidth;
+					for (i = 0; i <= index; i++)
+					{
+						var ir0:IItemRenderer = dataGroup.getItemRendererForIndex(i) as IItemRenderer;
+						colWidth = ir0.element.offsetWidth + (layout.gap * GapConstants.GAP_STEP);
+						if( i < index )
+							scrollToProposed += colWidth;
+					}
+				} else 
+				{
+					//We could "assume" that the width of the first itemrenderer will give us the predefined width.
+					var ir1:IItemRenderer = dataGroup.getItemRendererForIndex(0) as IItemRenderer;					
+					colWidth = ir1.element.offsetWidth + (layout.gap * GapConstants.GAP_STEP);
+					totalWidth = listModel.dataProvider.length * colWidth - scrollArea.clientWidth;
+					scrollToProposed = index * colWidth;
+				}
+
+				scrollMaxVisible = scrollArea.scrollLeft + scrollArea.offsetWidth;
+				if(scrollToProposed <= scrollMaxVisible && scrollToProposed+colWidth > scrollMaxVisible)
+				{
+					offset = scrollMaxVisible - scrollToProposed;
+					scrollToProposed = oldScroll + colWidth - offset;
+					scrollArea.scrollLeft = Math.min(scrollToProposed, totalWidth);
+				}
+				else if(scrollToProposed >= scrollMaxVisible || scrollToProposed < oldScroll)
+				{
+					scrollArea.scrollLeft = Math.min(scrollToProposed, totalWidth);
+				}
+
+				return oldScroll != scrollArea.scrollLeft;
+
 			}else
 			{
 				oldScroll = scrollArea.scrollTop;
@@ -82,14 +121,13 @@ package com.proj.example.jewel.beads.views
 					//each item render can have its own height
 					totalHeight = scrollArea.scrollHeight - scrollArea.offsetHeight;
 
-					for (var i:int = 0; i <= index; i++)
+					for (i = 0; i <= index; i++)
 					{
 						var ir:IItemRenderer = dataGroup.getItemRendererForIndex(i) as IItemRenderer;
 						rowHeight = ir.element.offsetHeight
 						if( i < index )
 							scrollToProposed += rowHeight;
 					}
-
 				} else
 				{
 					// all items renderers with same height
@@ -98,16 +136,15 @@ package com.proj.example.jewel.beads.views
 					scrollToProposed = index * rowHeight;
 				}
 
-				var scrollMaxVisible:Number = scrollArea.scrollTop + scrollArea.offsetHeight;
+				scrollMaxVisible = scrollArea.scrollTop + scrollArea.offsetHeight;
 
 				//When a row starts within the visible area but ends outside:
 				if(scrollToProposed <= scrollMaxVisible && scrollToProposed+rowHeight > scrollMaxVisible)
 				{
 					//If we want to respect the default behavior (position the selected row as the first visible), the next two lines should be canceled
 					//We adjust the scroll so that the row is fully visible, leaving it as the last visible...
-					var offset:Number = scrollMaxVisible - scrollToProposed;
+					offset = scrollMaxVisible - scrollToProposed;
 					scrollToProposed = oldScroll + rowHeight - offset;
-
 					scrollArea.scrollTop = Math.min(scrollToProposed, totalHeight);
 				}
 
