@@ -32,7 +32,7 @@
   <properties>
     <compiler.debug>true</compiler.debug>
     <royale.framework.version>0.9.8-SNAPSHOT</royale.framework.version>
-    <royale.compiler.version>0.9.8-SNAPSHOT</royale.compiler.version>
+    <royale.compiler.version>0.9.9-SNAPSHOT</royale.compiler.version>
     <royale.typedefs.version>0.9.8-SNAPSHOT</royale.typedefs.version>
     <player.version>15.0</player.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,7 +48,7 @@
         <extensions>true</extensions>
 
         <configuration>
-          <targets>JSRoyale</targets>		  
+          <targets>JSRoyale</targets>
           <namespaces>
             <!-- Make the classes listed in the manifest be available under the given namespace -->
             <namespace>
@@ -60,7 +60,7 @@
           <includeClasses>
             <includeClass>ECHARTSClasses</includeClass>
           </includeClasses>
-		  
+
           <includeFiles>
             <include-file>
               <name>js/*</name>
@@ -75,20 +75,20 @@
               <path>../src/main/resources/themes/thumb/*</path>
             </include-file>
           </includeFiles>
-        
-		      <skipExtern>true</skipExtern>
+
+		  <skipExtern>true</skipExtern>
           <includeLookupOnly>true</includeLookupOnly>
           <allowSubclassOverrides>true</allowSubclassOverrides>
           <additionalCompilerOptions>
-            -js-default-initializers=true;            
+            -js-default-initializers=true;
             -js-dynamic-access-unknown-members=true; <!-- to access JSON object graph subobjects -->
             -source-map=true;
-            -keep-code-with-metadata=Inject;            
+            -keep-code-with-metadata=Inject;
             -keep-as3-metadata+=Inject,EventHandler,Event,Bindable;
           </additionalCompilerOptions>
 
         </configuration>
-      
+
         <dependencies>
           <dependency>
             <groupId>org.apache.royale.compiler</groupId>
@@ -103,7 +103,7 @@
 
   <dependencies>
 
-    <!-- Needed for Flash compilation -->    
+    <!-- Needed for Flash compilation -->
     <dependency>
       <groupId>com.adobe.flash.framework</groupId>
       <artifactId>playerglobal</artifactId>
@@ -129,7 +129,7 @@
       <scope>runtime</scope>
     </dependency>
 
-    <!-- For flash compilation, we need the airglobal or playerglobal 
+    <!-- For flash compilation, we need the airglobal or playerglobal
     <dependency>
       <groupId>com.adobe.air.framework</groupId>
       <artifactId>airglobal</artifactId>
@@ -143,7 +143,7 @@
       <artifactId>Core</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
-      
+
       <classifier>swf</classifier>
     </dependency>
     <dependency>
@@ -151,7 +151,7 @@
       <artifactId>Core</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
-      
+
       <classifier>js</classifier>
     </dependency>
 
@@ -160,7 +160,7 @@
       <artifactId>Collections</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
-      
+
       <classifier>swf</classifier>
     </dependency>
     <dependency>
@@ -168,7 +168,7 @@
       <artifactId>Collections</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
-      
+
       <classifier>js</classifier>
     </dependency>
 
@@ -177,7 +177,7 @@
       <artifactId>Network</artifactId>
       <version>${royale.framework.version}</version>
       <type>swc</type>
-      
+
       <classifier>swf</classifier>
     </dependency>
     <dependency>
@@ -208,7 +208,7 @@
         <artifactId>Basic</artifactId>
         <version>${royale.framework.version}</version>
         <type>swc</type>
-        
+
         <classifier>js</classifier>
     </dependency>
     <dependency>
@@ -219,7 +219,7 @@
       <classifier>swf</classifier>
     </dependency>
 
-    <!-- For JavaScript compilation, we need some other base classes 
+    <!-- For JavaScript compilation, we need some other base classes
     <dependency>
       <groupId>org.apache.royale.typedefs</groupId>
       <artifactId>royale-typedefs-gcl</artifactId>
@@ -356,8 +356,8 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-  </repositories> 
-  
+  </repositories>
+
    <pluginRepositories>
     <pluginRepository>
       <id>apache-plugins-release</id>
