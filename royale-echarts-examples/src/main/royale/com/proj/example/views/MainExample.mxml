@@ -6,7 +6,7 @@
     xmlns:localbeads="com.proj.example.beads.layouts.*"
     xmlns:vos="com.proj.example.vos.*"
 	xmlns:models="com.proj.example.models.*"
-    xmlns:views="com.proj.example.views.*" 
+    xmlns:views="com.proj.example.views.*"
     initComplete="onInitComplete()"
     >
 
@@ -18,7 +18,7 @@
         import com.proj.example.charts.IEchartExampleBasic;
 	    import org.apache.royale.core.UIBase;
 
-        private function onInitComplete():void{            
+        private function onInitComplete():void{
 			//window.addEventListener('resize', autoResizeHandler, false);
             //this.addEventListener("sizeChanged", selectedChart);
             main.selectedContent = "welcome";
@@ -27,7 +27,7 @@
 
         [Bindable]
         public function get offsetTopBar():Number{
-            //The height of the Top Bar is not set correctly, the ApplicationMainContent does not have the Padding-Top either: 
+            //The height of the Top Bar is not set correctly, the ApplicationMainContent does not have the Padding-Top either:
             //it assigns 66 (it matches the minHeight of the Top Bar 'has-topappbar') instead of 255.64, the actual height of the Top Bar.
             // trace(topappbar.height.toString());  = 977 (incorrect)
             // trace(topappbar.element.clientTop + topappbar.element.clientHeight); = 240 //(incorrect)
@@ -38,7 +38,7 @@
             //var top:Number = 255 - barRowHeader.height + 20;
             //return top + topappbar.element.clientTop;
 
-            /*in CSS 
+            /*in CSS
             .has-topappbar {
                 padding-top: 250px !important;
             }
@@ -47,16 +47,16 @@
         }
 
         public function selectedChart():void
-        {            
+        {
             var it:TabBarChartVO = (tabbarApp.selectedItem as TabBarChartVO);
             if(!it){
                 main.selectedContent = "welcome";
             }else{
-                main.selectedContent= it.hash;                                
+                main.selectedContent= it.hash;
 				for (var i:int = 0; i < main.numElements; i++)
 				{
 					var content:ISelectableContent = main.getElementAt(i) as ISelectableContent;
-					if(content.isSelected){                        
+					if(content.isSelected){
                         if(content is IEchartExampleBasic){
                             var cchart:IEchartExampleBasic = content as IEchartExampleBasic;
                             var uiele:UIBase = content as UIBase;
@@ -92,7 +92,7 @@
         private var _currentTheme:EChartsThemeTemplateVO;
         [Bindable]
 		public function get currentTheme():EChartsThemeTemplateVO{
-            return _currentTheme; 
+            return _currentTheme;
         }
 		public function set currentTheme(value:EChartsThemeTemplateVO):void
         {
@@ -102,7 +102,7 @@
         }
 
         public function theme_Change():void
-        {            
+        {
             if(_currentTheme && _currentTheme.themeName == listTheme.selectedItem.themeName)
                 return;
             if( !listTheme.selectedItem.isReg )
@@ -133,7 +133,7 @@
     <j:TopAppBar localId="topappbar" fixed="true" visible="true">
         <j:BarRow localId="barRowHeader">
             <j:BarSection gap="0" percentWidth="100">
-                <j:BarTitle text="Integrating Apache ECharts (Incumbating) into Apache Royale"/>
+                <j:BarTitle text="Integrating Apache ECharts into Apache Royale"/>
             </j:BarSection>
         </j:BarRow>
         <j:BarRow localId="barRowContent" style ="height:auto;">
@@ -171,6 +171,6 @@
         <views:ECCT_CUSTOM2_EChartsExampleBasic localId="ecp4" name="ecp4" itemChartDef="{appModel.ECCT_CUSTOM2}"/>
         <views:EChartsExampleThemesDefault localId="ecp5" name="ecp5" itemChartDef="{appModel.ECCT_CUSTOM3}"/>
     </j:ApplicationMainContent>
-    
+
 
 </j:ResponsiveView>

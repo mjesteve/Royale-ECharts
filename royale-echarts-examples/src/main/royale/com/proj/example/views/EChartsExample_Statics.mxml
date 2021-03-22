@@ -23,7 +23,7 @@
         private var mychart:Object;
         private var dpCharts:ArrayList;
 
-        private function onInitComplete():void{            
+        private function onInitComplete():void{
 			window.addEventListener('resize', autoResizeHandler, false);
             var ar:Array = [
                 {idChart:1, desChart:'Bar Chart Person', typeChart:'bar', component: EC_BAR001},
@@ -49,19 +49,19 @@
             if(cbCharts.selectedIndex == -1)
             {
                 if(mychart)
-                    mychart.clear();                
+                    mychart.clear();
             }
             else{
 
                 var notMerge:Boolean = true;
                 var option:Object;
-                var idChart:int = cbCharts.selectedItem.idChart;                
+                var idChart:int = cbCharts.selectedItem.idChart;
 
                 if(!mychart)
                 {
                     mychart = echarts.init(myContainerChart.element);
                 }
-                
+
                 var defchart:IEchartDefinition;
                 switch(idChart)
                 {
@@ -72,16 +72,16 @@
                         defchart = new EC_BAR002() as IEchartDefinition;
                         break;
                     case 3:
-                        defchart = new EC_BAR003() as IEchartDefinition;               
+                        defchart = new EC_BAR003() as IEchartDefinition;
                         break;
                     case 4:
-                        defchart = new EC_PIE001() as IEchartDefinition;            
+                        defchart = new EC_PIE001() as IEchartDefinition;
                         break;
                     case 5:
-                        defchart = new EC_PIE002() as IEchartDefinition;                 
+                        defchart = new EC_PIE002() as IEchartDefinition;
                         break;
                     case 6:
-                        defchart = new ECC_PIE003() as IEchartDefinition;                 
+                        defchart = new ECC_PIE003() as IEchartDefinition;
                         break;
                     case 7:
                         defchart = new EC_LINE001() as IEchartDefinition;
@@ -91,7 +91,7 @@
                         mychart.on('updateAxisPointer', updateAxisPointer);
 
                         break;
-                
+
                     default:
                         option = mychart.getOption();
                         break;
@@ -117,8 +117,8 @@
             if (xAxisInfo) {
                 var dimension:int = xAxisInfo.value + 1;
                 var option:Object = {
-                    series: { id: 'pie', 
-                        label: { formatter: '{b}: {@[' + dimension + ']} ({d}%)' }, 
+                    series: { id: 'pie',
+                        label: { formatter: '{b}: {@[' + dimension + ']} ({d}%)' },
                         encode: { value: dimension, tooltip: dimension}
                     }
                 };
@@ -129,7 +129,7 @@
 
         ]]>
     </fx:Script>
-	
+
 	<fx:Style>
         @namespace js "library://ns.apache.org/royale/basic";
         @namespace j "library://ns.apache.org/royale/jewel";
@@ -140,18 +140,18 @@
             outline: 1px dashed navy;
         }
 
-        /* styles for '...' */ 
+        /* styles for '...' */
         .block-with-text {
             /* hide text if it more than N lines  */
             overflow: hidden;
             /* for set '...' in absolute position */
-            position: relative; 
+            position: relative;
             /* use this value to count block height */
             line-height: 1.2em;
             /* max-height = line-height (1.2) * lines max number (3) */
-            max-height: 3.6em; 
+            max-height: 3.6em;
             /* fix problem when last visible word doesn't adjoin right side  */
-            text-align: justify;  
+            text-align: justify;
             /* place for '...' */
             margin-right: -1em;
             padding-right: 1em;
@@ -188,7 +188,7 @@
 	</j:beads>
 
     <j:ApplicationMainContent localId="main">
-        
+
         <j:ScrollableSectionContent>
 
             <j:Grid gap="true" width="100%" height="100%">
@@ -197,22 +197,22 @@
                     <j:Card itemsExpand="false" width="100%" height="100%" className="cardWPStyle">
                         <j:CardHeader>
                                 <j:BarSection gap="3" width="80%">
-                                    <html:H3 text="Integrating Apache ECharts (Incumbating) into Apache Royale" 
+                                    <html:H3 text="Integrating Apache ECharts into Apache Royale"
                                         className="block-with-text primary-dark"/>
                                 </j:BarSection>
                                 <j:BarSection width="20%" itemsHorizontalAlign="itemsRight">
                                     <j:ComboBox width="100%" localId="cbCharts" labelField="desChart" change="selectChart()"/>
                                     <!--<j:Button text="*" click="onOpenPopup()"/>-->
-                                </j:BarSection>       
+                                </j:BarSection>
                         </j:CardHeader>
 
-                        <j:CardPrimaryContent localId="cardContent" 
-                                              itemsVerticalAlign="itemsCenter" 
+                        <j:CardPrimaryContent localId="cardContent"
+                                              itemsVerticalAlign="itemsCenter"
                                               itemsHorizontalAlign="itemsCenter" >
                             <j:Group localId="myContainerChart" percentHeight="100" percentWidth="100"/>
                         </j:CardPrimaryContent>
 
-                    </j:Card> 
+                    </j:Card>
 
                 </j:GridCell>
             </j:Grid>
