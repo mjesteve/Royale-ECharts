@@ -442,7 +442,7 @@
                 
                     <customcontrol:ListJwExt localId="countriesList_spacearound" percentWidth="100" percentHeight="100"
                         dataProvider="{dpCountries}"
-                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_explicitWidth" change="putSelectCountry(event)">
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_index" change="putSelectCountry(event)">
                         <customcontrol:beads>
                             <j:HorizontalLayout gap="3" itemsHorizontalAlign="itemsSpaceAround" />
                             <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
