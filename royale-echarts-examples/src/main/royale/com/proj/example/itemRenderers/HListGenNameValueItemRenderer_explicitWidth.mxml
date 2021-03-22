@@ -40,7 +40,6 @@ limitations under the License.
             
             [Bindable("dataChange")]
             private function get internationalFormat():String {
-                trace('IT ---------', lblname.width, lbltotal.width);
                 var res:String="";
                 var frt:NumberFormatter = new NumberFormatter;
                 frt.thousandsSeparator = "."

@@ -26,6 +26,7 @@
         import com.iest.royale.echarts.events.EChartsEvent;
         import org.apache.royale.events.Event;
         import com.proj.example.jewel.ListJwExt;
+        import org.apache.royale.jewel.List;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);
@@ -123,6 +124,17 @@
             countriesList_explicitWidth.selectedIndex = value;
             countriesList_itemsExpand.selectedIndex = value;
             countriesList_variableWidth.selectedIndex = value;
+            countriesList_spacebetween.selectedIndex = value;
+            countriesList_spacearound.selectedIndex = value;
+        }
+
+        private function onFirst():void
+        {
+            if( selectedIndex > 0 )
+            {
+                selectedIndex = 0;
+                putSelectCountry(null);
+            }
         }
 
         private function onPrev():void
@@ -139,6 +151,15 @@
             if( selectedIndex < dpCountries.length-1 )
             {                
                 selectedIndex +=1;
+                putSelectCountry(null);
+            }
+        }
+
+        private function onLast():void
+        {
+            if( selectedIndex < dpCountries.length-1 )
+            {                
+                selectedIndex = dpCountries.length-1;
                 putSelectCountry(null);
             }
         }
@@ -224,7 +245,7 @@
             if(event == null)
                 citem = countriesList.selectedItem as TypeGen_NameValueVO;
             else
-                citem = ((event.target as ListJwExt).selectedItem as TypeGen_NameValueVO);
+                citem = ((event.target as List).selectedItem as TypeGen_NameValueVO);
 
             if(!citem)
                 return;
@@ -305,7 +326,7 @@
 
             <!--    <j:Label localId="lblOption" multiline="true" width="200" height="100%" style="overflow-y: scroll;"/>-->
 
-                <j:VGroup gap="3" percentWidth="100" minWidth="20" minHeight="250">
+                <j:VGroup gap="3" percentWidth="100" minWidth="20" minHeight="325">
 
                     <j:HGroup percentWidth="100" gap="5" height="35" itemsVerticalAlign="itemsCenter">
 
@@ -327,8 +348,16 @@
                             </j:beads>
                         </j:IconButton>
                                         
-                        <j:HGroup percentWidth="20" gap="5" height="35" itemsVerticalAlign="itemsCenter">
+                        <j:HGroup width="225" gap="5" height="35" itemsVerticalAlign="itemsCenter">
                             
+                            <j:IconButton unboxed="true" click="onFirst()">
+                                <j:icon>
+                                    <js:FontAwesomeIcon text="chevron-double-left" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                                </j:icon>
+                                <j:beads>
+                                    <j:ToolTip toolTip="First"/>
+                                </j:beads>
+                            </j:IconButton>
                             <j:IconButton unboxed="true" click="onPrev()">
                                 <j:icon>
                                     <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_LEFT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
@@ -344,6 +373,14 @@
                                 </j:icon>
                                 <j:beads>
                                     <j:ToolTip toolTip="Next"/>
+                                </j:beads>
+                            </j:IconButton>
+                            <j:IconButton unboxed="true" click="onLast()">
+                                <j:icon>
+                                    <js:FontAwesomeIcon text="chevron-double-right" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                                </j:icon>
+                                <j:beads>
+                                    <j:ToolTip toolTip="Last"/>
                                 </j:beads>
                             </j:IconButton>
                     
@@ -390,6 +427,24 @@
                         itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_variableWidth" change="putSelectCountry(event)">
                         <customcontrol:beads>
                             <j:HorizontalLayout gap="3" itemsExpand="true" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
+                
+                    <customcontrol:ListJwExt localId="countriesList_spacebetween" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_variableWidth" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsHorizontalAlign="itemsSpaceBetween" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
+                
+                    <customcontrol:ListJwExt localId="countriesList_spacearound" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_explicitWidth" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsHorizontalAlign="itemsSpaceAround" />
                             <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
                         </customcontrol:beads>
                     </customcontrol:ListJwExt>
