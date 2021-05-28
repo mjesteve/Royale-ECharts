@@ -2,6 +2,11 @@
 @namespace "http://www.w3.org/1999/xhtml";
 @namespace js "library://ns.apache.org/royale/basic";
 @namespace j "library://ns.apache.org/royale/jewel";
+@namespace customctrl "com.proj.example.jewel.*";
+
+customctrl|ListJwExt {
+  IBeadView: ClassReference("com.proj.example.jewel.beads.views.ListViewJwExt");
+}
 
   .Application {
     font-family: 'Open Sans', serif, sans-serif;

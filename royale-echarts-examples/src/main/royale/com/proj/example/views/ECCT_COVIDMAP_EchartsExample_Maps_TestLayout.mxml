@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009" 
+    implements="com.proj.example.charts.IEchartExampleBasic"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+	xmlns:models="com.proj.example.models.*"
+    xmlns:views="com.proj.example.views.*" 
+    xmlns:localecharts="com.iest.royale.echarts.*"
+    xmlns:echartsbeads="com.iest.royale.echarts.beads.*"
+    xmlns:customcontrol="com.proj.example.jewel.*"
+    initComplete="onInitComplete()">
+
+    <fx:Metadata>
+        [Event(name="close", type="org.apache.royale.events.Event")]
+    </fx:Metadata>
+
+    <fx:Script>
+        <![CDATA[
+        import com.proj.example.vos.ChartDefExampleVO;
+        import com.iest.royale.echarts.events.EChartsEvent;
+        import org.apache.royale.collections.ArrayList;
+        import com.proj.example.charts.covid.ECT_COVIDMAP_1;
+        import com.proj.example.vos.TypeGen_NameValueVO;
+        import org.apache.royale.collections.ArrayListView;
+        import com.iest.royale.echarts.events.EChartsEvent;
+        import org.apache.royale.events.Event;
+        import com.proj.example.jewel.ListJwExt;
+        import org.apache.royale.jewel.List;
+
+        private function onInitComplete():void{
+            this.addEventListener("sizeChanged", autoResizeHandler,false);
+        }
+        public function autoResizeHandler(event:Event = null):void
+        {
+            if(charComp.isInit)
+            {
+                charComp.resize();
+            }
+        }
+
+        private var _itemChartDef:ChartDefExampleVO;    
+        [Bindable]
+		public function get itemChartDef():ChartDefExampleVO
+        {
+            return _itemChartDef;
+        }
+        public function set itemChartDef(value:ChartDefExampleVO):void
+        {            
+            _itemChartDef = value;
+        }
+
+        public function get allDesktop():Boolean
+        {
+            return true;
+        }
+
+
+        [Bindable]
+        private var opts:Object = {width: 'auto', height: 'auto'};
+
+        public function activate():void
+        {
+            if(!charComp.isConfigure && !charComp.autoLoad)
+                return;
+
+            var requestInitialize:Boolean = (!charComp.isInit);
+            if(requestInitialize){
+                //First initialization                
+                echarts.registerMap(_itemChartDef.nameMap, _itemChartDef.registerMap);
+                charComp.refreshOption(requestInitialize, true, true);
+                
+            }else
+                autoResizeHandler();
+        }
+
+        private function completConfigHandler(event:EChartsEvent):void
+        {   
+            countriesSeachInput.text = "";
+            onSearchCountries(true);
+        }
+
+        [Bindable]
+        private var dpCountries:ArrayList = new ArrayList;
+        private var dpCountriesSource:ArrayList = new ArrayList;
+        private var totalCases:Number = 0;
+
+        private function onSearchCountries(init:Boolean = false):void
+        {
+            if(init)
+            {
+                var classdata:ECT_COVIDMAP_1 = (_itemChartDef.classDataMap as ECT_COVIDMAP_1);
+                var len:int = classdata.legendCountriesData.length;
+                var ar:Array = new Array
+                for(var index:int = 0; index < len; index++)
+                {
+                    var element:TypeGen_NameValueVO = new TypeGen_NameValueVO(classdata.legendCountriesData[index]);
+                    ar.push(element);
+                    if(element.value > totalCases)
+                        totalCases = element.value;
+                }
+                dpCountriesSource = new ArrayList(ar);
+            }
+
+            if(countriesSeachInput.text == "")
+            {
+                dpCountries = dpCountriesSource;
+            }else
+            {
+                var alv:ArrayListView = new ArrayListView(dpCountriesSource);
+                alv.filterFunction = inFilterCountries;
+                alv.refresh();
+                dpCountries = new ArrayList(alv.toArray());
+            }
+
+        }
+
+        private function get selectedIndex():int{
+            return countriesList.selectedIndex;
+        }
+        private function set selectedIndex(value:int):void
+        {
+            countriesList.selectedIndex = value;
+            countriesList_explicitWidth.selectedIndex = value;
+            countriesList_itemsExpand.selectedIndex = value;
+            countriesList_variableWidth.selectedIndex = value;
+            countriesList_spacebetween.selectedIndex = value;
+            countriesList_spacearound.selectedIndex = value;
+        }
+
+        private function onFirst():void
+        {
+            if( selectedIndex > 0 )
+            {
+                selectedIndex = 0;
+                putSelectCountry(null);
+            }
+        }
+
+        private function onPrev():void
+        {
+            if( selectedIndex > 0 )
+            {
+                selectedIndex -=1;
+                putSelectCountry(null);
+            }
+        }
+
+        private function onNext():void
+        {
+            if( selectedIndex < dpCountries.length-1 )
+            {                
+                selectedIndex +=1;
+                putSelectCountry(null);
+            }
+        }
+
+        private function onLast():void
+        {
+            if( selectedIndex < dpCountries.length-1 )
+            {                
+                selectedIndex = dpCountries.length-1;
+                putSelectCountry(null);
+            }
+        }
+
+        private function inFilterCountries(item:Object):Boolean {
+            if(!item)
+                return false;
+
+            var reg:TypeGen_NameValueVO = item as TypeGen_NameValueVO;
+            var searchTxt:String = countriesSeachInput.text.toUpperCase();
+
+            return (reg.name.toUpperCase().indexOf(searchTxt) != -1);
+        }
+
+        private function onResetCountries():void
+        {
+            countriesSeachInput.text = "";
+            onSearchCountries();
+            putUnSelectCountry();
+        }
+        /* - The Chart dispatch by default
+        makeAction('toggleSelected', {
+            type: 'geoToggleSelect',
+            event: 'geoselectchanged'
+        });*/        
+        public function geoToggleSelect(... event):void{
+
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+            if(!param.batch || param.batch.length == 0)
+            {
+                //nothing
+            }else
+            {
+                var selname:String = param.batch[0].name as String;
+                var len:int = dpCountries.length;
+                var sel:Boolean = false;
+
+                for(var index:int = 0; index < len; index++)
+                {
+                    var element:TypeGen_NameValueVO = new TypeGen_NameValueVO(dpCountries[index]);
+                    sel = (element.name == selname);
+                    if(sel)
+                    {
+                        selectedIndex = index;
+
+                        //Bilbosax calc. scrollhorizontalPosition
+                        var IRWidthHor:int = 300;
+                        var gapH:int = 3;
+                        if(countriesList.scrollViewport.scroll)
+                        {
+                            //countriesList.scrollViewport.horizontalScrollPosition = (index * IRWidthHor) + (index * gapH);
+                            trace( (index * IRWidthHor) + (index * gapH));
+                        }
+                        break;
+                    }
+                }
+                if(!sel){
+                    if(countriesSeachInput.text != "")
+                    {
+                        //search without filter
+                        onResetCountries();
+
+                    }else{
+                        //Selected "default"
+                        selectedIndex = 0;                        
+                    }
+                }
+            }
+            
+        }
+        /*
+        makeAction('select', {
+            type: 'geoSelect',
+            event: 'geoselected'
+        });
+        */
+        
+        private function putSelectCountry(event:Event):void
+        {            
+            var citem:TypeGen_NameValueVO;
+            if(event == null)
+                citem = countriesList.selectedItem as TypeGen_NameValueVO;
+            else
+                citem = ((event.target as List).selectedItem as TypeGen_NameValueVO);
+
+            if(!citem)
+                return;
+            if(citem.name == ECT_COVIDMAP_1.nameCountryDefaultNoDataGeo)            
+            {
+                charComp.dispatchAction({
+                    type: EChartsEvent.ACTION_GEOUNSELECTED
+                });
+
+            }else{
+
+                charComp.dispatchAction({
+                    type: EChartsEvent.ACTION_GEOSELECTED,
+                    name: citem.name
+                });
+
+                //Change color country Selected ... todo
+
+            }
+        }
+        public function geoSelectCountryHandler(... event):void{
+            //listed when dispatchAction geoSelected. [name, selected{namecountry:true/false},type: 'gepselected']
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+        }
+        /*
+        makeAction('unSelect', {
+            type: 'geoUnSelect',
+            event: 'geounselected'
+        });*/
+        private function putUnSelectCountry():void
+        {
+            charComp.dispatchAction({
+                type: EChartsEvent.ACTION_GEOUNSELECTED
+            });
+        }
+        public function geoUnSelectCountryHandler(... event):void
+        {
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+        }
+
+        /*private function getOptionString():void
+        {
+            lblOption.html = JSON.stringify(itemChartDef.optionChartInit);
+        }*/
+
+        ]]>
+    </fx:Script>
+    
+    <j:beads>
+        <js:ViewDataBinding/>
+		<js:BrowserResizeListener/>
+    </j:beads>
+    <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
+        <j:CardHeader>
+            <j:BarSection width="100%" gap="10">
+                <html:H3 text="{itemChartDef.title}" className="primary-dark block-with-text "/>
+                <html:H5 text="{itemChartDef.subtitle}" className="primary-dark block-with-text"/>
+            </j:BarSection>
+            <j:BarSection width="30%" itemsHorizontalAlign="itemsRight" gap="0" itemsVerticalAlign="itemsCenter">     
+                <!--<j:Button localId="btncfg" text="save" click="getOptionString()" />-->
+                <j:IconButton localId="btnLoad" unboxed="true" click="{dispatchEvent(new Event('close'));}" >
+                    <j:icon>
+                        <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_CIRCLE_LEFT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                    </j:icon>
+                    <j:beads>
+                        <j:ToolTip toolTip="Back"/>
+                    </j:beads>
+                </j:IconButton> 
+            </j:BarSection>
+        </j:CardHeader>
+
+        <j:CardPrimaryContent height="100%" >
+            <j:VGroup percentWidth="100" percentHeight="100" gap="5" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">
+
+            <!--    <j:Label localId="lblOption" multiline="true" width="200" height="100%" style="overflow-y: scroll;"/>-->
+
+                <j:VGroup gap="3" percentWidth="100" minWidth="20" minHeight="325">
+
+                    <j:HGroup percentWidth="100" gap="5" height="35" itemsVerticalAlign="itemsCenter">
+
+                        <j:IconTextInput localId="countriesSeachInput" rightPosition="false" width="100%" text="" change="onSearchCountries()" >
+                            <j:beads>
+                                <j:TextPrompt prompt="Search countries..."/>
+                            </j:beads>
+                            <j:icon>
+                                <js:FontAwesomeIcon text="{FontAwesome5IconType.SEARCH}" emphasis="primary" className="primary-dark"
+                                faStyle="{FontAwesomeIcon.DUOTONE}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                            </j:icon>
+                        </j:IconTextInput>
+                        <j:IconButton unboxed="true" click="onResetCountries()">
+                            <j:icon>
+                                <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                            </j:icon>
+                            <j:beads>
+                                <j:ToolTip toolTip="Reset"/>
+                            </j:beads>
+                        </j:IconButton>
+                                        
+                        <j:HGroup width="225" gap="5" height="35" itemsVerticalAlign="itemsCenter">
+                            
+                            <j:IconButton unboxed="true" click="onFirst()">
+                                <j:icon>
+                                    <js:FontAwesomeIcon text="chevron-double-left" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                                </j:icon>
+                                <j:beads>
+                                    <j:ToolTip toolTip="First"/>
+                                </j:beads>
+                            </j:IconButton>
+                            <j:IconButton unboxed="true" click="onPrev()">
+                                <j:icon>
+                                    <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_LEFT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                                </j:icon>
+                                <j:beads>
+                                    <j:ToolTip toolTip="Previous"/>
+                                </j:beads>
+                            </j:IconButton>
+                            <j:Label text="{countriesList_explicitWidth.selectedIndex} / {(countriesList_explicitWidth.dataProvider as ArrayList).length}"/>
+                            <j:IconButton unboxed="true" click="onNext()">
+                                <j:icon>
+                                    <js:FontAwesomeIcon text="{FontAwesome5IconType.CHEVRON_RIGHT}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                                </j:icon>
+                                <j:beads>
+                                    <j:ToolTip toolTip="Next"/>
+                                </j:beads>
+                            </j:IconButton>
+                            <j:IconButton unboxed="true" click="onLast()">
+                                <j:icon>
+                                    <js:FontAwesomeIcon text="chevron-double-right" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                                </j:icon>
+                                <j:beads>
+                                    <j:ToolTip toolTip="Last"/>
+                                </j:beads>
+                            </j:IconButton>
+                    
+                        </j:HGroup>
+                    </j:HGroup>
+                    
+                    <j:HGroup percentWidth="100" gap="3" height="35" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsCenter"
+                        style="background-color: #19416b; color: #ffffff;font-weight: bold;">
+                        <j:Label text="Countries" width="60%" >
+                            <j:beads>
+                                <j:TruncateText/>
+                                <js:Paddings paddingLeft="5"/>
+                            </j:beads>
+                        </j:Label>                    
+                        <j:Label text="Total Cases" width="40%" >
+                            <j:beads>
+                                <j:TruncateText/>
+                                <j:TextAlign align="right"/>
+                                <js:Paddings paddingRight="15"/>
+                            </j:beads>
+                        </j:Label>
+                    </j:HGroup>
+                
+                    <customcontrol:ListJwExt localId="countriesList_explicitWidth" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_explicitWidth" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsExpand="false" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
+                
+                    <customcontrol:ListJwExt localId="countriesList_variableWidth" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_variableWidth" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsExpand="false" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
+                
+                    <customcontrol:ListJwExt localId="countriesList_itemsExpand" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_variableWidth" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsExpand="true" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
+                
+                    <customcontrol:ListJwExt localId="countriesList_spacebetween" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_variableWidth" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsHorizontalAlign="itemsSpaceBetween" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
+                
+                    <customcontrol:ListJwExt localId="countriesList_spacearound" percentWidth="100" percentHeight="100"
+                        dataProvider="{dpCountries}"
+                        itemRenderer="com.proj.example.itemRenderers.HListGenNameValueItemRenderer_index" change="putSelectCountry(event)">
+                        <customcontrol:beads>
+                            <j:HorizontalLayout gap="3" itemsHorizontalAlign="itemsSpaceAround" />
+                            <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                        </customcontrol:beads>
+                    </customcontrol:ListJwExt>
+                        
+                </j:VGroup>
+                
+                <j:HGroup percentWidth="100" percentHeight="100" gap="5" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop" style="overflow:auto;">
+                    
+                    <j:VGroup gap="3" percentWidth="20" minWidth="20" minHeight="100" percentHeight="100">
+                        
+                        <j:HGroup percentWidth="100" gap="3" height="35" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsCenter"
+                            style="background-color: #19416b; color: #ffffff;font-weight: bold;">
+                            <j:Label text="Countries" width="60%" >
+                                <j:beads>
+                                    <j:TruncateText/>
+                                    <js:Paddings paddingLeft="5"/>
+                                </j:beads>
+                            </j:Label>                    
+                            <j:Label text="Total Cases" width="40%" >
+                                <j:beads>
+                                    <j:TruncateText/>
+                                    <j:TextAlign align="right"/>
+                                    <js:Paddings paddingRight="15"/>
+                                </j:beads>
+                            </j:Label>
+                        </j:HGroup>
+                    
+                        <customcontrol:ListJwExt localId="countriesList" percentWidth="100" percentHeight="100"
+                            dataProvider="{dpCountries}"
+                            itemRenderer="com.proj.example.itemRenderers.ListGenNameValueItemRenderer" change="putSelectCountry(event)">
+                            <customcontrol:beads>
+                                <j:ListPresentationModel variableRowHeight="false" rowHeight="35"/>
+                            </customcontrol:beads>
+                        </customcontrol:ListJwExt>
+                            
+                    </j:VGroup>
+
+                    <localecharts:EChartsBasicControl localId="charComp" percentHeight="100" percentWidth="100"
+                                                        autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}" 
+                                                        optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+                                                        onCompleteConfig="completConfigHandler(event)"
+                                                        onUpdateConfig="completConfigHandler(event)">
+                        <localecharts:beads>
+                            <echartsbeads:EChartEventsBead GEOSELECTCHANGE="geoToggleSelect" GEOSELECTED="geoSelectCountryHandler" GEOUNSELECTED="geoUnSelectCountryHandler"/>
+                        </localecharts:beads>
+                    </localecharts:EChartsBasicControl>
+                </j:HGroup>
+                
+            </j:VGroup>
+        </j:CardPrimaryContent>
+
+    </j:Card> 
+</j:ScrollableSectionContent>
