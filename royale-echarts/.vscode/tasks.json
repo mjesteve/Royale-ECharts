@@ -19,7 +19,45 @@
             "args": [
                 "clean",
                 "install",
+                "-Droyalelib=${env:ROYALE_HOME}\\frameworks",
                 "-DskipTests"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },/*
+        {
+            "label": "[Project-royalelibs-Complete] Build with Maven (-e -X)",
+            "type": "shell",
+            "command": "mvn",
+            "args": [
+                "clean",
+                "install",
+                //"-f=royalelibs\\pomall.xml",
+                "-f.\\royalelibs\\pomall.xml",
+                "-Droyalelib=${env:ROYALE_LIB_DEBUG}",
+                "-DskipTests",
+                "-e",
+                "-X",
+                ">build_log.log"
+            ],
+            "problemMatcher": []
+        },*/
+        {
+            "label": "Build with Maven - to file",
+            "type": "shell",
+            "command": "mvn",
+            "args": [
+                "clean",
+                "install",
+                "-Droyalelib=${env:ROYALE_HOME}\\frameworks",
+                "-DskipTests",
+                "-e",
+                "-X",
+                ">build_log.log"
             ],
             "group": "build",
             "presentation": {

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ScrollableSectionContent xmlns:fx="http://ns.adobe.com/mxml/2009"
+    implements="org.apache.royale.community.charts.IEchartExampleBasic"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+    xmlns:views="org.apache.royale.community.views.*"
+    xmlns:localecharts="org.apache.royale.community.echarts.*"
+    xmlns:echartsbeads="org.apache.royale.community.echarts.beads.*"
+    initComplete="onInitComplete()" style="padding-top: 20px" >
+
+    <fx:Script>
+        <![CDATA[
+        import org.apache.royale.community.vos.ChartDefExampleVO;
+        import org.apache.royale.community.echarts.events.EChartsEvent;
+        import org.apache.royale.collections.ArrayList;
+        import mx.utils.StringUtil;
+
+        private function onInitComplete():void{
+            this.addEventListener("sizeChanged", autoResizeHandler,false);
+        }
+        public function autoResizeHandler(event:Event = null):void
+        {
+            if(charComp.isInit)
+            {
+                //It seems that, in the sunBurst chart, when resize is called some nodes are
+                //de-instantiated and simply with a mouse selection it gives an error.
+                //We recover the current configuration and send it again after resizing it.
+                var options:Object = charComp.getOption();
+                charComp.resize();
+                charComp.updateOption(options,true,false,true);
+            }
+        }
+
+        private var _itemChartDef:ChartDefExampleVO;
+        [Bindable]
+		public function get itemChartDef():ChartDefExampleVO
+        {
+            return _itemChartDef;
+        }
+        public function set itemChartDef(value:ChartDefExampleVO):void
+        {
+            _itemChartDef = value;
+        }
+
+        public function get allDesktop():Boolean
+        {
+            return false;
+        }
+
+        [Bindable]
+        private var dpNodes:ArrayList;
+
+        [Bindable]
+        private var opts:Object = {width: 'auto', height: 'auto'};
+
+        public function activate():void
+        {
+            if(!charComp.isConfigure && !charComp.autoLoad)
+                return;
+
+            var requestInitialize:Boolean = (!charComp.isInit);
+            if(requestInitialize){
+                //First initialization
+                charComp.refreshOption(requestInitialize, true, true);
+                //We cancel the click so that it does not interfere with the example
+                /*var optionUpdate:Object = {
+                    series: [{
+                    type: 'sunburst',
+                    nodeClick: 'false'
+                    }]
+                };
+                charComp.updateOption(optionUpdate);*/
+            }else
+                autoResizeHandler();
+        }
+
+        private function completConfigHandler(event:EChartsEvent):void
+        {
+            if(!dpNodes)
+            {
+                /* We fill in the list of the first two nodes that are allowed to be selected from the DropDownList */
+
+                //Direct access: this.charComp.instanceECharts._model.option
+                var data:Object = charComp.getOption().series[0].data;
+
+                var ar:Array = new Array;
+                var len0:int = data.length;
+                for(var ilevel0:int = 0; ilevel0 < len0; ilevel0++)
+                {
+                    var ele0:Object = data[ilevel0];
+                    if(ele0.hasOwnProperty("name"))
+                    {
+                        var name0:String = ele0.name as String;
+                        var lbl0:String = name0.replace('\n','');
+                        ar.push({label:lbl0, name:name0});
+
+                        for(var ilevel1:int = 0; ilevel1 < ele0.children.length; ilevel1++)
+                        {
+                            var ele1:Object = ele0.children[ilevel1];
+                            var name1:String = ele1.name as String;
+                            var lbl1:String = name1.replace('\n','');
+                            ar.push({label:lbl0+' - '+lbl1, name:name1});
+                        }
+                    }
+                }
+                dpNodes = new ArrayList(ar);
+
+            }else if(cbHighlightNode.selectedItem)
+            {
+                setTimeout(onHighlightNode, 300);
+            }
+        }
+
+        public function onHighlightNode():void
+        {
+            var node:Object = cbHighlightNode.selectedItem;
+            if(node)
+            {
+                charComp.dispatchAction({
+                    type: EChartsEvent.ACTION_SUNBURST_HIGHLIGHT,
+                    targetNodeId: node.name
+                });
+            }
+        }
+
+        public function onUnhighlightNode():void
+        {
+            resetLabels();
+            charComp.dispatchAction({type:EChartsEvent.ACTION_SUNBURST_UNHIGHLIGHT});
+        }
+
+        public function hightLightHandler(... event):void{
+
+            /* event sunbursthighlight dispatch by sunburstHighlight Action */
+
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+
+            resetLabels(true);
+
+            var treeNode:Object = param.highlight;
+
+            if(treeNode.depth >= 2)
+            {
+                level2.text = treeNode.name;
+                var parentNode:Object = treeNode.parentNode;
+                level1.text = parentNode.name;
+            }
+            else if(treeNode.depth == 1)
+                level1.text = treeNode.name;
+        }
+
+        public function onMouseOverHandler(... event):void{
+
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+
+            resetLabels();
+            if(param.componentType == 'series'){
+
+                var treeOver:Object = param.treePathInfo;
+                var len:int = treeOver.length;
+
+                for(var index:int = 0; index < len; index++)
+                {
+                    var element:Object = treeOver[index];
+                    if(element.name != "")
+                    {
+                        switch(index)
+                        {
+                            case 1:
+                                level1.text = element.name;
+                                break;
+                            case 2:
+                                level2.text = element.name;
+                                break;
+                            case 3:
+                                level3.text = element.name;
+                                break;
+                            case 4:
+                                book.text = element.name;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    //trace(element.name, element.dataIndex, element.value);
+                }
+            }
+
+            /* Needless:
+            charComp.dispatchAction({
+                type: 'highlight',
+                seriesIndex: 1,
+                dataIndex: param.dataIndex
+            });
+            */
+        }
+
+        public function onMouseOutHandler(... event):void{
+            /* Needless:
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+
+            charComp.dispatchAction({
+                type: 'downplay',
+                seriesIndex: 1,
+                dataIndex: param.dataIndex
+            });
+            */
+            resetLabels();
+        }
+
+        public function onChangeRootNode():void
+        {
+            var node:Object = cbRootNode.selectedItem;
+            if(node)
+            {
+                charComp.dispatchAction({
+                    type: 'sunburstRootToNode',
+                    targetNodeId: node.name
+                });
+            }
+        }
+
+        public function onRestoreRootNode():void
+        {
+            charComp.dispatchAction({
+                type: 'sunburstRootToNode',
+                targetNodeId: ''
+            });
+
+        }
+
+        private function resetLabels(onlyDet:Boolean = false):void
+        {
+            if(!onlyDet)
+                cbHighlightNode.selectedIndex = -1;
+            level1.text="";
+            level2.text="";
+            level3.text="";
+            book.text="";
+        }
+
+        ]]>
+    </fx:Script>
+
+    <j:beads>
+        <js:ViewDataBinding/>
+		<js:BrowserResizeListener/>
+    </j:beads>
+    <j:Card itemsExpand="false" percentHeight="100" percentWidth="100">
+        <j:CardHeader>
+            <j:BarSection width="100%" gap="10">
+                <html:H3 text="{itemChartDef.title}" className="block-with-text primary-dark"/>
+                <html:H5 text="{itemChartDef.subtitle}" className="block-with-text primary-dark"/>
+            </j:BarSection>
+        </j:CardHeader>
+
+        <j:CardPrimaryContent >
+            <j:HGroup percentWidth="100" percentHeight="100" gap="10" itemsHorizontalAlign="itemsLeft" itemsVerticalAlign="itemsTop">
+                <localecharts:EChartsWithThemeControl localId="charComp" height="100%" width="75%"
+                                                    autoLoad="{itemChartDef.autoLoad}" configOption="{itemChartDef.optionChartInit}"
+                                                    optsInstance="{this.opts}" themeName="{itemChartDef.themeName}"
+                                                    onCompleteConfig="completConfigHandler(event)"
+                                                    onUpdateConfig="completConfigHandler(event)">
+                    <localecharts:beads>
+                        <echartsbeads:EChartEventsBead SUNBURSTHIGHLIGHT="hightLightHandler"
+                                                MOUSEOVER="onMouseOverHandler" MOUSEOUT="onMouseOutHandler"/>
+                    </localecharts:beads>
+                </localecharts:EChartsWithThemeControl>
+
+                <j:VContainer gap="5" width="25%" height="100%">
+
+                    <j:HGroup gap="5" width="100%" itemsVerticalAlign="itemsCenter">
+
+                        <j:DropDownList localId="cbHighlightNode" percentWidth="100"
+                            dataProvider="{dpNodes}" labelField="label" change="onHighlightNode()">
+                            <j:beads>
+                                <j:DropDownListTextPrompt prompt="Highlight node..."/>
+                            </j:beads>
+                        </j:DropDownList>
+
+                        <j:IconButton unboxed="true" click="onUnhighlightNode()">
+                            <j:icon>
+                                <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                            </j:icon>
+                            <j:beads>
+                                <j:ToolTip toolTip="Reset"/>
+                            </j:beads>
+                        </j:IconButton>
+                    </j:HGroup>
+                    <j:Label text="Level 1:" style="font-weight: bold;"/>
+                    <j:Label localId="level1" style="padding-left: 10px;">
+                        <j:beads>
+                            <j:TruncateText/>
+                        </j:beads>
+                    </j:Label>
+                    <j:Label text="Level 2:" style="font-weight: bold;"/>
+                    <j:Label localId="level2" style="padding-left: 10px;">
+                        <j:beads>
+                            <j:TruncateText/>
+                        </j:beads>
+                    </j:Label>
+                    <j:Label text="Level 3:" style="font-weight: bold;"/>
+                    <j:Label localId="level3" style="padding-left: 10px;">
+                        <j:beads>
+                            <j:TruncateText/>
+                        </j:beads>
+                    </j:Label>
+                    <j:Label text="Book:" style="font-weight: bold;"/>
+                    <j:Label localId="book" style="padding-left: 10px;">
+                        <j:beads>
+                            <j:TruncateText/>
+                        </j:beads>
+                    </j:Label>
+
+                    <j:HGroup gap="5" width="100%" itemsVerticalAlign="itemsCenter">
+
+                        <j:DropDownList localId="cbRootNode" percentWidth="100"
+                            dataProvider="{dpNodes}" labelField="label" change="onChangeRootNode()">
+                            <j:beads>
+                                <j:DropDownListTextPrompt prompt="Root To Node..."/>
+                            </j:beads>
+                        </j:DropDownList>
+
+                        <j:IconButton unboxed="true" click="onRestoreRootNode()">
+                            <j:icon>
+                                <js:FontAwesomeIcon text="{FontAwesome5IconType.SYNC}" faStyle="{FontAwesomeIcon.REGULAR}" relativeSize="{FontAwesomeIcon.SIZE_LG}"/>
+                            </j:icon>
+                            <j:beads>
+                                <j:ToolTip toolTip="Reset"/>
+                            </j:beads>
+                        </j:IconButton>
+                    </j:HGroup>
+
+                </j:VContainer>
+            </j:HGroup>
+        </j:CardPrimaryContent>
+
+    </j:Card>
+</j:ScrollableSectionContent>

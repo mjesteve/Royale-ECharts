@@ -1,4 +1,4 @@
-package 
+package
 {
 
 	/**
@@ -13,19 +13,19 @@ package
 		{
 		import echarts; echarts;
 		}
-		import com.iest.royale.echarts.controllers.EChartsThemesController;EChartsThemesController;
-		import com.iest.royale.echarts.EChartsWithThemeControl;EChartsWithThemeControl;
-		import com.iest.royale.echarts.EChartsThemeLoader;EChartsThemeLoader;
-		import com.iest.royale.echarts.EChartsBasicControl;EChartsBasicControl;
-		import com.iest.royale.echarts.IEChartsBasic; IEChartsBasic;
-		import com.iest.royale.echarts.beads.EChartEventsBead;EChartEventsBead;
-		import com.iest.royale.echarts.events.EChartsEvent;EChartsEvent;
-		import com.iest.royale.echarts.events.EChartsThemesEvent;EChartsThemesEvent;
-		import com.iest.royale.echarts.models.EChartsThemesModel;EChartsThemesModel;
-		import com.iest.royale.echarts.vos.EChartsCallBackFunctionVO;EChartsCallBackFunctionVO;
-		import com.iest.royale.echarts.vos.EChartsInstanceVO;EChartsInstanceVO;
-		import com.iest.royale.echarts.vos.EChartsThemeTemplateVO;EChartsThemeTemplateVO;
-		import com.iest.royale.echarts.EChartsLoader;EChartsLoader;
+		import org.apache.royale.community.echarts.controllers.EChartsThemesController;EChartsThemesController;
+		import org.apache.royale.community.echarts.EChartsWithThemeControl;EChartsWithThemeControl;
+		import org.apache.royale.community.echarts.EChartsThemeLoader;EChartsThemeLoader;
+		import org.apache.royale.community.echarts.EChartsBasicControl;EChartsBasicControl;
+		import org.apache.royale.community.echarts.IEChartsBasic; IEChartsBasic;
+		import org.apache.royale.community.echarts.beads.EChartEventsBead;EChartEventsBead;
+		import org.apache.royale.community.echarts.events.EChartsEvent;EChartsEvent;
+		import org.apache.royale.community.echarts.events.EChartsThemesEvent;EChartsThemesEvent;
+		import org.apache.royale.community.echarts.models.EChartsThemesModel;EChartsThemesModel;
+		import org.apache.royale.community.echarts.vos.EChartsCallBackFunctionVO;EChartsCallBackFunctionVO;
+		import org.apache.royale.community.echarts.vos.EChartsInstanceVO;EChartsInstanceVO;
+		import org.apache.royale.community.echarts.vos.EChartsThemeTemplateVO;EChartsThemeTemplateVO;
+		import org.apache.royale.community.echarts.EChartsLoader;EChartsLoader;
 	}
 }
 

@@ -12,7 +12,7 @@
         ],
         "namespace": [
             {
-                "uri": "library://ns.iest.com/royale/echarts",
+                "uri": "library://ns.apache.org/royale/community/echarts",
                 "manifest": "src/main/resources/echarts-manifest.xml"
             }
         ],

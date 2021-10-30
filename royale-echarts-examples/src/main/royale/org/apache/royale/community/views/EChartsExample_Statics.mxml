@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<j:ResponsiveView xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:j="library://ns.apache.org/royale/jewel"
+    xmlns:js="library://ns.apache.org/royale/basic"
+    xmlns:html="library://ns.apache.org/royale/html"
+    initComplete="onInitComplete()" className="mainPrin"
+    >
+
+     <fx:Script>
+        <![CDATA[
+        import org.apache.royale.collections.ArrayList;
+        import org.apache.royale.community.charts.IEchartDefinition;
+        import org.apache.royale.community.charts.EC_BAR001;
+        import org.apache.royale.community.charts.EC_LINE001;
+        import org.apache.royale.community.charts.EC_BAR002;
+        import org.apache.royale.community.charts.EC_BAR003;
+        import org.apache.royale.community.charts.EC_PIE001;
+        import org.apache.royale.community.charts.EC_PIE002;
+        import org.apache.royale.community.charts.EC_LINE002;
+        import org.apache.royale.community.charts.ECC_PIE003;
+
+
+        private var mychart:Object;
+        private var dpCharts:ArrayList;
+
+        private function onInitComplete():void{
+			window.addEventListener('resize', autoResizeHandler, false);
+            var ar:Array = [
+                {idChart:1, desChart:'Bar Chart Person', typeChart:'bar', component: EC_BAR001},
+                {idChart:2, desChart:'Bar Chart Example', typeChart:'bar', component: EC_BAR002},
+                {idChart:3, desChart:'Bar Chart Example - Overlapping Series', typeChart:'bar', component: EC_BAR003},
+                {idChart:4, desChart:'Pie Chart Example 1', typeChart:'pie', component: EC_PIE001},
+                {idChart:5, desChart:'Pie-Doughnut Chart Person', typeChart:'pie', component: EC_PIE002},
+                {idChart:6, desChart:'Pie-Ring Diagram', typeChart:'pie', component: ECC_PIE003},
+                {idChart:7, desChart:'Line Chart - Temperature changes in the next week', typeChart:'line', component: EC_LINE001},
+                {idChart:8, desChart:'Line Chart & Pie Chart dataset-link', typeChart:'line', component: EC_LINE002}
+            ];
+            cbCharts.dataProvider = new ArrayList(ar);
+        }
+
+		public function autoResizeHandler(event:Event = null):void
+        {
+            if(mychart)
+                mychart.resize({width: 'auto', height: 'auto'});
+        }
+
+        private function selectChart():void
+        {
+            if(cbCharts.selectedIndex == -1)
+            {
+                if(mychart)
+                    mychart.clear();
+            }
+            else{
+
+                var notMerge:Boolean = true;
+                var option:Object;
+                var idChart:int = cbCharts.selectedItem.idChart;
+
+                if(!mychart)
+                {
+                    mychart = echarts.init(myContainerChart.element);
+                }
+
+                var defchart:IEchartDefinition;
+                switch(idChart)
+                {
+                    case 1:
+                        defchart = new EC_BAR001() as IEchartDefinition;
+                        break;
+                    case 2:
+                        defchart = new EC_BAR002() as IEchartDefinition;
+                        break;
+                    case 3:
+                        defchart = new EC_BAR003() as IEchartDefinition;
+                        break;
+                    case 4:
+                        defchart = new EC_PIE001() as IEchartDefinition;
+                        break;
+                    case 5:
+                        defchart = new EC_PIE002() as IEchartDefinition;
+                        break;
+                    case 6:
+                        defchart = new ECC_PIE003() as IEchartDefinition;
+                        break;
+                    case 7:
+                        defchart = new EC_LINE001() as IEchartDefinition;
+                        break;
+                    case 8:
+                        defchart = new EC_LINE002() as IEchartDefinition;
+                        mychart.on('updateAxisPointer', updateAxisPointer);
+
+                        break;
+
+                    default:
+                        option = mychart.getOption();
+                        break;
+                }
+                if(idChart != 8)
+                    mychart.off('updateAxisPointer');
+                if(defchart)
+                    option = defchart.optionChartInit();
+                if(notMerge)
+                    mychart.clear();
+
+                mychart.setOption(option, notMerge);
+                mychart.resize({width: 'auto', height: 'auto'});
+            }
+        }
+
+        public function updateAxisPointer(... event):void{
+
+            var param:Object = event?event[0]:null;
+            if(!param)
+                return;
+            var xAxisInfo:Object = param.axesInfo[0] as Object;
+            if (xAxisInfo) {
+                var dimension:int = xAxisInfo.value + 1;
+                var option:Object = {
+                    series: { id: 'pie',
+                        label: { formatter: '{b}: {@[' + dimension + ']} ({d}%)' },
+                        encode: { value: dimension, tooltip: dimension}
+                    }
+                };
+                mychart.setOption(option, false);
+            }
+        }
+
+
+        ]]>
+    </fx:Script>
+
+	<fx:Style>
+        @namespace js "library://ns.apache.org/royale/basic";
+        @namespace j "library://ns.apache.org/royale/jewel";
+		.mainPrin {
+            background-color: #384E6B;
+        }
+        .wrapper {
+            outline: 1px dashed navy;
+        }
+
+        /* styles for '...' */
+        .block-with-text {
+            /* hide text if it more than N lines  */
+            overflow: hidden;
+            /* for set '...' in absolute position */
+            position: relative;
+            /* use this value to count block height */
+            line-height: 1.2em;
+            /* max-height = line-height (1.2) * lines max number (3) */
+            max-height: 3.6em;
+            /* fix problem when last visible word doesn't adjoin right side  */
+            text-align: justify;
+            /* place for '...' */
+            margin-right: -1em;
+            padding-right: 1em;
+        }
+        /* create the ... */
+        .block-with-text:before {
+            /* points in the end */
+            content: '...';
+            /* absolute position */
+            position: absolute;
+            /* set position to right bottom corner of block */
+            right: 0;
+            bottom: 0;
+        }
+        /* hide ... if we have text, which is less than or equal to max lines */
+        .block-with-text:after {
+            /* points in the end */
+            content: '';
+            /* absolute position */
+            position: absolute;
+            /* set position to right bottom corner of text */
+            right: 0;
+            /* set width and height */
+            width: 1em;
+            height: 1em;
+            margin-top: 0.2em;
+            /* bg color = bg color under block */
+            background: white;
+        }
+	</fx:Style>
+
+    <j:beads>
+		<js:ContainerDataBinding/>
+	</j:beads>
+
+    <j:ApplicationMainContent localId="main">
+
+        <j:ScrollableSectionContent>
+
+            <j:Grid gap="true" width="100%" height="100%">
+                <j:GridCell desktopNumerator="1" desktopDenominator="1" tabletNumerator="1" tabletDenominator="1" phoneNumerator="1" phoneDenominator="1">
+
+                    <j:Card itemsExpand="false" width="100%" height="100%" className="cardWPStyle">
+                        <j:CardHeader>
+                                <j:BarSection gap="3" width="80%">
+                                    <html:H3 text="Integrating Apache ECharts into Apache Royale"
+                                        className="block-with-text primary-dark"/>
+                                </j:BarSection>
+                                <j:BarSection width="20%" itemsHorizontalAlign="itemsRight">
+                                    <j:ComboBox width="100%" localId="cbCharts" labelField="desChart" change="selectChart()"/>
+                                    <!--<j:Button text="*" click="onOpenPopup()"/>-->
+                                </j:BarSection>
+                        </j:CardHeader>
+
+                        <j:CardPrimaryContent localId="cardContent"
+                                              itemsVerticalAlign="itemsCenter"
+                                              itemsHorizontalAlign="itemsCenter" >
+                            <j:Group localId="myContainerChart" percentHeight="100" percentWidth="100"/>
+                        </j:CardPrimaryContent>
+
+                    </j:Card>
+
+                </j:GridCell>
+            </j:Grid>
+
+        </j:ScrollableSectionContent>
+    </j:ApplicationMainContent>
+
+</j:ResponsiveView>
