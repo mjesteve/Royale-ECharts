@@ -10,8 +10,9 @@ package
 		/**
 		 * <inject_script>
 		 * var script = document.createElement("script");
-		 * script.setAttribute("src", "https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js");
-		 * script.setAttribute("crossorigin","anonymous");
+		 * //script.setAttribute("src", "https://cdn.jsdelivr.net/npm/echarts@5.2.1/dist/echarts.min.js");
+		 * //script.setAttribute("crossorigin","anonymous");
+		 * script.setAttribute("src", "js/echarts.js");
 		 * document.head.appendChild(script);
 		 * 
 		 * //script.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.0-alpha.2/echarts.min.js");
