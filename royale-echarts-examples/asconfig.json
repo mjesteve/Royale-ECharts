@@ -4,6 +4,7 @@
         "debug": true,
         "targets": ["JSRoyale"],
         "html-template": "src/main/resources/royale-echarts-examples-template.html",
+        "theme": "${royalelib}/themes/JewelTheme/src/main/resources/defaults.css",
         "source-path": [
             "src/main/royale",
             "../royale-echarts/src/main/royale/"
@@ -15,7 +16,8 @@
             }
         ],
         "library-path": [
-            "${royalelib}/js/libs/MXRoyaleJS.swc"
+            /*"${royalelib}/libs/MXRoyale.swc"*/
+            "${royalelib}/libs/MXRoyale.swc"
         ],
         "js-library-path": [
             "${royalelib}/js/libs/MXRoyaleJS.swc"
