@@ -11,7 +11,7 @@ package
 		 * <inject_script>
 		 * var script = document.createElement("script");
 		 * //echarts.min.formatted.js | echarts.min_5.0.js | echarts-en-4.9.js | echarts-5.0.0-alpha.2.js
-		 * script.setAttribute("src", "js/echarts_5.1.js");
+		 * script.setAttribute("src", "js/echarts.js");
 		 * 
 		 * //script.setAttribute("src", "https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.js");
 		 * //script.setAttribute("src", "https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js");
