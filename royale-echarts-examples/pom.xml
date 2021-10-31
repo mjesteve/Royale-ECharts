@@ -206,7 +206,7 @@
         <configuration>
           <mainClass>App.mxml</mainClass>
           <targets>JSRoyale</targets>
-          <debug>${royale.debug}</debug>
+          <debug>${compiler.debug}</debug>
           <htmlTemplate>${basedir}/src/main/resources/royale-echarts-examples-template.html</htmlTemplate>
           <additionalCompilerOptions>
               -js-default-initializers=true;
