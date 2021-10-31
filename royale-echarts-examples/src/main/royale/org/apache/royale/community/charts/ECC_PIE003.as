@@ -1,8 +1,6 @@
 package org.apache.royale.community.charts
 {
 
-    import mx.core.InteractionMode;
-
     public class ECC_PIE003  implements IEchartDefinition
     {
 

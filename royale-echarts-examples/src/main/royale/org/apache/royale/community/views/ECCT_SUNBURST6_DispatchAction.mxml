@@ -14,7 +14,6 @@
         import org.apache.royale.community.vos.ChartDefExampleVO;
         import org.apache.royale.community.echarts.events.EChartsEvent;
         import org.apache.royale.collections.ArrayList;
-        import mx.utils.StringUtil;
 
         private function onInitComplete():void{
             this.addEventListener("sizeChanged", autoResizeHandler,false);

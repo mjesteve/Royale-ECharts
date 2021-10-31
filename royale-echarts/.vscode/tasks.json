@@ -38,7 +38,7 @@
                 "install",
                 //"-f=royalelibs\\pomall.xml",
                 "-f.\\royalelibs\\pomall.xml",
-                "-Droyalelib=${env:ROYALE_LIB_DEBUG}",
+                "-Droyalelib=${env:ROYALE_HOME}\\frameworks",
                 "-DskipTests",
                 "-e",
                 "-X",
