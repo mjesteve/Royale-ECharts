@@ -212,7 +212,7 @@
               -js-default-initializers=true;
               -js-dynamic-access-unknown-members=true; <!-- to access JSON object graph subobjects -->
               -source-map=true;
-              -compiler.exclude-defaults-css-files=MXRoyale-${royale.framework.version}-js.swc:defaults.css;
+              <!-- -compiler.exclude-defaults-css-files=MXRoyale-${royale.framework.version}-js.swc:defaults.css; -->
               -keep-as3-metadata+=Inject,Dispatcher,EventHandler,PostConstruct,PreDestroy,ViewAdded,ViewRemoved,Bindable,Transient;
               -keep-code-with-metadata=Inject;
               -show-binding-warnings=false;
@@ -364,9 +364,11 @@
         <updatePolicy>daily</updatePolicy>
       </snapshots>
     </repository>
+
     <repository>
       <id>jspresso</id>
-      <url>http://repository.jspresso.org/maven2</url>
+<!--      <url>http://repository.jspresso.org/maven2</url> --> 
+      <url>https://repository.apache.org/content/repositories/releases</url>
       <releases>
         <enabled>true</enabled>
         <updatePolicy>daily</updatePolicy>
@@ -375,6 +377,7 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    
   </repositories>
 
    <pluginRepositories>

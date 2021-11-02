@@ -15,10 +15,10 @@
             }
         ],
         "library-path": [
-            "${royalelib}/js/libs/MXRoyaleJS.swc"
+            "${royalelib}/libs/MXRoyaleBase.swc"
         ],
         "js-library-path": [
-            "${royalelib}/js/libs/MXRoyaleJS.swc"
+            "${royalelib}/js/libs/MXRoyaleBaseJS.swc"
         ],
         "define": [
             {
