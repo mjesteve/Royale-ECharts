@@ -76,7 +76,7 @@
             </include-file>
           </includeFiles>
 
-		      <skipExtern>true</skipExtern>
+		  <skipExtern>true</skipExtern>
           <includeLookupOnly>true</includeLookupOnly>
           <allowSubclassOverrides>true</allowSubclassOverrides>
           <additionalCompilerOptions>
@@ -121,6 +121,7 @@
       <scope>provided</scope>
       <classifier>typedefs</classifier>
     </dependency>
+
     <dependency>
       <groupId>org.apache.royale.typedefs</groupId>
       <artifactId>royale-typedefs-js</artifactId>

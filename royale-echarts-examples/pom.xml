@@ -206,7 +206,7 @@
         <configuration>
           <mainClass>App.mxml</mainClass>
           <targets>JSRoyale</targets>
-          <debug>${compiler.debug}</debug>
+          <debug>${royale.debug}</debug>
           <htmlTemplate>${basedir}/src/main/resources/royale-echarts-examples-template.html</htmlTemplate>
           <additionalCompilerOptions>
               -js-default-initializers=true;
@@ -311,7 +311,7 @@
       <scope>theme</scope>
       <classifier>js</classifier>
     </dependency>
--->
+
     <dependency>
       <groupId>org.apache.royale.framework</groupId>
       <artifactId>Jewel-Light-Flat-Primary-Sapphire-Theme</artifactId>
@@ -334,14 +334,6 @@
       <version>${royale.framework.version}</version>
       <type>swc</type>
       <scope>theme</scope>
-      <classifier>js</classifier>
-    </dependency>
-
-    <dependency>
-      <groupId>com.iest.royale.echarts</groupId>
-      <artifactId>royale-echarts</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <type>swc</type>
       <classifier>js</classifier>
     </dependency>
 
